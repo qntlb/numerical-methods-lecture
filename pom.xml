@@ -7,11 +7,32 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Numerical Methods Lectures</name>
 
-<distributionManagement>
-   <repository>
-     <id>github</id>
-     <name>GitHub qntlb Apache Maven Packages</name>
-     <url>https://maven.pkg.github.com/qntl/numericalmethods</url>
-   </repository>
-</distributionManagement>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- maven plugins -->
+		<compiler-plugin.version>3.8.1</compiler-plugin.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${compiler-plugin.version}</version>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+					<compilerVersion>11</compilerVersion>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub qntlb Apache Maven Packages</name>
+			<url>https://maven.pkg.github.com/qntl/numerical-methods-lecture</url>
+		</repository>
+	</distributionManagement>
 </project>
