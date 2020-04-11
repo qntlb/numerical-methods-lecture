@@ -32,7 +32,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub qntlb Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/qntl/maven-repository</url>
+			<url>https://maven.pkg.github.com/qntlb/maven-repository</url>
 		</repository>
 	</distributionManagement>
 </project>
