@@ -40,7 +40,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub qntlb Apache Maven Packages</name>
-			<url>https://maven.pkg.github.com/qntlb/maven-repository</url>
+			<url>file:///${project.basedir}/../numerical-methods-computerarithmetic-exercise/local-maven-repo</url>
 		</repository>
 	</distributionManagement>
 </project>

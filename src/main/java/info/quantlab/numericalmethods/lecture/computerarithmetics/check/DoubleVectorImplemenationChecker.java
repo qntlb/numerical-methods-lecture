@@ -13,7 +13,7 @@ import net.finmath.montecarlo.RandomVariableFromDoubleArray;
 
 public class DoubleVectorImplemenationChecker {
 
-	private static double accuracy = 1E-7;
+	private static double accuracy = 1E-11;
 	private static Random random = new Random(3141);
 
 	/**
@@ -38,8 +38,11 @@ public class DoubleVectorImplemenationChecker {
 		DoubleVector vector = ObjectConstructor.<DoubleVector>create(theClass, DoubleVector.class, testArgument);
 
 		if(vector.sum() != 6) {
-			System.out.println("Simple test failed.");
+			System.out.println("\tSimple test failed.");
 			return false;
+		}
+		else {
+			System.out.println("\tSimple test passed.");
 		}
 
 		return true;
@@ -62,8 +65,11 @@ public class DoubleVectorImplemenationChecker {
 		
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
-			System.out.println("Random test failed. The error is " + error);
+			System.out.println("\tRandom test failed. The error is " + error);
 			return false;
+		}
+		else {
+			System.out.println("\tRandom test passed.");
 		}
 
 		return true;
@@ -87,11 +93,13 @@ public class DoubleVectorImplemenationChecker {
 		
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
-			System.out.println("Small and large number test failed. The error is " + error);
+			System.out.println("\tAccuracy is too low. The error is " + error);
 			return false;
+		}
+		else {
+			System.out.println("\tAccuracy test passed.");
 		}
 
 		return true;
-	}
-	
+	}	
 }

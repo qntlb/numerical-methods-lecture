@@ -59,7 +59,7 @@ public class QuadraticEquationImplemenationChecker {
 		double[] testArgument = new double[] { 2.0 , 0.5 };
 		QuadraticEquation equation = ObjectConstructor.<QuadraticEquation>create(theClass, QuadraticEquation.class, testArgument);
 		if(equation.hasRealRoot()) {
-			System.out.println("Test failed with coefficients " + Arrays.toString(testArgument) + " failed. hasRealRoot reported true, should be false.");
+			System.out.println("\tTest failed with coefficients " + Arrays.toString(testArgument) + " failed. hasRealRoot reported true, should be false.");
 			return false;
 		}
 		
@@ -77,20 +77,20 @@ public class QuadraticEquationImplemenationChecker {
 	 */
 	public static boolean checkWithCoefficients(Class<?> theClass, double p, double q) {
 		double[] testArgument = new double[] { q, -2*p };
-		System.out.println("Testing with coefficients " + Arrays.toString(testArgument));
+		System.out.println("\tTesting with coefficients " + Arrays.toString(testArgument));
 
 		QuadraticEquation equation = ObjectConstructor.<QuadraticEquation>create(theClass, QuadraticEquation.class, testArgument);
 
 		double x = equation.getSmallestRoot();
-		System.out.println("\tSolution reported x = " + x);
+		System.out.println("\t\tSolution reported x = " + x);
 		
 		double error = (x*x - 2 * p * x + q) / (1.0+Math.pow(x,2));
 		if(Math.abs(error) > accuracy) {
-			System.out.println("\tTest failed. The error is " + error);
+			System.out.println("\t\tTest failed. The error is " + error);
 			return false;
 		}
 		else {
-			System.out.println("\tTest passed. The error is " + error);
+			System.out.println("\t\tTest passed. The error is " + error);
 		}
 
 		return true;
