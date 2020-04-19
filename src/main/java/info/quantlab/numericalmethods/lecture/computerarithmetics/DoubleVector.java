@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.computerarithmetics;
+package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
 public interface DoubleVector {
 
