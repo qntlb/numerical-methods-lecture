@@ -13,6 +13,14 @@
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 	</properties>
 
+	<dependencies>
+		<dependency>
+			<groupId>net.finmath</groupId>
+			<artifactId>finmath-lib</artifactId>
+			<version>5.0.0</version>
+		</dependency>
+	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

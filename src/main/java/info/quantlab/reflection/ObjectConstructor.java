@@ -1,3 +1,8 @@
+/*
+ * (c) Copyright Christian P. Fries, Germany. Contact: email@christian-fries.de.
+ *
+ * Created on 12.04.2020
+ */
 package info.quantlab.reflection;
 
 import java.lang.reflect.Constructor;
@@ -25,7 +30,7 @@ public class ObjectConstructor<T> {
 			vector = (T) vectorConstructor.newInstance(argument);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			System.out.println("Could not create an object of your class. The constructor failed.");
-			throw new IllegalArgumentException("Could not create an object of your class. The constructor failed.");
+			throw new IllegalArgumentException("Could not create an object of your class. The constructor failed.", e);
 		}
 
 		return vector;
