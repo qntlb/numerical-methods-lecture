@@ -23,7 +23,12 @@ public class DoubleVectorImplemenationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean check(Class<?> theClass) {
-		return check1(theClass) && check2(theClass) && check3(theClass);
+		boolean checkSum = check1(theClass) && check2(theClass);
+		boolean checkAccuracy = check3(theClass);
+		if(checkSum & !checkAccuracy) {
+			System.out.println("You almost solved the exercise. The sum is approximately correct, but not accurate enough.");
+		}
+		return checkSum & checkAccuracy;
 	}
 
 	/**
@@ -65,11 +70,11 @@ public class DoubleVectorImplemenationChecker {
 		
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
-			System.out.println("\tRandom test failed. The error is " + error);
+			System.out.println("\tRandom array test failed. The error is " + error);
 			return false;
 		}
 		else {
-			System.out.println("\tRandom test passed.");
+			System.out.println("\tRandom array test passed.");
 		}
 
 		return true;
@@ -82,6 +87,10 @@ public class DoubleVectorImplemenationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean check3(Class<?> theClass) {
+		/*
+		 * Create an array of 10000 times Math.Pi and 1 times 10000 * Math.Pi.
+		 * Then check if the sum is 20000 times Math.Pi.
+		 */
 		double[] testArgument = new double[10001];
 		for(int i=0; i<testArgument.length; i++) {
 			testArgument[i] = Math.PI;
@@ -93,7 +102,7 @@ public class DoubleVectorImplemenationChecker {
 		
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
-			System.out.println("\tAccuracy is too low. The error is " + error);
+			System.out.println("\tAccuracy test failes. Accuracy is too low. The error is " + error);
 			return false;
 		}
 		else {
