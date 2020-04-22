@@ -20,15 +20,17 @@ public class DoubleVectorImplemenationChecker {
 	 * Check if the class solves the exercise.
 	 * 
 	 * @param theClass The class to test;
+	 * @param whatToCheck A string, currently "basic" or "accuracy".
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean check(Class<?> theClass) {
-		boolean checkSum = check1(theClass) && check2(theClass);
+	public static boolean check(Class<?> theClass, String whatToCheck) {
+		boolean checkSum = checkSimpleArray(theClass) && checkRandom(theClass);
 		boolean checkAccuracy = check3(theClass);
 		if(checkSum & !checkAccuracy) {
 			System.out.println("You almost solved the exercise. The sum is approximately correct, but not accurate enough.");
 		}
-		return checkSum & checkAccuracy;
+		if(whatToCheck.equals("basic")) return checkSum;
+		else return checkSum & checkAccuracy;
 	}
 
 	/**
@@ -37,7 +39,7 @@ public class DoubleVectorImplemenationChecker {
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean check1(Class<?> theClass) {
+	public static boolean checkSimpleArray(Class<?> theClass) {
 		double[] testArgument = new double[] { 1, 2, 3 };
 
 		DoubleVector vector = ObjectConstructor.<DoubleVector>create(theClass, DoubleVector.class, testArgument);
@@ -59,7 +61,7 @@ public class DoubleVectorImplemenationChecker {
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean check2(Class<?> theClass) {
+	public static boolean checkRandom(Class<?> theClass) {
 		double[] testArgument = new double[1000];
 		for(int i=0; i<testArgument.length; i++) {
 			testArgument[i] = random.nextDouble();
@@ -67,7 +69,7 @@ public class DoubleVectorImplemenationChecker {
 		double testSum = new RandomVariableFromDoubleArray(0.0, testArgument).getAverage()*testArgument.length;
 
 		DoubleVector vector = ObjectConstructor.<DoubleVector>create(theClass, DoubleVector.class, testArgument);
-		
+
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
 			System.out.println("\tRandom array test failed. The error is " + error);
@@ -79,7 +81,7 @@ public class DoubleVectorImplemenationChecker {
 
 		return true;
 	}
-	
+
 	/**
 	 * Small and large numbers array
 	 * 
@@ -99,7 +101,7 @@ public class DoubleVectorImplemenationChecker {
 		double testSum = 20000*Math.PI;
 
 		DoubleVector vector = ObjectConstructor.<DoubleVector>create(theClass, DoubleVector.class, testArgument);
-		
+
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
 			System.out.println("\tAccuracy test failes. Accuracy is too low. The error is " + error);
