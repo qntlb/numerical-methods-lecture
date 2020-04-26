@@ -16,7 +16,7 @@ public class ComputerArithmeticExperiment {
 	public static void main(String[] args) {
 
 		System.out.println("\nSome experiments related to integer arithmetic.\n");
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 		/*
 		 * Explore Integer
@@ -33,7 +33,7 @@ public class ComputerArithmeticExperiment {
 
 		System.out.println("i > i+1 is " + (i > i+1));
 
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 
 		/*
@@ -41,7 +41,7 @@ public class ComputerArithmeticExperiment {
 		 */
 
 		System.out.println("\nSome experiments related to floating point arithmetic (IEEE 754).\n");
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 		/*
 		 * Double: Smallest positive number
@@ -60,7 +60,7 @@ public class ComputerArithmeticExperiment {
 		System.out.println("tiny/2*2   = " + (tiny/2)*2);
 		System.out.println("tiny*2/2   = " + (tiny*2)/2);
 
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 		/*
 		 * Double: Smallest positive number x = eps for which 1+2x != 1
@@ -80,7 +80,7 @@ public class ComputerArithmeticExperiment {
 		System.out.println("1+2*eps ... = " + (1+2*eps));
 		System.out.println("2^(-53).... = " + Math.pow(2, -53));
 
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 
 		/*
@@ -127,7 +127,7 @@ public class ComputerArithmeticExperiment {
 
 		System.out.println("1+infinity  = " + (1 + plusInfinity));
 
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 
 		/*
@@ -150,7 +150,7 @@ public class ComputerArithmeticExperiment {
 		System.out.println("maxDouble+maxDouble-maxDouble   = " + (maxDouble+maxDouble-maxDouble));
 		System.out.println("maxDouble+(maxDouble-maxDouble) = " + (maxDouble+(maxDouble-maxDouble)));
 
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 
 		/*
@@ -169,7 +169,7 @@ public class ComputerArithmeticExperiment {
 
 		System.out.println("x       = " + x);
 		System.out.println("error   = " + error);
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 
 
 		/*
@@ -190,7 +190,7 @@ public class ComputerArithmeticExperiment {
 		double averageKahan = sumOfValueKahan / numberOfValues;
 		System.out.println("Kahan     summation average = " + averageKahan);
 
-		System.out.println("_".repeat(79));
+		System.out.println("_".repeat(79)+"\n");
 	}
 
 	private static double getSumOfValuesKahan(double value, int numberOfValues) {
