@@ -83,7 +83,12 @@ public class QuadraticEquationImplemenationChecker {
 
 		double x = equation.getSmallestRoot();
 		System.out.println("\t\tSolution reported x = " + x);
-		
+
+		if(Double.isNaN(x)) {
+			System.out.println("\t\tTest failed. Solution failed to calculate.");
+			return false;
+		}
+
 		double error = (x*x - 2 * p * x + q) / (1.0+Math.pow(x,2));
 		if(Math.abs(error) > accuracy) {
 			System.out.println("\t\tTest failed. The error is " + error);
