@@ -24,7 +24,7 @@ public class QuasiRandomNumberExperiments {
 		
 		double integralPseudoMC = randomNumbers.map(function).sum() / numberOfSamplePoints;
 		
-		System.out.println("integralPseudoRng..: " + integralPseudoMC + " \terror: " + (integralPseudoMC-integralAnalytic));
+		System.out.println("integral(pseudo random number sequence)..: " + integralPseudoMC + " \terror: " + (integralPseudoMC-integralAnalytic));
 
 		/*
 		 * Using Quasi rng
@@ -33,7 +33,7 @@ public class QuasiRandomNumberExperiments {
 		
 		double integralQuasiMC = randomNumberQuasi.map(function).sum() / numberOfSamplePoints;
 		
-		System.out.println("integralPseudoRng..: " + integralQuasiMC + " \terror: " + (integralQuasiMC-integralAnalytic));
+		System.out.println("integral(quasi random number sequence)...: " + integralQuasiMC + " \terror: " + (integralQuasiMC-integralAnalytic));
 	}
 
 }
