@@ -111,14 +111,13 @@ public class MonteCarloIntegrationParalellExperiment {
 		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 
 		Random randomSeed = new Random(1);
-	
-		long seed = randomSeed.nextLong();
-		
+			
 		/*
 		 * Distribute the tasks
 		 */
 		List<Future<Double>> results = new ArrayList<>();
 		for(int taskIndex = 0; taskIndex < numberOfTask; taskIndex++) {
+			long seed = randomSeed.nextLong();
 			Future<Double> value = executor.submit(() -> getApproximationOfPiWithMersenne(seed, numberOfSamplesPerTask));
 			results.add(value);
 		}
