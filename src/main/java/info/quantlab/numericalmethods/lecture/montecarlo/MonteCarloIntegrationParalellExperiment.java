@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.IntStream;
+
 import net.finmath.randomnumbers.HaltonSequence;
 
 public class MonteCarloIntegrationParalellExperiment {
@@ -38,7 +39,7 @@ public class MonteCarloIntegrationParalellExperiment {
 				}).sum() / numberOfSamples;
 		long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (double)(timeEnd-timeStart) / 1000.0;
+		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Halton, sequential using stream....: " + (piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
@@ -55,7 +56,7 @@ public class MonteCarloIntegrationParalellExperiment {
 				}).sum() / numberOfSamples;
 		long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (double)(timeEnd-timeStart) / 1000.0;
+		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Halton, parallel using stream......: " + (piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
@@ -74,7 +75,7 @@ public class MonteCarloIntegrationParalellExperiment {
 				}).sum() / numberOfSamples;
 		long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (double)(timeEnd-timeStart) / 1000.0;
+		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Mersenne, sequential using stream..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
@@ -95,7 +96,7 @@ public class MonteCarloIntegrationParalellExperiment {
 				}).sum() / numberOfSamples;
 		long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (double)(timeEnd-timeStart) / 1000.0;
+		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Mersenne, parallel using stream....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
@@ -110,34 +111,38 @@ public class MonteCarloIntegrationParalellExperiment {
 		int numberOfThreads = Runtime.getRuntime().availableProcessors();
 		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 
-		Random randomSeed = new Random(3216);
+		try {
+			Random randomSeed = new Random(3216);
 
-		/*
-		 * Distribute the tasks.
-		 */
-		List<Future<Double>> results = new ArrayList<>();
-		for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
-			long seed = randomSeed.nextLong();
+			/*
+			 * Distribute the tasks.
+			 */
+			List<Future<Double>> results = new ArrayList<>();
+			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
+				long seed = randomSeed.nextLong();
 
-			Future<Double> value = executor.submit(() -> getApproximationOfPiWithMersenne(seed, numberOfSamplesPerTask));
-			results.add(value);
+				Future<Double> value = executor.submit(() -> getApproximationOfPiWithMersenne(seed, numberOfSamplesPerTask));
+				results.add(value);
+			}
+
+			/*
+			 * Collect the results
+			 */
+			double sum = 0.0;
+			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
+				sum += results.get(taskIndex).get();
+			}		
+			double piMersenne = sum / numberOfTask;
+
+			long timeEnd = System.currentTimeMillis();
+
+			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+
+			System.out.println("Mersenne, parallel using Executor..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 		}
-		
-		/*
-		 * Collect the results
-		 */
-		double sum = 0.0;
-		for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
-			sum += results.get(taskIndex).get();
-		}		
-		double piMersenne = sum / numberOfTask;
-
-		long timeEnd = System.currentTimeMillis();
-		
-		double timeInSeconds = (double)(timeEnd-timeStart) / 1000.0;
-
-		System.out.println("Mersenne, parallel using Executor..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
-
+		finally {
+			executor.shutdown();
+		}
 	}
 
 	private static void testHaltonWithExecutor(int numberOfSamples) throws InterruptedException, ExecutionException {
@@ -150,32 +155,36 @@ public class MonteCarloIntegrationParalellExperiment {
 		int numberOfThreads = Runtime.getRuntime().availableProcessors();
 		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 
-		/*
-		 * Distribute the tasks.
-		 */
-		List<Future<Double>> results = new ArrayList<>();
-		for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
-			int startIndex = taskIndex * numberOfSamplesPerTask;
+		try {
+			/*
+			 * Distribute the tasks.
+			 */
+			List<Future<Double>> results = new ArrayList<>();
+			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
+				int startIndex = taskIndex * numberOfSamplesPerTask;
 
-			Future<Double> value = executor.submit(() -> getApproximationOfPiWithHalton(startIndex, numberOfSamplesPerTask));
-			results.add(value);
+				Future<Double> value = executor.submit(() -> getApproximationOfPiWithHalton(startIndex, numberOfSamplesPerTask));
+				results.add(value);
+			}
+
+			/*
+			 * Collect the results
+			 */
+			double sum = 0.0;
+			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
+				sum += results.get(taskIndex).get();
+			}		
+			double piMersenne = sum / numberOfTask;
+
+			long timeEnd = System.currentTimeMillis();
+
+			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+
+			System.out.println("Halton, parallel using Executor....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 		}
-		
-		/*
-		 * Collect the results
-		 */
-		double sum = 0.0;
-		for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
-			sum += results.get(taskIndex).get();
-		}		
-		double piMersenne = sum / numberOfTask;
-
-		long timeEnd = System.currentTimeMillis();
-		
-		double timeInSeconds = (double)(timeEnd-timeStart) / 1000.0;
-
-		System.out.println("Halton, parallel using Executor....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
-
+		finally {
+			executor.shutdown();
+		}
 	}
 
 	private static double getApproximationOfPiWithMersenne(long seed, int numberOfSamples) {
