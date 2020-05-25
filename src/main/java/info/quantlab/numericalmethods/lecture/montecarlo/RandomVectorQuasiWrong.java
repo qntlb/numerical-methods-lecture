@@ -1,7 +1,5 @@
 package info.quantlab.numericalmethods.lecture.montecarlo;
 
-import java.util.Random;
-
 import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence;
 
 /**
@@ -16,7 +14,7 @@ public class RandomVectorQuasiWrong {
 	// Our memory for the d-Dimensional sequence indexed as [sampleIndex][componentIndex]
 	// Alternative would be : [componentIndex][sampleIndex]
 	private double[][] randomVectorSequence;
-	
+
 	public RandomVectorQuasiWrong(int length, int dimension) {
 		
 		randomVectorSequence = new double[length][dimension];
