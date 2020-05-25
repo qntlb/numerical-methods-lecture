@@ -2,7 +2,7 @@ package info.quantlab.numericalmethods.lecture.montecarlo;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
-	
+
 import net.finmath.randomnumbers.MersenneTwister;
 
 public class MonteCarloIntegrator implements Integrator {

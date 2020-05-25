@@ -1,9 +1,6 @@
 package info.quantlab.numericalmethods.lecture.montecarlo;
 
-import java.util.Random;
-
 import info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence;
-import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence;
 
 /**
  * Creates a sequence of vectors with uniform on [0,1) distributed components.
