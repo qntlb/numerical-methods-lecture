@@ -98,7 +98,7 @@ public class MonteCarloIntegrationParalellExperiment {
 
 		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Mersenne, parallel using stream....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
+		System.out.println("Mersenne, parallel stream + synchronize....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
 
 	private static void testMersenneWithExecutor(int numberOfSamples) throws InterruptedException, ExecutionException {
@@ -138,7 +138,7 @@ public class MonteCarloIntegrationParalellExperiment {
 
 			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-			System.out.println("Mersenne, parallel using Executor..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
+			System.out.println("Mersenne, parallel Executor w/ thread local generator..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 		}
 		finally {
 			executor.shutdown();

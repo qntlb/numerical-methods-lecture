@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>net.finmath</groupId>
 			<artifactId>finmath-lib-plot-extensions</artifactId>
-			<version>0.3.7</version>
+			<version>0.3.8</version>
 		</dependency>
 	</dependencies>
 

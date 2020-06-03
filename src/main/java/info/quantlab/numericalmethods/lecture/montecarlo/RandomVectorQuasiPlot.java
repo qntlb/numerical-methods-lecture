@@ -21,7 +21,7 @@ public class RandomVectorQuasiPlot {
 		
 		RandomVectorQuasi sequence = new RandomVectorQuasi(numberOfPoints, 2);
 		
-		Plot plot = Plots.createPlotScatter(
+		Plot plot = Plots.createScatter(
 				sequence.getSequenceForComponent(0),
 				sequence.getSequenceForComponent(1),
 				0.0, 1.0, 3);
