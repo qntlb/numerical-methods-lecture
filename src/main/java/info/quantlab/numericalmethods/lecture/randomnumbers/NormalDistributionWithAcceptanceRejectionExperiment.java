@@ -3,13 +3,9 @@ package info.quantlab.numericalmethods.lecture.randomnumbers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import net.finmath.functions.NormalDistribution;
-import net.finmath.montecarlo.RandomVariableFromDoubleArray;
 import net.finmath.plots.Plots;
 import net.finmath.randomnumbers.MersenneTwister;
-import net.finmath.stochastic.RandomVariable;
 
 /**
  * Acceptance-Rejection sampling of the normal distribution.
@@ -223,106 +219,8 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		
 		System.out.println("Time ICDF from Halton-Sequence 1D.: " + timeSec + " sec.");
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots .createHistogram(valuesNormal, 100, 4.0)
 		.setTitle("Normal via ICDF from Halton-Sequence").show();
 
 	}
-	
-	private static void testARWithHalton() {
-
-		HaltonSequence halton = new HaltonSequence(new int[] {2, 3, 5});
-		MersenneTwister mersenne = new MersenneTwister(3636);
-
-		List<Double> valuesNormal = new ArrayList<>();
-		int j = 0;
-		for(int i = 0; i<numberOfSamples; i++) {
-			double u = 1.0, x = 0.0, s = 1.0;
-			double[] uniform = null;
-			while(u >= Math.exp(-0.5 * (x-1)*(x-1))) {
-				uniform = halton.getSamplePoint(j++);
-				u = uniform[0];
-				double v = 2*(uniform[1]-0.5);
-				s = Math.signum(v);
-				double y = Math.abs(v);
-				x = -Math.log(y);
-			}
-			double normal = x * s;
-			
-			valuesNormal.add(normal);
-		}
-		
-		Plots.createHistogram(valuesNormal, 100, 4.0)
-		.setTitle("Normal via AR from Halton (" + valuesNormal.size() + " samples)").show();
-
-		
-	}
-
-	private static void testAR2WithHalton() throws Exception {
-
-		
-		MersenneTwister mersenne = new MersenneTwister(3636);
-
-		List<Double> valuesNormal = new ArrayList<>();
-		int j = 0;
-		double p = Math.sqrt(numberOfSamples);
-		for(int i = 0; i<numberOfSamples; i++) {
-			double u = 1.0, x = 0.0, s = 1.0;
-	
-			while(u >= Math.exp(-0.5 * (x-1)*(x-1))) {
-				double uniform = VanDerCorputSequence.getVanDerCorputNumber(j++, 2);
-				double uniform1 = ((int)(uniform*p))/p;
-				double uniform2 = uniform*p - uniform1*p;
-				u = uniform1;
-				double v = 2*(uniform2-0.5);
-				s = Math.signum(v);
-				double y = Math.abs(v);
-				x = -Math.log(y);
-			}
-			double normal = x * s;
-			
-			valuesNormal.add(normal);
-		}
-		
-		Plots.createHistogram(valuesNormal, 100, 4.0)
-		.setTitle("Normal via AR from Halton (" + valuesNormal.size() + " samples)").show();
-
-		
-	}
-
-	private static void testAR3WithHalton() throws Exception {
-
-		
-
-		List<Double> valuesNormal = new ArrayList<>();
-		int j = 0;
-		double p = Math.sqrt(numberOfSamples);
-		for(int i = 0; i<numberOfSamples; i++) {
-			double u = 1.0, x = 0.0, s = 1.0;
-	
-				while(u >= Math.exp(-0.5 * (x-1)*(x-1))) {
-
-					double uniform1 = VanDerCorputSequence.getVanDerCorputNumber(j, 2);
-					double uniform2 = VanDerCorputSequence.getVanDerCorputNumber(j++, 3);
-
-//				double uniform1 = ((int)(uniform*p))/p;
-//				double uniform2 = uniform*p - uniform1*p;
-				u = uniform1;
-				double v = 2*(uniform2-0.5);
-				s = Math.signum(v);
-				double y = Math.abs(v);
-				x = -Math.log(y);
-			}
-			double normal = x * s;
-			
-			valuesNormal.add(normal);
-		}
-		
-		Plots.createHistogram(valuesNormal, 100, 4.0)
-		.setTitle("Normal via AR from Halton (" + valuesNormal.size() + " samples)").show();
-
-		RandomVariable xrv = new RandomVariableFromDoubleArray(0.0, ArrayUtils.toPrimitive(valuesNormal.toArray(new Double[valuesNormal.size()])));
-		Plots.createHistogramBehindValues(xrv, xrv.apply(x -> 1.0/Math.sqrt(2*Math.PI) * Math.exp(-0.5*x*x)), 100, 4.0).show();
-		
-	}
-
 }
