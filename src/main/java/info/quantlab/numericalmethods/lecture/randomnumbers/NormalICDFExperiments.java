@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.finmath.functions.NormalDistribution;
-import net.finmath.plots.Plot;
 import net.finmath.plots.Plots;
 import net.finmath.randomnumbers.MersenneTwister;
 import net.finmath.randomnumbers.SobolSequence1D;
