@@ -28,6 +28,18 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 public class AsianOptionWithBSControlVariateChecker {
 
+	// Model properties
+	private static final double	initialValue   = 1.0;
+	private static final double	riskFreeRate   = 0.05;
+	private static final double	volatility     = 0.30;
+
+	// Process discretization properties
+	private static final int		numberOfPaths		= 200000;
+	private static final int		numberOfTimeSteps	= 20;
+	private static final double		deltaT				= 0.5;
+
+	private static final int		seed				= 31415;
+
 	private static double accuracy = 1E-11;
 	private static Random random = new Random(3141);
 
@@ -43,10 +55,27 @@ public class AsianOptionWithBSControlVariateChecker {
 		case "basic":
 			return checkBasicFunctionality(theClass);
 		case "accuracy":
-		default:
 			return checkAccuracy(theClass);
+		case "control":
+		default:
+			return checkControl(theClass);
 		}
 	}
+
+	private static boolean checkControl(Class<?> theClass) {
+
+		RandomVariable value = getValueForTestCase(theClass, 0);
+
+		if(Math.abs(value.getStandardError()) > 0.0004) {
+			System.out.println("\tThe variance reduction appears to be not good enough.");
+			return false;
+		}
+		else {
+			System.out.println("\t First variance reduction test passed.");
+		}
+
+		return true;
+	}	
 
 	/**
 	 * Check basic functionality
@@ -55,7 +84,43 @@ public class AsianOptionWithBSControlVariateChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkBasicFunctionality(Class<?> theClass) {
-		double	maturity = 2.0;
+		
+		RandomVariable value = getValueForTestCase(theClass, 0);
+
+		if(Math.abs(value.getAverage()- 0.3725) > 0.02) {
+			System.out.println("\tThe value of the asian option appears to be wrong.");
+			return false;
+		}
+		else {
+			System.out.println("\tSimple test passed.");
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check accuracy of the implementation.
+	 * 
+	 * @param theClass The class to test;
+	 * @return Boolean if the test is passed.
+	 */
+	public static boolean checkAccuracy(Class<?> theClass) {
+
+		RandomVariable value = getValueForTestCase(theClass, 0);
+
+		if(Math.abs(value.getStandardError()) > 0.0009) {
+			System.out.println("\tThe variance reduction appears to be not good enough.");
+			return false;
+		}
+		else {
+			System.out.println("\t First variance reduction test passed.");
+		}
+
+		return true;
+	}	
+
+	private static RandomVariable getValueForTestCase(Class<?> theClass, int testCase) {
+		double	maturity = 10.0;
 		double	strike = 1.05;
 		TimeDiscretization timesForAveraging = new TimeDiscretizationFromArray(5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
 
@@ -68,39 +133,11 @@ public class AsianOptionWithBSControlVariateChecker {
 		/*
 		 * Create model
 		 */
-		// Model properties
-		final double	initialValue   = 1.0;
-		final double	riskFreeRate   = 0.05;
-		final double	volatility     = 0.30;
-
-		// Process discretization properties
-		final int		numberOfPaths		= 200000;
-		final int		numberOfTimeSteps	= 20;
-		final double	deltaT				= 0.5;
-
-		final int		seed				= 31415;
-
-
-		// Create a model
-		final AbstractProcessModel model = new BlackScholesModel(initialValue, riskFreeRate, volatility);
-
-		// Create a time discretizeion
-		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0 /* initial */, numberOfTimeSteps, deltaT);
-
-		// Create a Brownian motion
-		final IndependentIncrements brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1 /* numberOfFactors */, numberOfPaths, seed);
-
-		// Create a corresponding MC process
-		final MonteCarloProcessFromProcessModel process = new EulerSchemeFromProcessModel(model, brownianMotion, Scheme.EULER);
-
-		// Using the process (Euler scheme), create an MC simulation of a Black-Scholes model
-		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = new MonteCarloAssetModel(model, process);
+		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel();
 
 		/*
 		 * Value AsianOptionWithBSControlVariate
 		 */
-
-		AssetMonteCarloProduct asian = new AsianOption(maturity, strike, timesForAveraging);
 
 		RandomVariable valueAsian = null;
 		try {
@@ -118,34 +155,29 @@ public class AsianOptionWithBSControlVariateChecker {
 		String.format("%10.7f \u00B1 %10.7f", x.getAverage(), x.getStandardError());
 
 		System.out.println("value Asian.................: " + printAvgErr.apply(valueAsian));
-
-		if(Math.abs(valueAsian.getAverage()- 0.556) > 0.02) {
-			System.out.println("\tThe value of the asian option appears to be wrong.");
-			return false;
-		}
-		else {
-			System.out.println("\tSimple test passed.");
-		}
-
-		System.out.println("You implementation appears to work, however, the final grading will require an update of this test.");
-		System.out.println("For that reason we consider this test currently as failed.");
-		System.out.println("Just wait for the update of this test.");
-
-		return false;
+		
+		return valueAsian;
 	}
 
-	/**
-	 * Check accuracy of the implementation.
-	 * 
-	 * @param theClass The class to test;
-	 * @return Boolean if the test is passed.
-	 */
-	public static boolean checkAccuracy(Class<?> theClass) {
+	private static AssetModelMonteCarloSimulationModel createModel() {
+		// Create a model
+		final AbstractProcessModel model = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
-		System.out.println("The final grading will require an update of this test.");
-		System.out.println("Just wait for the update of this test.");
-		return false;
-	}	
+		// Create a time discretization
+		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0 /* initial */, numberOfTimeSteps, deltaT);
+
+		// Create a Brownian motion
+		final IndependentIncrements brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1 /* numberOfFactors */, numberOfPaths, seed);
+
+		// Create a corresponding MC process
+		final MonteCarloProcessFromProcessModel process = new EulerSchemeFromProcessModel(model, brownianMotion, Scheme.EULER);
+
+		// Using the process (Euler scheme), create an MC simulation of a Black-Scholes model
+		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = new MonteCarloAssetModel(model, process);
+		
+		return monteCarloBlackScholesModel;
+	}
+
 
 	private static AssetMonteCarloProduct createProduct(Class<?> theClass, double maturity, double strike, TimeDiscretization timesForAveraging) {
 
