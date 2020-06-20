@@ -55,10 +55,10 @@ public class AsianOptionWithBSControlVariateChecker {
 		case "basic":
 			return checkBasicFunctionality(theClass);
 		case "accuracy":
-			return checkAccuracy(theClass);
+			return checkBasicFunctionality(theClass) & checkAccuracy(theClass);
 		case "control":
 		default:
-			return checkControl(theClass);
+			return checkBasicFunctionality(theClass) & checkControl(theClass);
 		}
 	}
 
