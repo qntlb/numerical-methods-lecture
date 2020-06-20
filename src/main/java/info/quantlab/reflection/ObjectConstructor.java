@@ -10,9 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
-import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
-import net.finmath.time.TimeDiscretization;
-
 public class ObjectConstructor<T> {
 	
 	public static <T> T create(Class<?> theClass, Class<T> theInterface, Object argument) {
@@ -52,7 +49,6 @@ public class ObjectConstructor<T> {
 			vectorConstructor = theClass.getConstructor(argumentTypes.toArray(new Class<?>[argumentTypes.size()]));
 		}
 		catch(Exception e) {
-			System.out.println("Your class does not have a constructor that takes an argument of type " + Arrays.deepToString(argumentTypes.toArray()));
 			throw new IllegalArgumentException("Your class does not have a constructor that takes an argument of type " + Arrays.deepToString(argumentTypes.toArray()));
 		}
 		
@@ -60,7 +56,6 @@ public class ObjectConstructor<T> {
 		try {
 			vector = (T) vectorConstructor.newInstance(arguments.toArray(new Object[arguments.size()]));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			System.out.println("Could not create an object of your class. The constructor failed.");
 			throw new IllegalArgumentException("Could not create an object of your class. The constructor failed.", e);
 		}
 

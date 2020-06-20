@@ -167,17 +167,14 @@ public class NormalICDFExperiments {
 
 	private static void testICDFWithVanDerCorput() throws Exception {
 
-		VanDerCorputSequence uniformSequence = new VanDerCorputSequence(2);
-
-		org.apache.commons.math3.distribution.NormalDistribution normalDistribution =
-				new org.apache.commons.math3.distribution.NormalDistribution();
+		var uniformSequence = new net.finmath.randomnumbers.VanDerCorputSequence(2);
 
 		List<Double> valuesNormal = new ArrayList<>();
 		List<Double> valuesUniform = new ArrayList<>();
 		for(int i = 0; i<100000; i++) {
 			double uniform = uniformSequence.getAsDouble();
 
-			double normal = normalDistribution.inverseCumulativeProbability(uniform);
+			double normal = net.finmath.functions.NormalDistribution.inverseCumulativeDistribution(uniform);
 
 			valuesUniform.add(uniform);
 			valuesNormal.add(normal);
