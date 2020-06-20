@@ -7,6 +7,11 @@ package info.quantlab.reflection;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
+
+import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
+import net.finmath.time.TimeDiscretization;
 
 public class ObjectConstructor<T> {
 	
@@ -28,6 +33,32 @@ public class ObjectConstructor<T> {
 		T vector;
 		try {
 			vector = (T) vectorConstructor.newInstance(argument);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			System.out.println("Could not create an object of your class. The constructor failed.");
+			throw new IllegalArgumentException("Could not create an object of your class. The constructor failed.", e);
+		}
+
+		return vector;
+	}
+
+	public static <T> T create(Class<?> theClass, Class<T> theInterface, List<Class<?>> argumentTypes, List<Object> arguments) {
+		if(!theInterface.isAssignableFrom(theClass)) {
+			System.out.println("Your class does not implement the interface " + theInterface.getName());
+			throw new IllegalArgumentException("Your class does not implement the interface " + theInterface.getName());
+		}
+
+		Constructor<?> vectorConstructor;
+		try {
+			vectorConstructor = theClass.getConstructor(argumentTypes.toArray(new Class<?>[argumentTypes.size()]));
+		}
+		catch(Exception e) {
+			System.out.println("Your class does not have a constructor that takes an argument of type " + Arrays.deepToString(argumentTypes.toArray()));
+			throw new IllegalArgumentException("Your class does not have a constructor that takes an argument of type " + Arrays.deepToString(argumentTypes.toArray()));
+		}
+		
+		T vector;
+		try {
+			vector = (T) vectorConstructor.newInstance(arguments.toArray(new Object[arguments.size()]));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			System.out.println("Could not create an object of your class. The constructor failed.");
 			throw new IllegalArgumentException("Could not create an object of your class. The constructor failed.", e);
