@@ -51,31 +51,52 @@ public class AsianOptionWithBSControlVariateChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean check(Class<?> theClass, String whatToCheck) {
+
 		switch(whatToCheck) {
-		case "basic":
-			return checkBasicFunctionality(theClass);
-		case "accuracy":
-			return checkBasicFunctionality(theClass) & checkAccuracy(theClass);
 		case "control":
 		default:
-			return checkBasicFunctionality(theClass) & checkControl(theClass);
+		{
+			if(!checkBasicFunctionality(theClass)) {
+				System.out.println("\t Before we test the variance reduction, the valuation has to be correct.");
+				return false;
+			}
+			else {
+				boolean success = checkControl(theClass);
+				if(success) {
+					System.out.println("\t Strong variance reduction test passed.");
+				}
+				else {
+					System.out.println("\t The variance reduction is not good enough for the strong variance reduction test.");
+				}
+				return success;
+			}
+		}
+		case "accuracy":
+			if(!checkBasicFunctionality(theClass)) {
+				System.out.println("\t Before we test the variance reduction, the valuation has to be correct.");
+				return false;
+			}
+			else {
+				boolean success = checkAccuracy(theClass);
+				if(success) {
+					System.out.println("\t Weak variance reduction test passed.");
+				}
+				else {
+					System.out.println("\t The variance reduction is not good enough.");
+				}
+				return success;
+			}
+		case "basic":
+			boolean success = checkBasicFunctionality(theClass);
+			if(success) {
+				System.out.println("\t Valuation test passed.");
+			}
+			else {
+				System.out.println("\t Your class does not work or the value of the asian option appears to be wrong.");
+			}
+			return success;
 		}
 	}
-
-	private static boolean checkControl(Class<?> theClass) {
-
-		RandomVariable value = getValueForTestCase(theClass, 0);
-
-		if(Math.abs(value.getStandardError()) > 0.0004) {
-			System.out.println("\tThe variance reduction appears to be not good enough.");
-			return false;
-		}
-		else {
-			System.out.println("\t First variance reduction test passed.");
-		}
-
-		return true;
-	}	
 
 	/**
 	 * Check basic functionality
@@ -84,18 +105,10 @@ public class AsianOptionWithBSControlVariateChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkBasicFunctionality(Class<?> theClass) {
-		
+
 		RandomVariable value = getValueForTestCase(theClass, 0);
 
-		if(Math.abs(value.getAverage()- 0.3725) > 0.02) {
-			System.out.println("\tThe value of the asian option appears to be wrong.");
-			return false;
-		}
-		else {
-			System.out.println("\tSimple test passed.");
-		}
-
-		return true;
+		return Math.abs(value.getAverage()- 0.3725) <= 0.02;
 	}
 
 	/**
@@ -108,15 +121,14 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		RandomVariable value = getValueForTestCase(theClass, 0);
 
-		if(Math.abs(value.getStandardError()) > 0.0009) {
-			System.out.println("\tThe variance reduction appears to be not good enough.");
-			return false;
-		}
-		else {
-			System.out.println("\t First variance reduction test passed.");
-		}
+		return Math.abs(value.getStandardError()) <= 0.0009;
+	}	
 
-		return true;
+	private static boolean checkControl(Class<?> theClass) {
+
+		RandomVariable value = getValueForTestCase(theClass, 0);
+
+		return Math.abs(value.getStandardError()) <= 0.0004;
 	}	
 
 	private static RandomVariable getValueForTestCase(Class<?> theClass, int testCase) {
@@ -155,7 +167,7 @@ public class AsianOptionWithBSControlVariateChecker {
 		String.format("%10.7f \u00B1 %10.7f", x.getAverage(), x.getStandardError());
 
 		System.out.println("value Asian.................: " + printAvgErr.apply(valueAsian));
-		
+
 		return valueAsian;
 	}
 
@@ -174,7 +186,7 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		// Using the process (Euler scheme), create an MC simulation of a Black-Scholes model
 		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = new MonteCarloAssetModel(model, process);
-		
+
 		return monteCarloBlackScholesModel;
 	}
 
