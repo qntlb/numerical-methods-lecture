@@ -8,8 +8,14 @@ import net.finmath.montecarlo.model.ProcessModel;
 
 public class Utils {
 
-
-	public BlackScholesModel getBlackScholesModelFromMonteCarloModel(AssetModelMonteCarloSimulationModel model) {
+	/**
+	 * Returns the BlackScholesModel 'processModel' used to build
+	 * the Monte Carlo simulation, if any.
+	 * 
+	 * @param model The Monte-Carlo simulation model.
+	 * @return The BlackScholesModel (ProcessModel).
+	 */
+	public static BlackScholesModel getBlackScholesModelFromMonteCarloModel(AssetModelMonteCarloSimulationModel model) {
 		ProcessModel processModel;
 		if(model instanceof MonteCarloAssetModel) {
 			processModel = ((MonteCarloAssetModel)model).getModel();
