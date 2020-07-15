@@ -16,7 +16,6 @@ import net.finmath.montecarlo.IndependentIncrements;
 import net.finmath.montecarlo.assetderivativevaluation.AssetModelMonteCarloSimulationModel;
 import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
-import net.finmath.montecarlo.assetderivativevaluation.products.AsianOption;
 import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
 import net.finmath.montecarlo.model.AbstractProcessModel;
 import net.finmath.montecarlo.process.EulerSchemeFromProcessModel;
@@ -163,10 +162,10 @@ public class AsianOptionWithBSControlVariateChecker {
 		 * Print results
 		 */
 
-		Function<RandomVariable, String> printAvgErr = x -> 
+		Function<RandomVariable, String> printAvgAndErr = x -> 
 		String.format("%10.7f \u00B1 %10.7f", x.getAverage(), x.getStandardError());
 
-		System.out.println("value Asian.................: " + printAvgErr.apply(valueAsian));
+		System.out.println("value Asian.................: " + printAvgAndErr.apply(valueAsian));
 
 		return valueAsian;
 	}
