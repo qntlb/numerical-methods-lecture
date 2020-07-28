@@ -18,7 +18,7 @@ public class DoubleVectorImplemenationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @param whatToCheck A string, currently "basic" or "accuracy".
 	 * @return Boolean if the test is passed.
@@ -35,7 +35,7 @@ public class DoubleVectorImplemenationChecker {
 
 	/**
 	 * Simple array
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -57,7 +57,7 @@ public class DoubleVectorImplemenationChecker {
 
 	/**
 	 * Random array test
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -84,7 +84,7 @@ public class DoubleVectorImplemenationChecker {
 
 	/**
 	 * Small and large numbers array
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -112,5 +112,5 @@ public class DoubleVectorImplemenationChecker {
 		}
 
 		return true;
-	}	
+	}
 }

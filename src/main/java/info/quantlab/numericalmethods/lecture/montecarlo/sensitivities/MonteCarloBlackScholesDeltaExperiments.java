@@ -153,7 +153,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 	}
 
 	private static void printResult(String name, double valueMonteCarlo, double valueAnalytic) {
-		System.out.format("%24s\t%+10.6f\t%+10.6f\t%+9.5e\n", name, valueMonteCarlo, valueAnalytic, valueMonteCarlo-valueAnalytic);		
+		System.out.format("%24s\t%+10.6f\t%+10.6f\t%+9.5e\n", name, valueMonteCarlo, valueAnalytic, valueMonteCarlo-valueAnalytic);
 	}
 
 	private static double getValueMonteCarlo(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) throws CalculationException {

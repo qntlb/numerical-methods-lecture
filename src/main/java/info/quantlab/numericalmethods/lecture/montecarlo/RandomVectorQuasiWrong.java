@@ -4,9 +4,9 @@ import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence
 
 /**
  * Creates a sequence of vectors with uniform on [0,1) distributed components.
- * 
+ *
  * The main method plots some points of a 2 dimensional vector.
- * 
+ *
  * @author Christian Fries
  */
 public class RandomVectorQuasiWrong {
@@ -16,9 +16,9 @@ public class RandomVectorQuasiWrong {
 	private double[][] randomVectorSequence;
 
 	public RandomVectorQuasiWrong(int length, int dimension) {
-		
+
 		randomVectorSequence = new double[length][dimension];
-		
+
 		for(int i=0; i<length; i++) {
 			for(int j=0; j<dimension; j++) {
 				// Populate the vector y_{i,j} = x_{i*d+j}
@@ -27,7 +27,7 @@ public class RandomVectorQuasiWrong {
 			}
 		}
 	}
-	
+
 
 	double[][] getSequence() {
 		return randomVectorSequence;

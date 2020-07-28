@@ -1,6 +1,6 @@
 /*
  * (c) Copyright Christian P. Fries, Germany. All rights reserved. Contact: email@christian-fries.de.
- * 
+ *
  * Created on 23.04.2020
  */
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
@@ -8,7 +8,7 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics;
 /**
  * A simple class illustrating some aspects related to
  * integer arithmetic and floating point arithmetic.
- * 
+ *
  * @author Christian Fries
  */
 public class ComputerArithmeticExperiment {
@@ -202,19 +202,19 @@ public class ComputerArithmeticExperiment {
 		int modulus = 13;
 		int modOfBig = integerBig % modulus;
 		int modOfSmall = integerSmall % modulus;
-		
+
 		/*
 		 * For the remainder we have ((a % c) + (b % c)) % c = (a+b)%c, but his is violate after an overflow
 		 */
-		
+
 		int sumOfModulusMod = modOfBig+modOfSmall;
 		int modulusOfSum = (integerBig+integerSmall) % modulus;
-		
+
 		/*
 		 * This is not fixed by adding modulus
 		 */
 		int sum4 = modulusOfSum+modulus;
-		
+
 		System.out.println(integerBig);
 		System.out.println(modOfBig);
 		System.out.println(integerSmall);
@@ -222,7 +222,7 @@ public class ComputerArithmeticExperiment {
 		System.out.println(sumOfModulusMod);
 		System.out.println(modulusOfSum);
 		System.out.println(sum4);
-		
+
 	}
 
 	private static double getSumOfValuesKahan(double value, int numberOfValues) {

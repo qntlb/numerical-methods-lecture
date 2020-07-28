@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ObjectConstructor<T> {
-	
+
 	public static <T> T create(Class<?> theClass, Class<T> theInterface) {
 		if(!theInterface.isAssignableFrom(theClass)) {
 			System.out.println("Your class does not implement the interface " + theInterface.getName());
@@ -26,7 +26,7 @@ public class ObjectConstructor<T> {
 			System.out.println("Your class does not have a constructor that takes no argument.");
 			throw new IllegalArgumentException("Your class does not have a constructor that takes no argument.");
 		}
-		
+
 		T vector;
 		try {
 			vector = (T) vectorConstructor.newInstance();
@@ -52,7 +52,7 @@ public class ObjectConstructor<T> {
 			System.out.println("Your class does not have a constructor that takes an argument of type " + argument.getClass().getCanonicalName());
 			throw new IllegalArgumentException("Your class does not have a constructor that takes an argument of type " + argument.getClass().getCanonicalName());
 		}
-		
+
 		T vector;
 		try {
 			vector = (T) vectorConstructor.newInstance(argument);
@@ -77,7 +77,7 @@ public class ObjectConstructor<T> {
 		catch(Exception e) {
 			throw new IllegalArgumentException("Your class does not have a constructor that takes an argument of type " + Arrays.deepToString(argumentTypes.toArray()));
 		}
-		
+
 		T vector;
 		try {
 			vector = (T) vectorConstructor.newInstance(arguments.toArray(new Object[arguments.size()]));

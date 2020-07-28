@@ -13,7 +13,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
 public class BrownianMotionExperiment {
 
 	public static void main(String[] args) {
-		
+
 		plotBrownianIncrementsScatter();
 		plotBrownianPaths();
 
@@ -23,13 +23,13 @@ public class BrownianMotionExperiment {
 		int numberOfTimeSteps = 300;
 		double deltaT = 0.01;
 		int numberOfPaths = 1000;
-		
+
 		TimeDiscretization td = new TimeDiscretizationFromArray(0.0, numberOfTimeSteps, deltaT);
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(td, 1, numberOfPaths, 3231);
 
-		RandomVariable bm1 = brownianMotion.getBrownianIncrement(0, 0);				
-		RandomVariable bm2 = brownianMotion.getBrownianIncrement(1, 0);	
-		
+		RandomVariable bm1 = brownianMotion.getBrownianIncrement(0, 0);
+		RandomVariable bm2 = brownianMotion.getBrownianIncrement(1, 0);
+
 		// Plot a Scatter of the two Brownian incements.
 		var plot = Plots.createScatter(bm1, bm2, -1, 1);
 		plot.setTitle("Two independent (Brownian) increments").setXAxisLabel("\u0394 W(0)").setYAxisLabel("\u0394 W(0.01)");
@@ -40,7 +40,7 @@ public class BrownianMotionExperiment {
 		int numberOfTimeSteps = 300;
 		double deltaT = 0.01;
 		int numberOfPaths = 1000;
-		
+
 		TimeDiscretization td = new TimeDiscretizationFromArray(0.0, numberOfTimeSteps, deltaT);
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(td, 1, numberOfPaths, 3231);
 
@@ -49,9 +49,9 @@ public class BrownianMotionExperiment {
 		for(int i=0; i<td.getNumberOfTimeSteps();i++) {
 			processDiscrete[i+1] = processDiscrete[i].add(brownianMotion.getBrownianIncrement(i, 0));
 		}
-		
+
 		DoubleToRandomVariableFunction process = time -> processDiscrete[td.getTimeIndex(time)];
-				
+
 		// Plot a Scatter of the two Brownian incements.
 		var plot = new PlotProcess2D(td, process, 200 /* maxNumberOfPaths */);
 		plot.setTitle("Paths of Brownian motion").setXAxisLabel("time (t)").setYAxisLabel("value (W(t))");

@@ -7,21 +7,21 @@ public class VanDerCorputSequence implements DoubleSupplier {
 
 	private final AtomicInteger index;
 	private final int base;
-	
+
 	public static void main(String[] args) {
 		for(int i=0; i<30; i++) {
 			double x = getVanDerCorputNumber(i, 2);
 			System.out.println(i + "\t" + x);
 		}
 	}
-	
+
 	public VanDerCorputSequence(int startIndex, int base) {
 		super();
 		this.index = new AtomicInteger(startIndex);
 		this.base = base;
 	}
 
-	
+
 	public VanDerCorputSequence(int base) {
 		this(0, base);
 	}
@@ -37,9 +37,9 @@ public class VanDerCorputSequence implements DoubleSupplier {
 	 * @return The van der Corput number
 	 */
 	public static double getVanDerCorputNumber(long index, int base) {
-		
+
 		index = index + 1;
-		
+
 		double x = 0.0;
 		double refinementFactor = 1.0 / base;
 
@@ -48,7 +48,7 @@ public class VanDerCorputSequence implements DoubleSupplier {
 			index = index / base;
 			refinementFactor = refinementFactor / base;
 		}
-		
+
 		return x;
 	}
 }

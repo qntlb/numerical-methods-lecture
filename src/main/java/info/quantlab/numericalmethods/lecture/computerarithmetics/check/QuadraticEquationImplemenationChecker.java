@@ -18,19 +18,19 @@ public class QuadraticEquationImplemenationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean check(Class<?> theClass) {
 		boolean succes = true;
-		
+
 		/*
 		 * Check two extrem cases
 		 */
 		succes &= checkWithCoefficients(theClass,  100000.0, -1.0);
 		succes &= checkWithCoefficients(theClass, -100000.0, -1.0);
-		
+
 		/*
 		 * Check a random case
 		 */
@@ -51,7 +51,7 @@ public class QuadraticEquationImplemenationChecker {
 	/**
 	 * Check if the class solves the exercise with respect to the method <code>hasRealRoot</code>.
 	 * Test x^2 - 2 p x + q = 0.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -62,14 +62,14 @@ public class QuadraticEquationImplemenationChecker {
 			System.out.println("\tTest failed with coefficients " + Arrays.toString(testArgument) + " failed. hasRealRoot reported true, should be false.");
 			return false;
 		}
-		
+
 		return true;
 	}
 
 	/**
 	 * Check if the class solves the exercise.
 	 * Test x^2 - 2 p x + q = 0.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @param p The coefficient p.
 	 * @param q The coefficient q.

@@ -11,7 +11,7 @@ public class Utils {
 	/**
 	 * Returns the BlackScholesModel 'processModel' used to build
 	 * the Monte Carlo simulation, if any.
-	 * 
+	 *
 	 * @param model The Monte-Carlo simulation model.
 	 * @return The BlackScholesModel (ProcessModel).
 	 */
@@ -26,11 +26,11 @@ public class Utils {
 		else {
 			throw new IllegalArgumentException("Argument type not supported: " + model.getClass());
 		}
-		
+
 		if(!(processModel instanceof BlackScholesModel)) {
 			throw new IllegalArgumentException("Argument contains an unsupproted ProcessModel: " + processModel.getClass());
 		}
-		
+
 		return (BlackScholesModel)processModel;
 	}
 

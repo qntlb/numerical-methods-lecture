@@ -17,7 +17,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
 /**
  * A small experiment for a control variate for an exotic option payoff using a European option
  * under the Black-Scholes model as a control.
- * 
+ *
  * @author Christian Fries
  */
 public class MonteCarloBlackScholesExoticPayoffControlVariateExperiment {

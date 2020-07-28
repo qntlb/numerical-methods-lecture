@@ -1,6 +1,6 @@
 /*
  * (c) Copyright Christian P. Fries, Germany. All rights reserved. Contact: email@christian-fries.de.
- * 
+ *
  * Created on 23.04.2020
  */
 package info.quantlab.numericalmethods.lecture.computerarithmetics.check;
@@ -8,7 +8,7 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics.check;
 /**
  * A simple class illustrating some aspects related to
  * integer arithmetic and floating point arithmetic.
- * 
+ *
  * @author Christian Fries
  */
 public class ComputerArithmeticExperiment2 {
@@ -77,25 +77,25 @@ public class ComputerArithmeticExperiment2 {
 		System.out.println("1+eps==1...is " + ((1+epsilon)==1));
 		System.out.println("1+2*eps ... = " + (1+2*epsilon));
 		System.out.println("0.1 + eps == 0.1 is " + (0.1+epsilon == 0.1));
-		
+
 		System.out.println("2^(-(52+1)) = " + Math.pow(2, -53));
 
 		System.out.println("_".repeat(79));
 
 
 
-		
-		
+
+
 		/*
 		 * Test 2
 		 */
 		System.out.println("Test 2: Check behavior of Double.MAX_VALUE");
-		
+
 		double x = Double.MAX_VALUE;
 		System.out.println("Double.MAX_VALUE                       = " + x);
 		System.out.println("Double.MAX_VALUE + 1                   = " + (x+1));
 		System.out.println("Double.MAX_VALUE + Double.MAX_VALUE    = " + (x+x-x));
-		
+
 		System.out.println("_________________________________________________________");
 		System.out.println("");
 
@@ -110,7 +110,7 @@ public class ComputerArithmeticExperiment2 {
 			zero = zero / 2;
 		}
 		System.out.println("     zero   = " + zero);
-		
+
 		// Create -0
 		double minusZero = -1;
 		while(minusZero < 0) {
@@ -165,8 +165,8 @@ public class ComputerArithmeticExperiment2 {
 		System.out.println("Average (classic) = " + averageClassical);
 		System.out.println("Error (classic)   = " + (averageClassical-value)/value);
 
-		
-		
+
+
 		double sumKahan = getSumOfNumberKahan(value, numberOfSumations);
 		double averageKahan = sumKahan / numberOfSumations;
 

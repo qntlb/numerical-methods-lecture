@@ -7,7 +7,7 @@ public interface MonteCarloBlackScholesModelFactory {
 
 	/**
 	 * Creates a Black-Scholes model with the specified parameters.
-	 * 
+	 *
 	 * @param initialValue The initial value S(0).
 	 * @param riskFreeRate The risk free rate r.
 	 * @param volatility The volatility sigma.

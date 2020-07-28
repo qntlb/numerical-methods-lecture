@@ -19,37 +19,37 @@ public class MonteCarloBlackScholesEuropeanOptionValuation {
 		double initialValue = 100.0;
 		double riskFreeRate = 0.05;
 		double volatility = 0.20;
-		
+
 		double initialTime = 0.0;
 		int numberOfTimeSteps = 10;
 		double deltaT = 0.5;
 
 		int numberOfPaths = 2000000;
 		int seed = 3141;
-		
+
 		double maturity = 5.0;
 		double strike = 105;
-		
+
 
 		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
 
 		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
-		
+
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, numberOfPaths, seed);
-		
+
 		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
 
 
 		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
-		
-		
-		
+
+
+
 		EuropeanOption option = new EuropeanOption(maturity, strike);
-		
+
 		double value = option.getValue(blackScholesMonteCarloModel);
-		
-			
+
+
 		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
 		System.out.println("Monte-Carlo valuation...: " + value);
 		System.out.println("Analytic valuation......: " + valueAnalytic);

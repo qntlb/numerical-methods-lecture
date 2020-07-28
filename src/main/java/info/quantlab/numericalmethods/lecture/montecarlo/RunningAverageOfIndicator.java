@@ -43,7 +43,7 @@ public class RunningAverageOfIndicator {
 
 			int drawing = random.nextInt(6)+1;					// integer in { 1,2,3,4,5,6 }
 
-			int indicator = (drawing == omega) ? 1 : 0;			// indicator function 
+			int indicator = (drawing == omega) ? 1 : 0;			// indicator function
 
 			sum += indicator;									// sum up
 

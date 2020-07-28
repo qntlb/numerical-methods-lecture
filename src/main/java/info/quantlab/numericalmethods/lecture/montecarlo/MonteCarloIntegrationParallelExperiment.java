@@ -131,7 +131,7 @@ public class MonteCarloIntegrationParallelExperiment {
 			double sum = 0.0;
 			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
 				sum += results.get(taskIndex).get();
-			}		
+			}
 			double piMersenne = sum / numberOfTask;
 
 			long timeEnd = System.currentTimeMillis();
@@ -173,7 +173,7 @@ public class MonteCarloIntegrationParallelExperiment {
 			double sum = 0.0;
 			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
 				sum += results.get(taskIndex).get();
-			}		
+			}
 			double piMersenne = sum / numberOfTask;
 
 			long timeEnd = System.currentTimeMillis();

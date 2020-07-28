@@ -8,7 +8,7 @@ public class HaltonSequence {
 		super();
 		this.base = base;
 	}
-	
+
 	public double[] getSamplePoint(int index) {
 		double[] x = new double[base.length];
 		for(int i = 0; i<x.length; i++) {

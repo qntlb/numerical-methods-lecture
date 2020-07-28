@@ -49,7 +49,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @param whatToCheck A string, currently "basic" or "accuracy".
 	 * @return Boolean if the test is passed.
@@ -104,7 +104,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 
 	/**
 	 * Check basic functionality
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -154,92 +154,92 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 
 	/**
 	 * Check accuracy of the implementation.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkWeak(Class<?> theClass) {
 		try {
-		/*
-		 * Create model using the factory "theClass"
-		 */
-		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
+			/*
+			 * Create model using the factory "theClass"
+			 */
+			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
 
-		/*
-		 * Create products
-		 */
-		AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
-		AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
+			/*
+			 * Create products
+			 */
+			AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
+			AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
 
-		/*
-		 * Calculate delta of a European call option
-		 */
-		double delteEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-		RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
+			/*
+			 * Calculate delta of a European call option
+			 */
+			double delteEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
 
-		System.out.println("\nDelta (European Call Option):\n");
-		System.out.format("\t%20s: %10.3g\n", "analytic", delteEuropeanAnalytic);
-		System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaEuropeanMonteCarlo));
+			System.out.println("\nDelta (European Call Option):\n");
+			System.out.format("\t%20s: %10.3g\n", "analytic", delteEuropeanAnalytic);
+			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaEuropeanMonteCarlo));
 
-		/*
-		 * Calculate delta of a digital option
-		 */
-		double delteDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-		RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
+			/*
+			 * Calculate delta of a digital option
+			 */
+			double delteDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
 
-		System.out.println("\nDelta (European Digital Option):\n");
-		System.out.format("\t%20s: %10.3g\n", "analytic", delteDigitalAnalytic);
-		System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));		
+			System.out.println("\nDelta (European Digital Option):\n");
+			System.out.format("\t%20s: %10.3g\n", "analytic", delteDigitalAnalytic);
+			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));
 
-		return	(Math.abs(deltaEuropeanMonteCarlo.getAverage()- delteEuropeanAnalytic) <= 0.002)
-				&&
-				(Math.abs(deltaDigitalMonteCarlo.getAverage()- delteDigitalAnalytic) <= 0.06);
+			return	(Math.abs(deltaEuropeanMonteCarlo.getAverage()- delteEuropeanAnalytic) <= 0.002)
+					&&
+					(Math.abs(deltaDigitalMonteCarlo.getAverage()- delteDigitalAnalytic) <= 0.06);
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
 			e.printStackTrace();
 			return false;
 		}
-	}	
+	}
 
 	private static boolean checkStrong(Class<?> theClass) {
 		try {
-		/*
-		 * Create model using the factory "theClass"
-		 */
-		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
+			/*
+			 * Create model using the factory "theClass"
+			 */
+			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
 
-		/*
-		 * Create products
-		 */
-		AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
-		AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
+			/*
+			 * Create products
+			 */
+			AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
+			AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
 
-		/*
-		 * Calculate delta of a European call option
-		 */
-		double delteEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-		RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
+			/*
+			 * Calculate delta of a European call option
+			 */
+			double delteEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
 
-		System.out.println("\nDelta (European Call Option):\n");
-		System.out.format("\t%20s: %10.3g\n", "analytic", delteEuropeanAnalytic);
-		System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaEuropeanMonteCarlo));
+			System.out.println("\nDelta (European Call Option):\n");
+			System.out.format("\t%20s: %10.3g\n", "analytic", delteEuropeanAnalytic);
+			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaEuropeanMonteCarlo));
 
-		/*
-		 * Calculate delta of a digital option
-		 */
-		double delteDigitalAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-		RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
-		RandomVariable deltaDigitalLikelihood = new DigitalOptionDeltaLikelihood(maturity, strike).getValue(initalTime, monteCarloBlackScholesModel);
+			/*
+			 * Calculate delta of a digital option
+			 */
+			double delteDigitalAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
+			RandomVariable deltaDigitalLikelihood = new DigitalOptionDeltaLikelihood(maturity, strike).getValue(initalTime, monteCarloBlackScholesModel);
 
-		System.out.println("\nDelta (European Digital Option):\n");
-		System.out.format("\t%20s: %10.3g\n", "analytic", delteDigitalAnalytic);
-		System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));		
-		System.out.format("\t%20s: %s\n", "likelihood ratio", printAvgErr.apply(deltaDigitalLikelihood));		
+			System.out.println("\nDelta (European Digital Option):\n");
+			System.out.format("\t%20s: %10.3g\n", "analytic", delteDigitalAnalytic);
+			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));
+			System.out.format("\t%20s: %s\n", "likelihood ratio", printAvgErr.apply(deltaDigitalLikelihood));
 
-		return	(Math.abs(deltaDigitalMonteCarlo.getAverage()- delteDigitalAnalytic) <= 0.002)
-				&&
-				(Math.abs(deltaDigitalMonteCarlo.getStandardError()- deltaDigitalLikelihood.getAverage()) <= 0.01);
+			return	(Math.abs(deltaDigitalMonteCarlo.getAverage()- delteDigitalAnalytic) <= 0.002)
+					&&
+					(Math.abs(deltaDigitalMonteCarlo.getStandardError()- deltaDigitalLikelihood.getAverage()) <= 0.01);
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
@@ -247,7 +247,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			return false;
 		}
 
-	}	
+	}
 
 	private static RandomVariable getDeltaByFiniteDifference(AssetModelMonteCarloSimulationModel model, AbstractAssetMonteCarloProduct product, double shiftRelative) {
 		try {

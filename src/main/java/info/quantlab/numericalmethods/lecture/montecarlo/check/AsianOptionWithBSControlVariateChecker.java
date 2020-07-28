@@ -44,7 +44,7 @@ public class AsianOptionWithBSControlVariateChecker {
 
 	/**
 	 * Check if the class solves the exercise.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @param whatToCheck A string, currently "basic" or "accuracy".
 	 * @return Boolean if the test is passed.
@@ -99,7 +99,7 @@ public class AsianOptionWithBSControlVariateChecker {
 
 	/**
 	 * Check basic functionality
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -112,7 +112,7 @@ public class AsianOptionWithBSControlVariateChecker {
 
 	/**
 	 * Check accuracy of the implementation.
-	 * 
+	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
@@ -121,14 +121,14 @@ public class AsianOptionWithBSControlVariateChecker {
 		RandomVariable value = getValueForTestCase(theClass, 0);
 
 		return Math.abs(value.getStandardError()) <= 0.0009;
-	}	
+	}
 
 	private static boolean checkControl(Class<?> theClass) {
 
 		RandomVariable value = getValueForTestCase(theClass, 0);
 
 		return Math.abs(value.getStandardError()) <= 0.0004;
-	}	
+	}
 
 	private static RandomVariable getValueForTestCase(Class<?> theClass, int testCase) {
 		double	maturity = 10.0;
@@ -162,7 +162,7 @@ public class AsianOptionWithBSControlVariateChecker {
 		 * Print results
 		 */
 
-		Function<RandomVariable, String> printAvgAndErr = x -> 
+		Function<RandomVariable, String> printAvgAndErr = x ->
 		String.format("%10.7f \u00B1 %10.7f", x.getAverage(), x.getStandardError());
 
 		System.out.println("value Asian.................: " + printAvgAndErr.apply(valueAsian));

@@ -9,17 +9,17 @@ import net.finmath.randomnumbers.MersenneTwister;
 public class MonteCarloIntegrationQuasiExperiment {
 
 	private static DecimalFormat formatter = new DecimalFormat(" 0.000E00;-0.000E00");
-	
+
 	public static void main(String[] args) {
-		
+
 		DoubleUnaryOperator function = x -> x*x*x;
-		
+
 		double integralAnalytic = 0.25;
-		
+
 		int numberOfSamplePoints = 100000;
-				
+
 		MersenneTwister mersenne = new MersenneTwister(3141);
-		
+
 		System.out.println("Integration Errors:");
 		System.out.println("n" + "\t" + "mersenne" + "\t" + "equidistant" + "\t" + "v.-d.-corput");
 
@@ -42,15 +42,15 @@ public class MonteCarloIntegrationQuasiExperiment {
 
 			double integralEquidistributed = sumEquidistributed / currentNumberOfSamplePoints;
 			double errorEquidistributed = integralEquidistributed-integralAnalytic;
-			
+
 			double integralVanDerCorput = sumVanDerCorput / currentNumberOfSamplePoints;
 			double errorVanDerCorput = integralVanDerCorput-integralAnalytic;
-			
+
 			// Print every 100 points the intermediate result
 			if(currentNumberOfSamplePoints % 100 == 0) {
-				System.out.println((i+1) + "\t" + 
-						formatter.format(errorMersenneTwister) + "\t" + 
-						formatter.format(errorEquidistributed) + "\t" + 
+				System.out.println((i+1) + "\t" +
+						formatter.format(errorMersenneTwister) + "\t" +
+						formatter.format(errorEquidistributed) + "\t" +
 						formatter.format(errorVanDerCorput));
 			}
 		}
@@ -63,16 +63,16 @@ public class MonteCarloIntegrationQuasiExperiment {
 
 		double integralEquidistributed = sumEquidistributed / numberOfSamplePoints;
 		double errorEquidistributed = integralEquidistributed-integralAnalytic;
-		
+
 		double integralVanDerCorput = sumVanDerCorput / numberOfSamplePoints;
 		double errorVanDerCorput = integralVanDerCorput-integralAnalytic;
-		
+
 		System.out.println();
-		
+
 		System.out.println("Pseudo RNG....: " + integralMersenneTwister + "\t error: " + errorMersenneTwister);
 		System.out.println("Equidistri....: " + integralEquidistributed + "\t error: " + errorEquidistributed);
 		System.out.println("v.d.Corput....: " + integralVanDerCorput + "\t error: " + errorVanDerCorput);
-		
+
 	}
 
 }
