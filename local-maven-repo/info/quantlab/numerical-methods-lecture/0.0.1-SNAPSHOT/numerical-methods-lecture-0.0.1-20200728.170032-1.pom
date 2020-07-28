@@ -17,12 +17,12 @@
 		<dependency>
 			<groupId>net.finmath</groupId>
 			<artifactId>finmath-lib</artifactId>
-			<version>5.0.4-SNAPSHOT</version>
+			<version>5.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>net.finmath</groupId>
 			<artifactId>finmath-lib-plot-extensions</artifactId>
-			<version>0.3.9</version>
+			<version>0.3.10</version>
 		</dependency>
 	</dependencies>
 
