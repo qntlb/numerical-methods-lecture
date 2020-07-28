@@ -12,6 +12,32 @@ import java.util.List;
 
 public class ObjectConstructor<T> {
 	
+	public static <T> T create(Class<?> theClass, Class<T> theInterface) {
+		if(!theInterface.isAssignableFrom(theClass)) {
+			System.out.println("Your class does not implement the interface " + theInterface.getName());
+			throw new IllegalArgumentException("Your class does not implement the interface " + theInterface.getName());
+		}
+
+		Constructor<?> vectorConstructor;
+		try {
+			vectorConstructor = theClass.getConstructor();
+		}
+		catch(Exception e) {
+			System.out.println("Your class does not have a constructor that takes no argument.");
+			throw new IllegalArgumentException("Your class does not have a constructor that takes no argument.");
+		}
+		
+		T vector;
+		try {
+			vector = (T) vectorConstructor.newInstance();
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			System.out.println("Your class does not have a constructor that takes no argument.");
+			throw new IllegalArgumentException("Your class does not have a constructor that takes no argument.");
+		}
+
+		return vector;
+	}
+
 	public static <T> T create(Class<?> theClass, Class<T> theInterface, Object argument) {
 		if(!theInterface.isAssignableFrom(theClass)) {
 			System.out.println("Your class does not implement the interface " + theInterface.getName());
