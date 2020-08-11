@@ -239,7 +239,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 
 			return	(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.002)
 					&&
-					(Math.abs(deltaDigitalMonteCarlo.getStandardError()- deltaDigitalLikelihood.getAverage()) <= 0.01);
+					(Math.abs(deltaDigitalMonteCarlo.getStandardError()- deltaDigitalLikelihood.getStandardError()) <= 0.01);
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
