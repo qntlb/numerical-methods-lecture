@@ -191,9 +191,9 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			System.out.format("\t%20s: %10.3g\n", "analytic", deltaDigitalAnalytic);
 			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));
 
-			return	(Math.abs(deltaEuropeanMonteCarlo.getAverage()- delteEuropeanAnalytic) <= 0.002)
+			return	(Math.abs(deltaEuropeanMonteCarlo.getAverage()- delteEuropeanAnalytic) <= 0.01)
 					&&
-					(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.06);
+					(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.08);
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
@@ -237,7 +237,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));
 			System.out.format("\t%20s: %s\n", "likelihood ratio", printAvgErr.apply(deltaDigitalLikelihood));
 
-			return	(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.002)
+			return	(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.01)
 					&&
 					(Math.abs(deltaDigitalMonteCarlo.getStandardError()- deltaDigitalLikelihood.getStandardError()) <= 0.01);
 		}
