@@ -218,11 +218,11 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			/*
 			 * Calculate delta of a European call option
 			 */
-			double delteEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			double deltaEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
 			RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
 
 			System.out.println("\nDelta (European Call Option):\n");
-			System.out.format("\t%20s: %10.3g\n", "analytic", delteEuropeanAnalytic);
+			System.out.format("\t%20s: %10.3g\n", "analytic", deltaEuropeanAnalytic);
 			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaEuropeanMonteCarlo));
 
 			/*
