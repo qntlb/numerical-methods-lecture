@@ -145,12 +145,22 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 					&&
 					(Math.abs(valueDigitalMonteCarlo.getAverage()- valueDigitalAnalytic) <= 0.005);
 
-			if(!isValuationOK) System.out.println(
-					"\n"
-							+ "The valuation appears to be not OK. "
-							+ "Note however that this is a Monte-Carlo valuation and the test may "
-							+ "fail for certain seeds. Try to use a different seed."
-							+ "\n");
+			if(isValuationOK) {
+				System.out.println(
+						"\n"
+								+ "The valuation appears to be OK. "
+								+ "Note however that this is a Monte-Carlo valuation and test "
+								+ "and an error may still 'hide' behind the Monte-Carlo error."
+								+ "\n");
+			}
+			else {
+				System.out.println(
+						"\n"
+								+ "The valuation appears to be not OK.\n"
+								+ "Note however that this is a Monte-Carlo valuation and the test may\n"
+								+ "fail for certain seeds. Try to use a different seed."
+								+ "\n");
+			}
 
 			return isValuationOK;
 		}
@@ -208,25 +218,24 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			}
 
 			System.out.format("\t%20s: %s\n", "weighted monte carlo", "min = " + minStandardError);
-			System.out.println("_".repeat(79));
 
 			boolean isVarianceReductionForValuationOK = minStandardError < valueMonteCarlo.getStandardError();
 
 			if(isVarianceReductionForValuationOK) {
 				System.out.println("\n"
-						+ "It looks as if your valuation framework does allow "
-						+ "to use a shifted initial value to reduce the variance "
-						+ "of a Monte-Carlo valuation. "
-						+ "Nice."
+						+ "It looks as if your valuation framework does allow\n"
+						+ "to use a shifted initial value to reduce the variance\n"
+						+ "of a Monte-Carlo valuation. Nice."
 						+ "\n");
 			}
 			else {
 				System.out.println("\n"
-						+ "It looks as if your valuation framework does not allow "
-						+ "to use a shifted initial value to reduce the variance "
+						+ "It looks as if your valuation framework does not allow\n"
+						+ "to use a shifted initial value to reduce the variance\n"
 						+ "of a Monte-Carlo valuation. "
 						+ "\n");
 			}
+
 			return isVarianceReductionForValuationOK;
 		}
 		catch(Exception e) {
