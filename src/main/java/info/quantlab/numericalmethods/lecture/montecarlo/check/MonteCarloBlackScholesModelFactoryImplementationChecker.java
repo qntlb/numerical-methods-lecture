@@ -113,7 +113,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			/*
 			 * Create model using the factory "theClass"
 			 */
-			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
+			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass, initialValue);
 
 			/*
 			 * Create products
@@ -141,9 +141,18 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			System.out.format("\t%20s: %10.3g\n", "analytic", valueDigitalAnalytic);
 			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(valueDigitalMonteCarlo));
 
-			return	(Math.abs(valueMonteCarlo.getAverage()- valueAnalytic) <= 0.002)
+			boolean isValuationOK = (Math.abs(valueMonteCarlo.getAverage()- valueAnalytic) <= 0.005)
 					&&
-					(Math.abs(valueDigitalMonteCarlo.getAverage()- valueDigitalAnalytic) <= 0.002);
+					(Math.abs(valueDigitalMonteCarlo.getAverage()- valueDigitalAnalytic) <= 0.005);
+
+			if(!isValuationOK) System.out.println(
+					"\n"
+							+ "The valuation appears to be not OK. "
+							+ "Note however that this is a Monte-Carlo valuation and the test may "
+							+ "fail for certain seeds. Try to use a different seed."
+							+ "\n");
+
+			return isValuationOK;
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
@@ -160,40 +169,65 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 	 */
 	public static boolean checkWeak(Class<?> theClass) {
 		try {
-			/*
-			 * Create model using the factory "theClass"
-			 */
-			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
+			// Get model
+			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass, initialValue);
 
 			/*
 			 * Create products
 			 */
+			double strike = initialValue*1.5*Math.exp(riskFreeRate*maturity);
 			AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
 			AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
 
 			/*
-			 * Calculate delta of a European call option
+			 * Value a European call option
 			 */
-			double delteEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-			RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
+			double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
+			RandomVariable valueMonteCarlo = europeanOption.getValue(initalTime, monteCarloBlackScholesModel);
 
-			System.out.println("\nDelta (European Call Option):\n");
-			System.out.format("\t%20s: %10.3g\n", "analytic", delteEuropeanAnalytic);
-			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaEuropeanMonteCarlo));
+			System.out.println("\nValuation (European Call Option):\n");
+			System.out.format("\t%20s: %10.3g\n", "analytic", valueAnalytic);
+			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(valueMonteCarlo));
 
 			/*
-			 * Calculate delta of a digital option
+			 * We would expect that a shift of the initial value allows to reduce the variance
 			 */
-			double deltaDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-			RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
+			double minStandardError = Double.MAX_VALUE;
+			for(int relativeShiftPercentage = -10; relativeShiftPercentage<=50; relativeShiftPercentage++) {
+				double initialValueShifted = initialValue*(1.0 + (double)relativeShiftPercentage/100.0);
 
-			System.out.println("\nDelta (European Digital Option):\n");
-			System.out.format("\t%20s: %10.3g\n", "analytic", deltaDigitalAnalytic);
-			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));
+				RandomVariable valueMonteCarloWithWeight = europeanOption.
+						getValue(initalTime,
+								createModel(theClass, initialValueShifted).
+								getCloneWithModifiedData(
+										Map.of("initialValue", initialValue)));
 
-			return	(Math.abs(deltaEuropeanMonteCarlo.getAverage()- delteEuropeanAnalytic) <= 0.01)
-					&&
-					(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.08);
+				minStandardError = Math.min(minStandardError, valueMonteCarloWithWeight.getStandardError());
+
+				System.out.format("\t%20s: %s\n", "weighted monte carlo", printAvgErr.apply(valueMonteCarloWithWeight) + String.format(" (for shift =%.3f)", (initialValueShifted-initialValue)));
+			}
+
+			System.out.format("\t%20s: %s\n", "weighted monte carlo", "min = " + minStandardError);
+			System.out.println("_".repeat(79));
+
+			boolean isVarianceReductionForValuationOK = minStandardError < valueMonteCarlo.getStandardError();
+
+			if(isVarianceReductionForValuationOK) {
+				System.out.println("\n"
+						+ "It looks as if your valuation framework does allow "
+						+ "to use a shifted initial value to reduce the variance "
+						+ "of a Monte-Carlo valuation. "
+						+ "Nice."
+						+ "\n");
+			}
+			else {
+				System.out.println("\n"
+						+ "It looks as if your valuation framework does not allow "
+						+ "to use a shifted initial value to reduce the variance "
+						+ "of a Monte-Carlo valuation. "
+						+ "\n");
+			}
+			return isVarianceReductionForValuationOK;
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
@@ -207,7 +241,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			/*
 			 * Create model using the factory "theClass"
 			 */
-			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass);
+			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass, initialValue);
 
 			/*
 			 * Create products
@@ -237,9 +271,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(deltaDigitalMonteCarlo));
 			System.out.format("\t%20s: %s\n", "likelihood ratio", printAvgErr.apply(deltaDigitalLikelihood));
 
-			return	(Math.abs(deltaDigitalMonteCarlo.getAverage()- deltaDigitalAnalytic) <= 0.01)
-					&&
-					(Math.abs(deltaDigitalMonteCarlo.getStandardError()- deltaDigitalLikelihood.getStandardError()) <= 0.01);
+			return	(Math.abs(deltaDigitalMonteCarlo.getStandardError()-deltaDigitalLikelihood.getStandardError()) <= 0.01);
 		}
 		catch(Exception e) {
 			System.out.println("\nTest failed with exception:");
@@ -265,7 +297,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 		}
 	}
 
-	private static AssetModelMonteCarloSimulationModel createModel(Class<?> theClass) {
+	private static AssetModelMonteCarloSimulationModel createModel(Class<?> theClass, double initialValue) {
 
 		MonteCarloBlackScholesModelFactory modelFactory = ObjectConstructor.<MonteCarloBlackScholesModelFactory>create(theClass, MonteCarloBlackScholesModelFactory.class);
 
