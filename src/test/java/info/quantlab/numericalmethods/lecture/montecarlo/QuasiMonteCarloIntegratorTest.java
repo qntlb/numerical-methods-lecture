@@ -5,6 +5,9 @@ import java.util.function.DoubleUnaryOperator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
+import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.QuasiMonteCarloIntegrator1D;
+
 public class QuasiMonteCarloIntegratorTest {
 
 	@Test
@@ -18,7 +21,7 @@ public class QuasiMonteCarloIntegratorTest {
 
 		int numberOfEvaluationPoints = 10000;
 
-		Integrator integrator = new QuasiMonteCarloIntegrator(numberOfEvaluationPoints);
+		Integrator1D integrator = new QuasiMonteCarloIntegrator1D(numberOfEvaluationPoints);
 
 		double integralNumeric = integrator.integrate(integrand, lowerBound, upperBound);
 		double integralAnalyticValue = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);

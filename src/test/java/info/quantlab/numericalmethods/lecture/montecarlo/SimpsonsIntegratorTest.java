@@ -5,6 +5,8 @@ import java.util.function.DoubleUnaryOperator;
 import org.junit.Assert;
 import org.junit.Test;
 
+import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
+
 public class SimpsonsIntegratorTest {
 
 	@Test
@@ -18,7 +20,7 @@ public class SimpsonsIntegratorTest {
 
 		int numberOfEvaluationPoints = 100;
 
-		Integrator integrator = new SimpsonsIntegrator(numberOfEvaluationPoints);
+		Integrator1D integrator = new SimpsonsIntegrator(numberOfEvaluationPoints);
 
 		double integralNumeric = integrator.integrate(integrand, lowerBound, upperBound);
 		double integralAnalyticValue = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);

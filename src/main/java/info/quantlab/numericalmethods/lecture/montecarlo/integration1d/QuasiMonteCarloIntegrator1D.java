@@ -1,14 +1,14 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-public class QuasiMonteCarloIntegrator implements Integrator {
+public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 
 	private int numberOfEvaluationPoints;
 
-	public QuasiMonteCarloIntegrator(int numberOfEvaluationPoints) {
+	public QuasiMonteCarloIntegrator1D(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
 	}

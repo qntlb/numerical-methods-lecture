@@ -1,15 +1,15 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 
 import net.finmath.randomnumbers.MersenneTwister;
 
-public class MonteCarloIntegrator implements Integrator {
+public class MonteCarloIntegrator1D implements Integrator1D {
 
 	private int numberOfEvaluationPoints;
 
-	public MonteCarloIntegrator(int numberOfEvaluationPoints) {
+	public MonteCarloIntegrator1D(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
 	}
