@@ -1,0 +1,43 @@
+/*
+ * (c) Copyright Christian P. Fries, Germany. All rights reserved. Contact: email@christian-fries.de.
+ *
+ * Created on 23.04.2020, 16.04.2021
+ */
+package info.quantlab.numericalmethods.lecture.computerarithmetics;
+
+/**
+ * A simple class illustrating some aspects related to
+ * integer arithmetic and floating point arithmetic.
+ *
+ * @author Christian Fries
+ */
+public class IntegerArithmeticExperiment {
+
+	public static void main(String[] args) {
+
+		/*
+		 * Explore Integer
+		 */
+
+		System.out.println("\nSome experiments related to integer arithmetic.\n");
+		System.out.println("_".repeat(79)+"\n");
+
+		/*
+		 * Behaviour of MAX_VALUE
+		 */
+
+		System.out.println("Behaviour of Integer.MAX_VALUE:\n");
+
+		int i = Integer.MAX_VALUE;
+
+		int iPlusOne = i+1;
+
+		System.out.println("i     = " + i);
+		System.out.println("i+1   = " + iPlusOne);
+
+		System.out.println("i > i+1 is " + (i > i+1));
+
+		System.out.println("_".repeat(79)+"\n");
+
+	}
+}
