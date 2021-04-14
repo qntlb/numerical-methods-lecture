@@ -11,30 +11,9 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics;
  *
  * @author Christian Fries
  */
-public class ComputerArithmeticExperiment {
+public class FloatingPointArithmeticExperiment {
 
 	public static void main(String[] args) {
-
-		System.out.println("\nSome experiments related to integer arithmetic.\n");
-		System.out.println("_".repeat(79)+"\n");
-
-		/*
-		 * Explore Integer
-		 */
-
-		System.out.println("Behaviour of Integer.MAX_VALUE:\n");
-
-		int i = Integer.MAX_VALUE;
-
-		int iPlusOne = i+1;
-
-		System.out.println("i     = " + i);
-		System.out.println("i+1   = " + iPlusOne);
-
-		System.out.println("i > i+1 is " + (i > i+1));
-
-		System.out.println("_".repeat(79)+"\n");
-
 
 		/*
 		 * Explore Double
@@ -115,7 +94,7 @@ public class ComputerArithmeticExperiment {
 		double plusInfinity = 1.0/plusZero;
 		double minusInfinity = 1.0/minusZero;
 
-		System.out.println("+infinity  +  -infinity = " + (plusInfinity+minusInfinity));
+		System.out.println("+Infinity  +  -Infinity = " + (plusInfinity+minusInfinity));
 
 		double nan = Double.NaN;
 
@@ -207,7 +186,7 @@ public class ComputerArithmeticExperiment {
 		 * For the remainder we have ((a % c) + (b % c)) % c = (a+b)%c, but his is violate after an overflow
 		 */
 
-		int sumOfModulusMod = modOfBig+modOfSmall;
+		int sumOfModulusMod = (modOfBig+modOfSmall) % modulus;
 		int modulusOfSum = (integerBig+integerSmall) % modulus;
 
 		/*
@@ -223,6 +202,8 @@ public class ComputerArithmeticExperiment {
 		System.out.println(modulusOfSum);
 		System.out.println(sum4);
 
+		System.out.println(".");
+		System.out.println((-31+20) % 20 -10);
 	}
 
 	private static double getSumOfValuesKahan(double value, int numberOfValues) {
