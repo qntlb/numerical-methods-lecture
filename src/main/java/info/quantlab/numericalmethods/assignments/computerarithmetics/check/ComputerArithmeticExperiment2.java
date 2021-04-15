@@ -3,7 +3,7 @@
  *
  * Created on 23.04.2020
  */
-package info.quantlab.numericalmethods.lecture.computerarithmetics.check;
+package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 
 /**
  * A simple class illustrating some aspects related to
