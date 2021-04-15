@@ -6,8 +6,7 @@
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
 /**
- * A simple class illustrating some aspects related to
- * integer arithmetic and floating point arithmetic.
+ * A simple class illustrating some aspects related to integer arithmetic
  *
  * @author Christian Fries
  */

@@ -6,8 +6,7 @@
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
 /**
- * A simple class illustrating some aspects related to
- * integer arithmetic and floating point arithmetic.
+ * A simple class illustrating some aspects related to floating point arithmetic.
  *
  * @author Christian Fries
  */
@@ -42,7 +41,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("_".repeat(79)+"\n");
 
 		/*
-		 * Double: Smallest positive number x = eps for which 1+2x != 1
+		 * Double: Smallest positive (i.e. non-zero) number x = eps for which 1+2x != 1
 		 */
 
 		System.out.println("Smallest positive number with 1+2x != 1, that is 1+x = 1:\n");
@@ -60,7 +59,27 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("2^(-53).... = " + Math.pow(2, -53));	// For double mantissa has p = 52 bits
 
 		System.out.println("_".repeat(79)+"\n");
+		
+		/*
+		 * Experiments with Double.MAX_VALUE
+		 */
 
+		System.out.println("Small experiments with Double.MAX_VALUE (largest positive floating point number (before infinity).\n");
+
+		double maxDouble	= Double.MAX_VALUE;
+		double bigStep		= 0.49 * Math.pow(2, 1023-52);
+		double bigerStep	= 0.50 * Math.pow(2, 1023-52);
+
+		System.out.println("maxDouble            = " + maxDouble);
+		System.out.println("maxDouble+1000       = " + (maxDouble+1000));
+		System.out.println("maxDouble+bigStep    = " + (maxDouble+bigStep));
+		System.out.println("maxDouble+bigerStep  = " + (maxDouble+bigerStep));
+		System.out.println("maxDouble+maxDouble  = " + (maxDouble+maxDouble));
+		System.out.println();
+		System.out.println("maxDouble+maxDouble-maxDouble   = " + (maxDouble+maxDouble-maxDouble));
+		System.out.println("maxDouble+(maxDouble-maxDouble) = " + (maxDouble+(maxDouble-maxDouble)));
+
+		System.out.println("_".repeat(79)+"\n");
 
 		/*
 		 * Small experiments with special values like Infinity and NaN
@@ -108,30 +127,6 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("_".repeat(79)+"\n");
 
-
-		/*
-		 * Experiments with Double.MAX_VALUE
-		 */
-
-		System.out.println("Small experiments with Double.MAX_VALUE (largest positive floating point number (before infinity).\n");
-
-		double maxDouble	= Double.MAX_VALUE;
-		double bigStep		= Math.pow(2, 1022-53);
-		double bigerStep	= Math.pow(2, 1023-53);
-
-
-		System.out.println("maxDouble            = " + maxDouble);
-		System.out.println("maxDouble+1000       = " + (maxDouble+1000));
-		System.out.println("maxDouble+bigStep    = " + (maxDouble+bigStep));
-		System.out.println("maxDouble+bigerStep  = " + (maxDouble+bigerStep));
-		System.out.println("maxDouble+maxDouble  = " + (maxDouble+maxDouble));
-		System.out.println();
-		System.out.println("maxDouble+maxDouble-maxDouble   = " + (maxDouble+maxDouble-maxDouble));
-		System.out.println("maxDouble+(maxDouble-maxDouble) = " + (maxDouble+(maxDouble-maxDouble)));
-
-		System.out.println("_".repeat(79)+"\n");
-
-
 		/*
 		 * Experiment on loss of significance - solve a quadratic equation x^2 - 2*p*x + q = 0
 		 */
@@ -149,7 +144,6 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("x       = " + x);
 		System.out.println("error   = " + error);
 		System.out.println("_".repeat(79)+"\n");
-
 
 		/*
 		 * Experiment on loss of significance - summation
