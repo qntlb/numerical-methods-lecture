@@ -3,7 +3,7 @@
  *
  * Created on 12.04.2020
  */
-package info.quantlab.numericalmethods.lecture.computerarithmetics.check;
+package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 
 import java.util.Random;
 
