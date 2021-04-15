@@ -9,12 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import info.quantlab.numericalmethods.lecture.computerarithmetics.QuadraticEquation;
+import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquation;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.Integrand;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.IntegrationDomain;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.MonteCarloIntegratorFactory;
 import info.quantlab.reflection.ObjectConstructor;
 import net.finmath.exception.CalculationException;
+import net.finmath.functions.NormalDistribution;
 import net.finmath.integration.MonteCarloIntegrator;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.montecarlo.IndependentIncrements;
@@ -49,9 +50,9 @@ public class MonteCarloIntegrationChecker {
 			success = testUnitCircle(integratorFactory);
 			break;
 		case "normal cdf":
-			success = testUnitCircle(integratorFactory);
+			success = testNormalCDF(integratorFactory);
 			break;
-			
+
 		}
 
 		if(success) {
@@ -72,7 +73,7 @@ public class MonteCarloIntegrationChecker {
 				return x*x + y*y < 1.0 ? 1.0 : 0.0;
 			}
 		};
-			
+
 		IntegrationDomain domain = new IntegrationDomain() {
 
 			@Override
@@ -90,17 +91,27 @@ public class MonteCarloIntegrationChecker {
 				return 4.0;
 			}			
 		};
-		
-		long seed = 3141;
-		long numberOfSamplePoints = 1000000;
 
-		double integral = integratorFactory.getIntegrator(seed, numberOfSamplePoints).integrate(integrand, domain);
-		
-		System.out.println(integral);
+		double integralAnalytic = Math.PI;
 
-		return Math.abs(integral-Math.PI) < 1E-2;
+		/*
+		 * Check three different seeds, at least one should pass
+		 */
+		boolean success = false;
+
+		for(long seed : new long[] { 3141, 6563, 132 }) {
+			long numberOfSamplePoints = 1000000;
+
+			double integral = integratorFactory.getIntegrator(seed, numberOfSamplePoints).integrate(integrand, domain);
+
+			System.out.println("\tgot: " + integral + ", expected: " + integralAnalytic);
+
+			success |= Math.abs(integral-integralAnalytic) < 1E-2;
+		}
+
+		return success;
 	}
-	
+
 	private static boolean testNormalCDF(MonteCarloIntegratorFactory integratorFactory) {
 		Integrand integrand = new Integrand() {
 			@Override
@@ -111,7 +122,7 @@ public class MonteCarloIntegrationChecker {
 				return Math.exp(-0.5 * (x*x + y*y + z*z)) / Math.pow(2*Math.PI, 3.0/2.0);
 			}
 		};
-			
+
 		IntegrationDomain domain = new IntegrationDomain() {
 
 			@Override
@@ -120,7 +131,7 @@ public class MonteCarloIntegrationChecker {
 						2.0 * parametersOnUnitCube[0] - 1.0,
 						2.0 * parametersOnUnitCube[1] - 1.0,
 						2.0 * parametersOnUnitCube[2] - 1.0
-						};
+				};
 			}
 
 			@Override
@@ -133,14 +144,24 @@ public class MonteCarloIntegrationChecker {
 				return 8.0;
 			}			
 		};
-		
-		long seed = 3141;
-		long numberOfSamplePoints = 1000000;
-		double integral = integratorFactory.getIntegrator(seed, numberOfSamplePoints).integrate(integrand, domain);
-		
-		System.out.println(integral);
-		System.out.println(integral);
 
-		return Math.abs(integral-Math.PI) < 1E-2;
+		double integralAnalytic = Math.pow(NormalDistribution.cumulativeDistribution(1)-NormalDistribution.cumulativeDistribution(-1), 3);
+
+		/*
+		 * Check three different seeds, at least one should pass
+		 */
+		boolean success = false;
+
+		for(long seed : new long[] { 3141, 6563, 132 }) {
+			long numberOfSamplePoints = 1000000;
+
+			double integral = integratorFactory.getIntegrator(seed, numberOfSamplePoints).integrate(integrand, domain);
+
+			System.out.println("\tgot: " + integral + ", expected: " + integralAnalytic);
+
+			success |= Math.abs(integral-integralAnalytic) < 1E-2;
+		}
+
+		return success;
 	}
 }
