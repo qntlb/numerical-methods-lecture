@@ -39,5 +39,32 @@ public class IntegerArithmeticExperiment {
 
 		System.out.println("_".repeat(79)+"\n");
 
+		/*
+		 * Experiment on overflow and remainder (%)
+		 * 
+		 * For the remainder we have ((a % c) + (b % c)) % c = (a+b)%c,
+		 * but this is violated after an overflow.
+		 */
+
+		// The sum of integerBig and intergerSmall will result in an overflow
+		int integerBig = Integer.MAX_VALUE-9;
+		int integerSmall = 20;
+		int modulus = 13;
+		int modOfBig = integerBig % modulus;
+		int modOfSmall = integerSmall % modulus;
+
+
+		int sumOfModulusMod = (modOfBig+modOfSmall) % modulus;
+		int modulusOfSum = (integerBig+integerSmall) % modulus;
+
+		System.out.println("Large integer a = " + integerBig);
+		System.out.println("Modulus c       = " + modulus);
+		System.out.println("a % c           = " + modOfBig);
+
+		System.out.println("Small integer b = " + integerSmall);
+		System.out.println("b % c           = " + modOfSmall);
+		
+		System.out.println("((a % c) + (b % c)) % c = " + sumOfModulusMod);
+		System.out.println("(a + b) % c             = " + modulusOfSum);
 	}
 }

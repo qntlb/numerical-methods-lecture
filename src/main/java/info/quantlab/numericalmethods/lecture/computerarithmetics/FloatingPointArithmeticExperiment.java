@@ -57,7 +57,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("1+eps ..... = " + (1+eps));
 		System.out.println("1+eps == 1 is " + ((1+eps)==1));
 		System.out.println("1+2*eps ... = " + (1+2*eps));
-		System.out.println("2^(-53).... = " + Math.pow(2, -53));
+		System.out.println("2^(-53).... = " + Math.pow(2, -53));	// For double mantissa has p = 52 bits
 
 		System.out.println("_".repeat(79)+"\n");
 
@@ -171,39 +171,6 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("_".repeat(79)+"\n");
 
-		/*
-		 * Experiment on overflow and remainder (%)
-		 */
-
-		// The sum of integerBig and intergerSmall will result in an overflow
-		int integerBig = Integer.MAX_VALUE-9;
-		int integerSmall = 20;
-		int modulus = 13;
-		int modOfBig = integerBig % modulus;
-		int modOfSmall = integerSmall % modulus;
-
-		/*
-		 * For the remainder we have ((a % c) + (b % c)) % c = (a+b)%c, but his is violate after an overflow
-		 */
-
-		int sumOfModulusMod = (modOfBig+modOfSmall) % modulus;
-		int modulusOfSum = (integerBig+integerSmall) % modulus;
-
-		/*
-		 * This is not fixed by adding modulus
-		 */
-		int sum4 = modulusOfSum+modulus;
-
-		System.out.println(integerBig);
-		System.out.println(modOfBig);
-		System.out.println(integerSmall);
-		System.out.println(modOfSmall);
-		System.out.println(sumOfModulusMod);
-		System.out.println(modulusOfSum);
-		System.out.println(sum4);
-
-		System.out.println(".");
-		System.out.println((-31+20) % 20 -10);
 	}
 
 	private static double getSumOfValuesKahan(double value, int numberOfValues) {
