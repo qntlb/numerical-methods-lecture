@@ -78,6 +78,21 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 		Plotable2D expectedContinuationValue = PlotablePoints2D.of("Black Scholes Value of Option on S(T\u2082)-K\u2082", stockInT1, valueRelativeOption2InT1, new GraphStyle(new Rectangle(-3,-3,5,5),null, Color.BLUE));
 		Plotable2D bermudanPathwiseValueAdmissiblePlot = PlotablePoints2D.of("Bermudan exercise value", stockInT1, bermudanPathwiseValueAdmissible, new GraphStyle(new Rectangle(-1,-1,2,2), null, new Color(0.0f, 0.66f, 0.0f)));
 		Plotable2D bermudanPathwiseValueForesightPlot = PlotablePoints2D.of("Exercise value with foresight", stockInT1, bermudanPathwiseValueForesight, new GraphStyle(new Rectangle(-1,-1,2,2), null, new Color(0.50f, 0.50f, 0.0f)));
+		Plotable2D expectedContinuationValue2 = PlotablePoints2D.of("Black Scholes Value of Option on S(T\u2082)-K\u2082, conditional to T\u2081", stockInT1, valueRelativeOption2InT1, new GraphStyle(new Rectangle(-3,-3,5,5),null, Color.BLUE));
+
+		Plot plotCondExpEstimate = new Plot2D(
+				List.of(
+						continuationValues,
+						expectedContinuationValue2)
+				)
+		.setYRange(-5, 150)
+		.setIsLegendVisible(true)
+		.setXAxisLabel("S(T\u2081)")
+		.setYAxisLabel("V\u2082(T\u2081), V\u2082(T\u2082)")
+		.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
+		plotCondExpEstimate.show();
+		plotCondExpEstimate.saveAsSVG(new File("ConditionalExpectationEstimate.svg"),900,600);
+		plotCondExpEstimate.saveAsPDF(new File("ConditionalExpectationEstimate.png"),900,600);
 
 		Plot plotBermudanExercise = new Plot2D(
 				List.of(
