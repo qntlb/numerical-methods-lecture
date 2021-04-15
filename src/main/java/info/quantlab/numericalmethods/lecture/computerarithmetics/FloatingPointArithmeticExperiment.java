@@ -67,7 +67,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("Small experiments with Double.MAX_VALUE (largest positive floating point number (before infinity).\n");
 
 		double maxDouble	= Double.MAX_VALUE;
-		double bigStep		= 0.49 * Math.pow(2, 1023-52);
+		double bigStep		= 0.49 * Math.pow(2, 1023-52);		// Largest scale (1 + c / 2^52) * 2^1023, i.e. steps are 1/2^52 * 2^1023
 		double bigerStep	= 0.50 * Math.pow(2, 1023-52);
 
 		System.out.println("maxDouble            = " + maxDouble);
