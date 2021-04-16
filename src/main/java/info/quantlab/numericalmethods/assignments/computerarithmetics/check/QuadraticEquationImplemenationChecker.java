@@ -14,8 +14,7 @@ import info.quantlab.reflection.ObjectConstructor;
 
 public class QuadraticEquationImplemenationChecker {
 
-	private static double accuracy = 1E-12;
-	private static Random random = new Random(3141);
+	private static double accuracy = 3E-16;		// A bit larger than 2 times machine precision. You may achive this.
 
 	/**
 	 * Check if the class solves the exercise.
@@ -38,21 +37,37 @@ public class QuadraticEquationImplemenationChecker {
 			succes &= checkHasRealRoot(quadraticEquationFactory);
 
 			/*
-			 * Check two extreme cases
+			 * Check some extreme cases
 			 */
-			succes &= checkWithCoefficients(quadraticEquationFactory,  100000.0, -1.0);
-			succes &= checkWithCoefficients(quadraticEquationFactory, -100000.0, -1.0);
+			double[][] testCases = {
+					{1.0,  100000.0},
+					{1.0, -100000.0},
+					{1.0,  10000000.0},
+					{1.0, -10000000.0},
+					{100, 20.01  },
+					{100, -20.01 },
+			};
+			for(double[] testCase : testCases) {
+				succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* q */);
+			}
 
 			/*
-			 * Check some random cases
+			 * Check behaviour for non real roots.
 			 */
-			for(int i=0; i<100; i++) {
-				double pAbs = 10000*(1.0-random.nextDouble());	// 0 not included
-				double sign = random.nextBoolean() ? 1.0 : -1.0;
-				double p = sign * pAbs;
-				double q = p*p*random.nextDouble()-1.0;		// q < p*p
-				succes &= checkWithCoefficients(quadraticEquationFactory, p, q);
+			boolean isNonRealRootNaN;
+			try {
+				QuadraticEquation equationWithoutRoot = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
+				double solution = equationWithoutRoot.getSmallestRoot();
+
+				isNonRealRootNaN = Double.isNaN(solution);
 			}
+			catch(Exception e) {
+				isNonRealRootNaN = false;
+			}
+			if(!isNonRealRootNaN) {
+				System.out.println("\tWe would expect getSmallestRoot() of equation without root to be NaN.");
+			}
+
 		}
 		catch(UnsupportedOperationException e) {
 			System.out.println("You assigment does not implement the factory method that should create"
@@ -81,7 +96,6 @@ public class QuadraticEquationImplemenationChecker {
 	/**
 	 * Check if the class solves the exercise with respect to the method <code>hasRealRoot</code>.
 	 * Test x^2 + p x + q = 0.
-	 * -p/2 +/- sqrt(-p/2
 	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
@@ -130,13 +144,15 @@ public class QuadraticEquationImplemenationChecker {
 			return false;
 		}
 
-		double error = (x*x + p * x + q) / (1.0+Math.pow(x,2));
+		double error = (x*x + p * x + q) / (2*x*x+Math.abs(x*p));
+		System.out.println("\t\tThe relative error of the solution is " + error);
+
 		if(Math.abs(error) > accuracy) {
-			System.out.println("\t\tTest failed. The error is " + error);
+			System.out.println("\t\tTest failed.");
 			return false;
 		}
 		else {
-			System.out.println("\t\tTest passed. The error is " + error);
+			System.out.println("\t\tTest passed.");
 		}
 
 		return true;
