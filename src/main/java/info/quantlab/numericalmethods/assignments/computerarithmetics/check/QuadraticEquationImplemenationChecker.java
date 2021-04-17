@@ -164,7 +164,7 @@ public class QuadraticEquationImplemenationChecker {
 			return false;
 		}
 
-		double error = (x*x + p * x + q) / (2*x*x+Math.abs(x*p));
+		double error = (x*x + p * x + q) / (1+2*x*x+Math.abs(x*p));
 		System.out.println("\t\tThe relative error of the solution is " + error);
 
 		if(Math.abs(error) > accuracy) {
