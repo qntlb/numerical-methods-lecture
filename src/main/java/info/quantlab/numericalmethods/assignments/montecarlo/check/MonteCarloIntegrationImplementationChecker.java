@@ -3,14 +3,14 @@
  *
  * Created on 12.04.2020
  */
-package info.quantlab.numericalmethods.lecture.montecarlo.check;
+package info.quantlab.numericalmethods.assignments.montecarlo.check;
 
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.Integrand;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.IntegrationDomain;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.MonteCarloIntegratorFactory;
 import net.finmath.functions.NormalDistribution;
 
-public class MonteCarloIntegrationChecker {
+public class MonteCarloIntegrationImplementationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
@@ -31,7 +31,6 @@ public class MonteCarloIntegrationChecker {
 		case "normal cdf":
 			success = testNormalCDF(integratorFactory);
 			break;
-
 		}
 
 		if(success) {
@@ -40,6 +39,33 @@ public class MonteCarloIntegrationChecker {
 		else {
 			System.out.println("\t Test of " + whatToCheck + " failed.");
 		}
+		return success;
+	}
+
+	public static boolean check(MonteCarloIntegrationAssignment solution, String whatToCheck) {
+		System.out.println("Testing getIntegral(...)");
+
+		boolean success;
+		try {
+			double integral = solution.getIntegral((x,y) -> Math.sin(x)*Math.sin(y), 0, Math.PI, 0, Math.PI);
+			double integralAnalytic = 4.0;
+
+			success = Math.abs(integral-integralAnalytic) < 5E-2;
+		}
+		catch(Exception e) {
+			System.out.println(" Failed with exception " + e.getMessage());
+			success = false;
+		}
+		
+		if(!success) {
+			System.out.println("Sorry, the test failed.");
+		}
+		else {
+			System.out.println("Congratulation! You solved this part of the exercise.");
+		}
+
+		System.out.println("_".repeat(79));
+
 		return success;
 	}
 

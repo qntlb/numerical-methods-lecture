@@ -15,9 +15,8 @@ public class QuadraticEquationImplemenationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
-	 * @param whatToTest 
-	 *
-	 * @param theClass The class to test;
+	 * 
+	 * @param whatToTest Specifies different tests.
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean check(QuadraticEquationFactory quadraticEquationFactory, String whatToTest) {

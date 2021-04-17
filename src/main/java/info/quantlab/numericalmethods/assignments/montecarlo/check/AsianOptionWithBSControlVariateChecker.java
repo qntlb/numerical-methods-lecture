@@ -3,7 +3,7 @@
  *
  * Created on 12.04.2020
  */
-package info.quantlab.numericalmethods.lecture.montecarlo.check;
+package info.quantlab.numericalmethods.assignments.montecarlo.check;
 
 import java.util.List;
 import java.util.Random;
