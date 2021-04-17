@@ -18,54 +18,60 @@ public class QuadraticEquationImplemenationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
+	 * @param whatToTest 
 	 *
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean check(QuadraticEquationFactory quadraticEquationFactory) {
+	public static boolean check(QuadraticEquationFactory quadraticEquationFactory, String whatToTest) {
 		boolean succes = true;
 
 		try {
-			/*
-			 * Check coefficents returned correctly
-			 */
-			succes &= checkgetCoefficients(quadraticEquationFactory, 2.0, -1.0);
+			switch(whatToTest) {
+			case "accuracy":
+			default:
+				/*
+				 * Check some extreme cases
+				 */
+				double[][] testCases = {
+						{1.0,  100000.0},
+						{1.0, -100000.0},
+						{1.0,  10000000.0},
+						{1.0, -10000000.0},
+						{100, 20.01  },
+						{100, -20.01 },
+				};
+				for(double[] testCase : testCases) {
+					succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* q */);
+				}
+			case "basic":
+				/*
+				 * Check coefficents returned correctly
+				 */
+				succes &= checkgetCoefficients(quadraticEquationFactory, 2.0, -1.0);
 
-			/*
-			 * Check hasRealRoot
-			 */
-			succes &= checkHasRealRoot(quadraticEquationFactory);
+				/*
+				 * Check hasRealRoot
+				 */
+				succes &= checkHasRealRoot(quadraticEquationFactory);
 
-			/*
-			 * Check some extreme cases
-			 */
-			double[][] testCases = {
-					{1.0,  100000.0},
-					{1.0, -100000.0},
-					{1.0,  10000000.0},
-					{1.0, -10000000.0},
-					{100, 20.01  },
-					{100, -20.01 },
-			};
-			for(double[] testCase : testCases) {
-				succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* q */);
-			}
 
-			/*
-			 * Check behaviour for non real roots.
-			 */
-			boolean isNonRealRootNaN;
-			try {
-				QuadraticEquation equationWithoutRoot = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
-				double solution = equationWithoutRoot.getSmallestRoot();
+				/*
+				 * Check behaviour for non real roots.
+				 */
+				boolean isNonRealRootNaN;
+				try {
+					QuadraticEquation equationWithoutRoot = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
+					double solution = equationWithoutRoot.getSmallestRoot();
 
-				isNonRealRootNaN = Double.isNaN(solution);
-			}
-			catch(Exception e) {
-				isNonRealRootNaN = false;
-			}
-			if(!isNonRealRootNaN) {
-				System.out.println("\tWe would expect getSmallestRoot() of equation without root to be NaN.");
+					isNonRealRootNaN = Double.isNaN(solution);
+				}
+				catch(Exception e) {
+					isNonRealRootNaN = false;
+				}
+				if(!isNonRealRootNaN) {
+					System.out.println("\tWe would expect getSmallestRoot() of equation without root to be NaN.");
+				}
 			}
 
 		}
