@@ -8,6 +8,8 @@ package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 import java.util.Arrays;
 import java.util.Random;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquation;
 import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquationFactory;
 import info.quantlab.reflection.ObjectConstructor;
@@ -94,9 +96,21 @@ public class QuadraticEquationImplemenationChecker {
 
 	private static boolean  checkgetCoefficients(QuadraticEquationFactory quadraticEquationFactory, double q, double p) {
 		QuadraticEquation equation = quadraticEquationFactory.createQuadraticEquation(q, p);
-		double[] parameter = equation.getCoefficients();
 
-		return parameter[0] == 2.0 && parameter[1] == -1.0;
+		boolean success = false;
+		try {
+			double[] parameter = equation.getCoefficients();
+
+			success = parameter[0] == 2.0 && parameter[1] == -1.0;
+		}
+		catch(Exception e) {
+			System.out.println("\tTest of method getCoefficients reported an exception, did not expect that: " + e.getMessage());
+		}
+
+		if(!success) {
+			System.out.println("\tTest of method getCoefficients failed. The method did not report the coefficients in the right way.");
+		}
+		return success;
 	}
 
 	/**
