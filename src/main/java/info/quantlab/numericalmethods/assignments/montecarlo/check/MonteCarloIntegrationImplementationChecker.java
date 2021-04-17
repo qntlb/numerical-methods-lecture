@@ -34,10 +34,10 @@ public class MonteCarloIntegrationImplementationChecker {
 		}
 
 		if(success) {
-			System.out.println("\t Test of " + whatToCheck + " passed.");
+			System.out.println("\tTest of " + whatToCheck + " passed.");
 		}
 		else {
-			System.out.println("\t Test of " + whatToCheck + " failed.");
+			System.out.println("\tTest of " + whatToCheck + " failed.");
 		}
 		return success;
 	}
@@ -56,15 +56,14 @@ public class MonteCarloIntegrationImplementationChecker {
 			System.out.println(" Failed with exception " + e.getMessage());
 			success = false;
 		}
-		
-		if(!success) {
-			System.out.println("Sorry, the test failed.");
+
+		if(success) {
+			System.out.println("\tTest of " + whatToCheck + " passed.");
 		}
 		else {
-			System.out.println("Congratulation! You solved this part of the exercise.");
+			System.out.println("\tTest of " + whatToCheck + " failed.");
+			System.out.println("\tIn case it is a numerical error: we expect an accuracy of 0.05.");
 		}
-
-		System.out.println("_".repeat(79));
 
 		return success;
 	}
