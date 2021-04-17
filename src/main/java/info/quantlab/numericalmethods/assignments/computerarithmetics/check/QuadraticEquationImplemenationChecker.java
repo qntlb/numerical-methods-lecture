@@ -101,9 +101,9 @@ public class QuadraticEquationImplemenationChecker {
 		
 		System.out.println("\tTesting ordering of the roots.");
 
-		// (x-1) * (x-2) = x^2 - 2 x + 2 => p = -2, q= 2
+		// (x-1) * (x-2) = x^2 - 3 x + 2 => p = -3, q= 2
 		System.out.println("\t\tTesting q = 2, p = -2.");
-		double x1 = quadraticEquationFactory.createQuadraticEquation(2, -2).getSmallestRoot();
+		double x1 = quadraticEquationFactory.createQuadraticEquation(2, -3).getSmallestRoot();
 		success &= x1 < 1.5;
 
 		// x * (x+2) = x^2 + 2 x => p = 2, q= 0
