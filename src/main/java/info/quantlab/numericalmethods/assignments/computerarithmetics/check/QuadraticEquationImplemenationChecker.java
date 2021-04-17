@@ -110,10 +110,10 @@ public class QuadraticEquationImplemenationChecker {
 		success &= x2 < -0.5;
 
 		if(!success) {
-			System.out.println("\u274c\tThe method getSmallestRoot does not report the smallest (!) root.");
+			System.out.println("\t\u274cThe method getSmallestRoot does not report the smallest (!) root.");
 		}
 		else {
-			System.out.println("\u2705\tTest passed.");
+			System.out.println("\t\u2705Test passed.");
 		}
 		return success;
 	}
@@ -132,10 +132,10 @@ public class QuadraticEquationImplemenationChecker {
 		}
 
 		if(!success) {
-			System.out.println("\u274c\tTest of method getCoefficients failed. The method did not report the coefficients in the right way.");
+			System.out.println("\t\u274cTest of method getCoefficients failed. The method did not report the coefficients in the right way.");
 		}
 		else {
-			System.out.println("\u2705\tTest passed.");
+			System.out.println("\t\u2705Test passed.");
 		}
 		return success;
 	}
@@ -194,12 +194,12 @@ public class QuadraticEquationImplemenationChecker {
 		double error = (x*x + p * x + q) / (1+2*x*x+Math.abs(x*p));
 		System.out.println("\t\tThe relative error of the solution is " + error);
 
-		boolean success = Math.abs(error) > accuracy;
+		boolean success = Math.abs(error) < accuracy;
 		if(!success) {
-			System.out.println("\u274c\tTest failed.");
+			System.out.println("\t\u274cTest failed.");
 		}
 		else {
-			System.out.println("\u2705\tTest passed.");
+			System.out.println("\t\u2705Test passed.");
 		}
 
 		return success;

@@ -68,11 +68,11 @@ public class DoubleVectorImplemenationChecker {
 		DoubleVector vector = solution.createDoubleVector(testArgument);
 
 		if(vector.sum() != 6) {
-			System.out.println("\tSimple test failed.");
+			System.out.println("\t\u274cSimple test failed.");
 			return false;
 		}
 		else {
-			System.out.println("\tSimple test passed.");
+			System.out.println("\t\u2705Simple test passed.");
 		}
 
 		return true;
@@ -95,11 +95,11 @@ public class DoubleVectorImplemenationChecker {
 
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
-			System.out.println("\tRandom array test failed. The error is " + error);
+			System.out.println("\t\u274cRandom array test failed. The error is " + error);
 			return false;
 		}
 		else {
-			System.out.println("\tRandom array test passed.");
+			System.out.println("\t\u2705Random array test passed.");
 		}
 
 		return true;
@@ -127,12 +127,12 @@ public class DoubleVectorImplemenationChecker {
 
 		double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
-			System.out.println("\tAccuracy test failed. Accuracy is too low. The error is " + error);
+			System.out.println("\t\u274cAccuracy test failed. Accuracy is too low. The error is " + error);
 			System.out.println("\tHint: Check the numerical methods lecture on how to improve the accuracy of a summation.");
 			return false;
 		}
 		else {
-			System.out.println("\tAccuracy test passed.");
+			System.out.println("\t\u2705Accuracy test passed.");
 		}
 
 		return true;
