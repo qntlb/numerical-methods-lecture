@@ -9,7 +9,6 @@ import java.util.Random;
 
 import info.quantlab.numericalmethods.lecture.computerarithmetics.summation.DoubleVector;
 import info.quantlab.numericalmethods.lecture.computerarithmetics.summation.DoubleVectorFactory;
-import info.quantlab.reflection.ObjectConstructor;
 import net.finmath.montecarlo.RandomVariableFromDoubleArray;
 
 public class DoubleVectorImplemenationChecker {

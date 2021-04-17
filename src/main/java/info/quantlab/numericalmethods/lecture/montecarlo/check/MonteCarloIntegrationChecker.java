@@ -5,31 +5,10 @@
  */
 package info.quantlab.numericalmethods.lecture.montecarlo.check;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.function.Function;
-
-import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquation;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.Integrand;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.IntegrationDomain;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.MonteCarloIntegratorFactory;
-import info.quantlab.reflection.ObjectConstructor;
-import net.finmath.exception.CalculationException;
 import net.finmath.functions.NormalDistribution;
-import net.finmath.integration.MonteCarloIntegrator;
-import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
-import net.finmath.montecarlo.IndependentIncrements;
-import net.finmath.montecarlo.assetderivativevaluation.AssetModelMonteCarloSimulationModel;
-import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
-import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
-import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
-import net.finmath.montecarlo.model.AbstractProcessModel;
-import net.finmath.montecarlo.process.EulerSchemeFromProcessModel;
-import net.finmath.montecarlo.process.EulerSchemeFromProcessModel.Scheme;
-import net.finmath.montecarlo.process.MonteCarloProcessFromProcessModel;
-import net.finmath.stochastic.RandomVariable;
-import net.finmath.time.TimeDiscretization;
-import net.finmath.time.TimeDiscretizationFromArray;
 
 public class MonteCarloIntegrationChecker {
 

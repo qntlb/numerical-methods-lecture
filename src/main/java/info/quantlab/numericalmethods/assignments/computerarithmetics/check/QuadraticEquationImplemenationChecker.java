@@ -6,13 +6,8 @@
 package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 
 import java.util.Arrays;
-import java.util.Random;
-
-import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
 import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquation;
 import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquationFactory;
-import info.quantlab.reflection.ObjectConstructor;
 
 public class QuadraticEquationImplemenationChecker {
 
@@ -46,8 +41,13 @@ public class QuadraticEquationImplemenationChecker {
 						{0, -10.0 },
 				};
 				for(double[] testCase : testCases) {
-					succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* q */);
+					succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* p */);
 				}
+
+				/*
+				 * Check for smallest root
+				 */
+				succes &= checkForSmallestRoot(quadraticEquationFactory);
 			case "basic":
 				/*
 				 * Check coefficents returned correctly
@@ -94,6 +94,25 @@ public class QuadraticEquationImplemenationChecker {
 		}
 
 		return succes;
+	}
+
+	private static boolean checkForSmallestRoot(QuadraticEquationFactory quadraticEquationFactory) {
+		boolean success = true;
+		
+		// (x-1) * (x-2) = x^2 - 2 x + 2 => p = -2, q= 2
+		System.out.println("\tTesting q = 2, p = -2.");
+		double x1 = quadraticEquationFactory.createQuadraticEquation(2, -2).getSmallestRoot();
+		success &= x1 < 1.5;
+
+		// x * (x-2) = x^2 - 2 x => p = -2, q= 0
+		System.out.println("\tTesting q = 0, p = -2.");
+		double x2 = quadraticEquationFactory.createQuadraticEquation(0, -2).getSmallestRoot();
+		success &= x2 < -0.5;
+
+		if(!success) {
+			System.out.println("\tThe method getSmallestRoot does not report the smallest (!) root.");
+		}
+		return success;
 	}
 
 	private static boolean  checkgetCoefficients(QuadraticEquationFactory quadraticEquationFactory, double q, double p) {

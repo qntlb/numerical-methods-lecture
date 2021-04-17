@@ -204,7 +204,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			 */
 			double minStandardError = Double.MAX_VALUE;
 			for(int relativeShiftPercentage = -10; relativeShiftPercentage<=50; relativeShiftPercentage++) {
-				double initialValueShifted = initialValue*(1.0 + (double)relativeShiftPercentage/100.0);
+				double initialValueShifted = initialValue*(1.0 + relativeShiftPercentage/100.0);
 
 				RandomVariable valueMonteCarloWithWeight = europeanOption.
 						getValue(initalTime,
