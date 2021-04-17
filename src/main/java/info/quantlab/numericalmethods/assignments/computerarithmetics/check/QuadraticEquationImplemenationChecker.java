@@ -104,8 +104,8 @@ public class QuadraticEquationImplemenationChecker {
 		double x1 = quadraticEquationFactory.createQuadraticEquation(2, -2).getSmallestRoot();
 		success &= x1 < 1.5;
 
-		// x * (x-2) = x^2 - 2 x => p = -2, q= 0
-		System.out.println("\tTesting q = 0, p = -2.");
+		// x * (x+2) = x^2 + 2 x => p = 2, q= 0
+		System.out.println("\tTesting q = 0, p = 2.");
 		double x2 = quadraticEquationFactory.createQuadraticEquation(0, -2).getSmallestRoot();
 		success &= x2 < -0.5;
 
