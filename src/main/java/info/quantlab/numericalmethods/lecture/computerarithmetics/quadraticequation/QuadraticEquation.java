@@ -8,7 +8,7 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequa
 public interface QuadraticEquation {
 
 	/**
-	 * Returns the array { a_0 , a_1 } with the coefficients of the quadratic from
+	 * Returns the array { a_0 , a_1 } with the coefficients of the quadratic form
 	 * \(  x^2 + a_1 x + a_0 = 0 \)
 	 * Note: the first element of the array is the constant coefficient, the second element is the linear coefficient.
 	 *
