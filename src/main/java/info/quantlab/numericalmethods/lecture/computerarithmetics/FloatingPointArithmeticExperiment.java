@@ -33,10 +33,11 @@ public class FloatingPointArithmeticExperiment {
 			tiny = tiny/2.0;
 		}
 
-		System.out.println("tiny       = " + tiny);
-		System.out.println("tiny/2     = " + tiny/2);
-		System.out.println("tiny/2*2   = " + (tiny/2)*2);
-		System.out.println("tiny*2/2   = " + (tiny*2)/2);
+		System.out.println("tiny............ = " + tiny);
+		System.out.println("2^{-1023+1-52}.. = " + Math.pow(2,-1023+1-52));
+		System.out.println("tiny/2.......... = " + tiny/2);
+		System.out.println("tiny/2*2........ = " + (tiny/2)*2);
+		System.out.println("tiny*2/2........ = " + (tiny*2)/2);
 
 		System.out.println("_".repeat(79)+"\n");
 
