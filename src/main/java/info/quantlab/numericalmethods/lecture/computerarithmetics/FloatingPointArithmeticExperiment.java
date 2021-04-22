@@ -128,21 +128,28 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("_".repeat(79)+"\n");
 
 		/*
-		 * Experiment on loss of significance - solve a quadratic equation x^2 - 2*p*x + q = 0
+		 * Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0
+		 * 
+		 * Note: In the lecture we considered the example x^2 - 2 p*x + q = 0 (i.e. p -> -p/2).
 		 */
 
-		System.out.println("Experiment on loss of significance - solve a quadratic equation x^2 - 2*p*x + q = 0.\n");
+		System.out.println("Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0.\n");
 
-		double p = 10000000.0;
+		double p = -10000000.0;
 		double q = 1.0;
+		
+		double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
+		System.out.println("..................p = " +p);
+		System.out.println("..................q = " +q);
+		System.out.println("Solution.........x1 = " +x1);
 
-		// solve x^2 -2px + q = 0
-		double x = p - Math.sqrt(p*p-q);		// alternatively: try q / (p + Math.sqrt(p*p-q))
+		System.out.println("x^2 + px + q (with x1) = " + (x1*x1 + p*x1 +q) );
+		
+		double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
 
-		double error = x*x - 2*p*x + q;
+		System.out.println("Solution.........x2 = " +x2);
+		System.out.println("x^2 + px +q (with x1) = " + (x2*x2 + p*x2 +q) );
 
-		System.out.println("x       = " + x);
-		System.out.println("error   = " + error);
 		System.out.println("_".repeat(79)+"\n");
 
 		/*
@@ -165,6 +172,29 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("_".repeat(79)+"\n");
 
+	}
+
+
+	/**
+	 * Returns the smallest root of x^2 + px + q = 0
+	 * 
+	 * @param p coefficient p
+	 * @param q coefficient q
+	 * @return The root
+	 */
+	private static double getSmallestRootOfQuadraticEquationVersion1(double p, double q) {
+		return -p/2 - Math.sqrt(p*p/4 - q);
+	}
+
+	/**
+	 * Returns the smallest root of x^2 + px + q = 0
+	 * 
+	 * @param p coefficient p
+	 * @param q coefficient q
+	 * @return The root
+	 */
+	private static double getSmallestRootOfQuadraticEquationVersion2(double p, double q) {
+		return q / (-p/2 + Math.sqrt(p*p/4 -q));
 	}
 
 	private static double getSumOfValuesKahan(double value, int numberOfValues) {
