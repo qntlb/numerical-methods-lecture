@@ -11,6 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- maven plugins -->
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
+		<maven.source-plugin.version>3.2.1</maven.source-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -37,6 +38,19 @@
 					<target>11</target>
 					<compilerVersion>11</compilerVersion>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>${maven.source-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
