@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
 
@@ -6,8 +6,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
+import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarloIntegrator1D;
 
-public class SimpsonsIntegratorTest {
+public class MonteCarloIntegratorTest {
 
 	@Test
 	public void test() {
@@ -18,9 +19,9 @@ public class SimpsonsIntegratorTest {
 
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		int numberOfEvaluationPoints = 100;
+		int numberOfEvaluationPoints = 10000;
 
-		Integrator1D integrator = new SimpsonsIntegrator(numberOfEvaluationPoints);
+		Integrator1D integrator = new MonteCarloIntegrator1D(numberOfEvaluationPoints);
 
 		double integralNumeric = integrator.integrate(integrand, lowerBound, upperBound);
 		double integralAnalyticValue = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);
