@@ -7,6 +7,8 @@ import net.finmath.randomnumbers.MersenneTwister;
 
 public class MonteCarloIntegrator1D implements Integrator1D {
 
+	private final int seed = 3141;
+	
 	private int numberOfEvaluationPoints;
 
 	public MonteCarloIntegrator1D(int numberOfEvaluationPoints) {
@@ -19,7 +21,7 @@ public class MonteCarloIntegrator1D implements Integrator1D {
 
 		double range = upperBound-lowerBound;
 
-		DoubleStream randomNumbers = DoubleStream.generate(new MersenneTwister(3141)).limit(numberOfEvaluationPoints);
+		DoubleStream randomNumbers = DoubleStream.generate(new MersenneTwister(seed)).limit(numberOfEvaluationPoints);
 
 		double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+range*x)).sum();
 
