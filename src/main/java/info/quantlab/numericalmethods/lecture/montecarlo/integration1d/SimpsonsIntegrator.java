@@ -1,10 +1,8 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
-
-import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
 
 public class SimpsonsIntegrator implements Integrator1D {
 
