@@ -1,5 +1,6 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.streams;
 
+import java.util.function.DoubleSupplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
@@ -21,13 +22,13 @@ public class JavaStreamsExperiments {
 		/*
 		 * A stream of 10 random numbers
 		 */
-		DoubleStream randomNumbers = DoubleStream.generate(new MersenneTwister()).limit(10);
+		DoubleSupplier randomNumberGenerator = new MersenneTwister();
+		DoubleStream randomNumbers = DoubleStream.generate(randomNumberGenerator).limit(10);
 		randomNumbers.forEach(x -> System.out.println(x));
 
 		System.out.println("_".repeat(80) + "\n");
 
-
-		for(int i=0; i<100; i++) {
+		for(int i=0; i<10; i++) {
 			double randomNumber = Math.random();
 			System.out.println(randomNumber);
 		}

@@ -8,35 +8,31 @@ public class SimpsonsIntegrator implements Integrator1D {
 
 	private int numberOfEvaluationPoints;
 
-
 	public SimpsonsIntegrator(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
 	}
-
 
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
 		double range = upperBound-lowerBound;
 
-		int numberOfIntervals = (numberOfEvaluationPoints-1)/2;
+		int numberOfDoubleSizeIntervals = (numberOfEvaluationPoints-1)/2;
 
-		// same as range / (numberOfEvaluationPoints-1) - the h in the formula
-		double intervalHalfSize  = range/numberOfIntervals / 2.0;
+		double intervalSize  = range/numberOfDoubleSizeIntervals / 2.0;			// the h in the formula
 
-		IntStream intervals = IntStream.range(1,numberOfIntervals);
+		// First, second and last evaluation point will be missing, added at the end
+		IntStream intervals = IntStream.range(1,numberOfDoubleSizeIntervals);
 
-		DoubleStream integralParts = intervals.mapToDouble(i -> 2 * integrand.applyAsDouble(lowerBound + 2*i*intervalHalfSize)
-				+ 4 * integrand.applyAsDouble(lowerBound + (2*i+1)*intervalHalfSize));
+		DoubleStream integralParts = intervals.mapToDouble(
+				i -> 2 * integrand.applyAsDouble(lowerBound + 2*i*intervalSize)
+				+ 4 * integrand.applyAsDouble(lowerBound + (2*i+1)*intervalSize));
 
-		double sum = integralParts.sum();
-		sum += 4 * integrand.applyAsDouble(lowerBound + intervalHalfSize);
-		sum += integrand.applyAsDouble(lowerBound);
-		sum += integrand.applyAsDouble(upperBound);
+		double sum = integralParts.sum()
+				+ 4 * integrand.applyAsDouble(lowerBound + intervalSize)
+				+ integrand.applyAsDouble(lowerBound) + integrand.applyAsDouble(upperBound);
 
-
-		return sum / 3 * intervalHalfSize;
+		return sum / 3 * intervalSize;
 	}
-
 }
