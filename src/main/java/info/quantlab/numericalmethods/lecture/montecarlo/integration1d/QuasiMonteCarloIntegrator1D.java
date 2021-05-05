@@ -19,7 +19,7 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 		double range = upperBound-lowerBound;
 
 		DoubleStream randomNumbers = IntStream.range(0, numberOfEvaluationPoints).mapToDouble(
-				i -> i*1.0/numberOfEvaluationPoints
+				i -> (2*i+1)*1.0/(2*numberOfEvaluationPoints)
 				);
 
 		double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+range*x)).sum();

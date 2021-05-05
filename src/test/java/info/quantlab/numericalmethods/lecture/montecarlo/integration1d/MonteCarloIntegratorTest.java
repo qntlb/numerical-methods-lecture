@@ -13,13 +13,13 @@ public class MonteCarloIntegratorTest {
 	@Test
 	public void test() {
 
-		double lowerBound = 1.0;
-		double upperBound = 5.0;
+		double lowerBound = 0.0;
+		double upperBound = 1.5;
 		DoubleUnaryOperator integrand = x -> Math.cos(x);
 
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		int numberOfEvaluationPoints = 10000;
+		int numberOfEvaluationPoints = 101;
 
 		Integrator1D integrator = new MonteCarloIntegrator1D(numberOfEvaluationPoints);
 
@@ -28,7 +28,7 @@ public class MonteCarloIntegratorTest {
 
 		double error = integralNumeric-integralAnalyticValue;
 
-		System.out.println("numeric: " + integralNumeric + "\tanalytic: " + integralAnalyticValue + "\t" + error);
+		System.out.println(String.format("%30s:", integrator.getClass().getSimpleName()) + "\t" + "numeric: " + integralNumeric + "\tanalytic: " + integralAnalyticValue + "\t" + error);
 
 		double tolerance = 3.0/Math.sqrt(numberOfEvaluationPoints);
 		Assert.assertEquals("Integral", integralNumeric, integralAnalyticValue, tolerance);

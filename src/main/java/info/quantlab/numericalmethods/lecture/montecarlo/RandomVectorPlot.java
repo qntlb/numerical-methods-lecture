@@ -19,7 +19,7 @@ public class RandomVectorPlot {
 
 		int numberOfPoints = 1000;
 
-		RandomVector sequence = new RandomVector(numberOfPoints, 2);
+		RandomVectorLCG sequence = new RandomVectorLCG(numberOfPoints, 2);
 
 		Plot plot = Plots.createScatter(
 				sequence.getSequenceForComponent(0),

@@ -9,7 +9,7 @@ import java.util.Random;
  *
  * @author Christian Fries
  */
-public class RandomVector {
+public class RandomVectorLCG {
 
 	// Create a 1-D random number generator x_{k}
 	private Random random = new Random(3141);
@@ -18,7 +18,7 @@ public class RandomVector {
 	// Alternative would be : [componentIndex][sampleIndex]
 	private double[][] randomVectorSequence;
 
-	public RandomVector(int length, int dimension) {
+	public RandomVectorLCG(int length, int dimension) {
 		randomVectorSequence = new double[length][dimension];
 
 		for(int i=0; i<length; i++) {

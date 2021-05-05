@@ -4,11 +4,11 @@ import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
-public class SimpsonsIntegrator implements Integrator1D {
+public class SimpsonsIntegrator1D implements Integrator1D {
 
 	private int numberOfEvaluationPoints;
 
-	public SimpsonsIntegrator(int numberOfEvaluationPoints) {
+	public SimpsonsIntegrator1D(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
 	}
