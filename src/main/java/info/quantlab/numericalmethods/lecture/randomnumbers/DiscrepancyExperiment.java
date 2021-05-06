@@ -1,16 +1,12 @@
 package info.quantlab.numericalmethods.lecture.randomnumbers;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
-import java.util.stream.Stream;
-
 import net.finmath.plots.Plot2D;
 import net.finmath.plots.PlotableFunction2D;
 import net.finmath.plots.PlotablePoints2D;
-import net.finmath.plots.Plots;
 import net.finmath.plots.Point2D;
 import net.finmath.randomnumbers.MersenneTwister;
 

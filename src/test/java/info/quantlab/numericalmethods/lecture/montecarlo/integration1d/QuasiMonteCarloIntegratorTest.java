@@ -5,9 +5,6 @@ import java.util.function.DoubleUnaryOperator;
 import org.junit.Assert;
 import org.junit.Test;
 
-import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
-import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.QuasiMonteCarloIntegrator1D;
-
 public class QuasiMonteCarloIntegratorTest {
 
 	@Test
