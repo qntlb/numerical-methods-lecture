@@ -8,6 +8,8 @@ package info.quantlab.numericalmethods.assignments.montecarlo.check;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.Integrand;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.IntegrationDomain;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration.MonteCarloIntegratorFactory;
+import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
+import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGeneratorFrom1D;
 import net.finmath.functions.NormalDistribution;
 
 public class MonteCarloIntegrationImplementationChecker {
@@ -86,7 +88,7 @@ public class MonteCarloIntegrationImplementationChecker {
 			}
 
 			@Override
-			public int getDimention() {
+			public int getDimension() {
 				return 2;
 			}
 
@@ -106,7 +108,9 @@ public class MonteCarloIntegrationImplementationChecker {
 		for(long seed : new long[] { 3141, 6563, 132 }) {
 			long numberOfSamplePoints = 1000000;
 
-			double integral = integratorFactory.getIntegrator(seed, numberOfSamplePoints).integrate(integrand, domain);
+			double integral = integratorFactory.getIntegrator(
+					new RandomNumberGeneratorFrom1D(new MersenneTwister(seed), domain.getDimension()),
+					numberOfSamplePoints).integrate(integrand, domain);
 
 			System.out.println("\tgot: " + integral + ", expected: " + integralAnalytic);
 
@@ -139,7 +143,7 @@ public class MonteCarloIntegrationImplementationChecker {
 			}
 
 			@Override
-			public int getDimention() {
+			public int getDimension() {
 				return 3;
 			}
 
@@ -159,7 +163,10 @@ public class MonteCarloIntegrationImplementationChecker {
 		for(long seed : new long[] { 3141, 6563, 132 }) {
 			long numberOfSamplePoints = 1000000;
 
-			double integral = integratorFactory.getIntegrator(seed, numberOfSamplePoints).integrate(integrand, domain);
+			double integral = integratorFactory.getIntegrator(
+					new RandomNumberGeneratorFrom1D(new MersenneTwister(seed), domain.getDimension()),
+					numberOfSamplePoints)
+					.integrate(integrand, domain);
 
 			System.out.println("\tgot: " + integral + ", expected: " + integralAnalytic);
 

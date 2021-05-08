@@ -1,7 +1,9 @@
 package info.quantlab.numericalmethods.lecture.montecarlo.integration;
 
+import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerator;
+
 public interface MonteCarloIntegratorFactory {
 
-	Integrator getIntegrator(long seed, long numberOfSamplePoints);
+	Integrator getIntegrator(RandomNumberGenerator randomNumberGenerator, long numberOfSamplePoints);
 
 }

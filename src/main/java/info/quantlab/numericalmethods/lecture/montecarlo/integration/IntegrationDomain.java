@@ -20,7 +20,7 @@ public interface IntegrationDomain {
 	 * 
 	 * @return
 	 */
-	int getDimention();
+	int getDimension();
 	
 	/**
 	 * For this transformation f : [0,1]^{n} \mapsto R^{n} this methods returns the value
