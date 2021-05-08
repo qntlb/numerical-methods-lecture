@@ -24,7 +24,7 @@ public class RandomVectorQuasi {
 		randomVectorSequence = new double[length][dimension];
 
 		for(int i=0; i<length; i++) {
-			randomVectorSequence[i] = sequence.getSamplePoint(i);
+			randomVectorSequence[i] = sequence.getHaltonNumber(i);
 		}
 	}
 
