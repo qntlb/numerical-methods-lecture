@@ -1,10 +1,9 @@
-package net.finmath.randomnumbers;
 /*
  * (c) Copyright Christian P. Fries, Germany. Contact: email@christianfries.com.
  *
  * Created on 21 May 2018
  */
-
+package info.quantlab.numericalmethods.lecture.randomnumbers;
 
 import org.apache.commons.math3.random.SobolSequenceGenerator;
 
@@ -23,9 +22,9 @@ public class SobolSequence implements RandomNumberGenerator {
 
 	private static final long serialVersionUID = -1904010803493075019L;
 
-	private int dimension;
+	private final int dimension;
 
-	private SobolSequenceGenerator generator;
+	private final SobolSequenceGenerator generator;
 
 	/**
 	 * Constructs a Sobol sequence with given dimension.

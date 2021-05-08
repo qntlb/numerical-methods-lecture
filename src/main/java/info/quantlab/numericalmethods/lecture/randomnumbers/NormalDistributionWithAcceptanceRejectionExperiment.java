@@ -113,9 +113,9 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 			boolean isRejected = true;
 
 			while(isRejected) {
-				double u = net.finmath.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 2);
-				double v = net.finmath.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 3);
-				double w = net.finmath.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 5);
+				double u = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 2);
+				double v = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 3);
+				double w = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 5);
 				double s = w < 0.5 ? 1.0 : -1.0;
 
 				double x = -Math.log(1-v);
@@ -151,8 +151,8 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 			boolean isRejected = true;
 
 			while(isRejected) {
-				double u = net.finmath.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 2);
-				double v = net.finmath.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 3);
+				double u = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 2);
+				double v = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 3);
 
 				double x = -Math.log(1-Math.abs(2*v-1));
 
@@ -206,7 +206,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		int j = 0;
 		List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<numberOfSamples; i++) {
-			double uniform = net.finmath.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 2);
+			double uniform = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 2);
 
 			double normal = NormalDistribution.inverseCumulativeNormalDistributionWichura(uniform);
 

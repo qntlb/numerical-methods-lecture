@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.integration1d.experiments;
 
 import java.text.DecimalFormat;
 import java.util.function.DoubleUnaryOperator;
@@ -6,7 +6,7 @@ import java.util.function.DoubleUnaryOperator;
 import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence;
 import net.finmath.randomnumbers.MersenneTwister;
 
-public class MonteCarloIntegrationQuasiExperiment {
+public class MonteCarloIntegrationExperiment {
 
 	private static DecimalFormat formatter = new DecimalFormat(" 0.000E00;-0.000E00");
 
@@ -30,6 +30,7 @@ public class MonteCarloIntegrationQuasiExperiment {
 		double sumMersenneTwister = 0.0;
 		double sumEquidistributed = 0.0;
 		double sumVanDerCorput = 0.0;
+
 		for(int i=0; i<numberOfSamplePoints; i++) {
 			sumMersenneTwister += function.applyAsDouble(mersenne.nextDouble());
 			sumEquidistributed += function.applyAsDouble((double)i/numberOfSamplePoints);

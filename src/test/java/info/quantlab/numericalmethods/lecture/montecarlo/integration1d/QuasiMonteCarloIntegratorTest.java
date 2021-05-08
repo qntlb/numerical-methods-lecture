@@ -16,7 +16,7 @@ public class QuasiMonteCarloIntegratorTest {
 
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		int numberOfEvaluationPoints = 100;
+		int numberOfEvaluationPoints = 101;
 
 		Integrator1D integrator = new QuasiMonteCarloIntegrator1D(numberOfEvaluationPoints);
 

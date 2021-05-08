@@ -9,6 +9,9 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- libs -->
+		<finmath-lib.version>5.1.0</finmath-lib.version>
+		<junit.version>5.6.2</junit.version>
 		<!-- maven plugins -->
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<maven.source-plugin.version>3.2.1</maven.source-plugin.version>
@@ -18,12 +21,31 @@
 		<dependency>
 			<groupId>net.finmath</groupId>
 			<artifactId>finmath-lib</artifactId>
-			<version>5.0.4</version>
+			<version>${finmath-lib.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.finmath</groupId>
 			<artifactId>finmath-lib-plot-extensions</artifactId>
-			<version>0.3.10</version>
+			<version>0.4.3-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

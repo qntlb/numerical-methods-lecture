@@ -1,4 +1,5 @@
-package net.finmath.randomnumbers;
+package info.quantlab.numericalmethods.lecture.randomnumbers;
+
 /**
  * Implements a multi-dimensional Sobol sequence.
  *
@@ -13,7 +14,7 @@ public class SobolSequence1D implements RandomNumberGenerator1D {
 
 	private static final long serialVersionUID = 1368710922067034251L;
 
-	private SobolSequence sobolSequence;
+	private final SobolSequence sobolSequence;
 
 	/**
 	 * Create a Sobol sequence.

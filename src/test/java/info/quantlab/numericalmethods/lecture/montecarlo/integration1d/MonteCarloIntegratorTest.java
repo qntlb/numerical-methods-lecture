@@ -2,8 +2,9 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
 
+import org.junit.jupiter.api.Test;
+
 import org.junit.Assert;
-import org.junit.Test;
 
 public class MonteCarloIntegratorTest {
 
@@ -16,7 +17,7 @@ public class MonteCarloIntegratorTest {
 
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		int numberOfEvaluationPoints = 101;
+		int numberOfEvaluationPoints = 100;
 
 		Integrator1D integrator = new MonteCarloIntegrator1D(numberOfEvaluationPoints);
 
@@ -28,6 +29,7 @@ public class MonteCarloIntegratorTest {
 		System.out.println(String.format("%30s:", integrator.getClass().getSimpleName()) + "\t" + "numeric: " + integralNumeric + "\tanalytic: " + integralAnalyticValue + "\t" + error);
 
 		double tolerance = 3.0/Math.sqrt(numberOfEvaluationPoints);
+		
 		Assert.assertEquals("Integral", integralNumeric, integralAnalyticValue, tolerance);
 	}
 
