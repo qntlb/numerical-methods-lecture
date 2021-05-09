@@ -18,7 +18,7 @@ public interface MonteCarloIntegrationAssignment {
 	 * with integration domain [a,b] x [c,d] 
 	 * using your Monte-Carlo Integrator.
 	 * 
-	 * @param function The function to integrate.
+	 * @param function The function to integrate, given as a {@link DoubleBinaryOperator}.
 	 * @param lowerBoundX The lower bound a for the integral of dx.
 	 * @param upperBoundX The upper bound b for the integral of dx.
 	 * @param lowerBoundY The lower bound c for the integral of dy.
