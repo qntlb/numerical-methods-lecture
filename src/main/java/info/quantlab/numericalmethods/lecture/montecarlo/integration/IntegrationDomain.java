@@ -18,7 +18,7 @@ public interface IntegrationDomain {
 	/**
 	 * Returns the dimension of the unit cube.
 	 * 
-	 * @return
+	 * @return The dimension n of the unit cube.
 	 */
 	int getDimension();
 	
@@ -30,11 +30,11 @@ public interface IntegrationDomain {
 	 * 
 	 * This is required to transform the integral of a function h to the unit cube. It is
 	 * \[
-	 *   \int_A h(z) dz = \int_[0,1] h(f(x)) det(df/dx) dx
+	 *   \int_A h(z) dz = \int_[0,1]^{n} h(f(x)) det(df/dx) dx
 	 * \]
 	 * 
 	 * @param parametersOnUnitCurve
-	 * @return
+	 * @return The determinant of df/dx - the scaleing of applied to an infinitesimal volume.
 	 */
 	double getDeterminantOfDifferential(double[] parametersOnUnitCurve);
 
