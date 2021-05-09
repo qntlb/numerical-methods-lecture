@@ -16,6 +16,7 @@ public class QuadraticEquationImplemenationChecker {
 	/**
 	 * Check if the class solves the exercise.
 	 * 
+	 * @param quadraticEquationFactory The factory to create a QuadraticEquation.
 	 * @param whatToTest Specifies different tests.
 	 * @return Boolean if the test is passed.
 	 */
@@ -145,7 +146,7 @@ public class QuadraticEquationImplemenationChecker {
 	 * Check if the class solves the exercise with respect to the method <code>hasRealRoot</code>.
 	 * Test x^2 + p x + q = 0.
 	 *
-	 * @param theClass The class to test;
+	 * @param quadraticEquationFactory The factory to create a QuadraticEquation.
 	 * @return Boolean if the test is passed.
 	 */
 	private static boolean checkHasRealRoot(QuadraticEquationFactory quadraticEquationFactory) {
@@ -174,7 +175,7 @@ public class QuadraticEquationImplemenationChecker {
 	 * Check if the class solves the exercise.
 	 * Test x^2 + p x + q = 0.
 	 *
-	 * @param theClass The class to test;
+	 * @param quadraticEquationFactory The factory to create a QuadraticEquation.
 	 * @param p The coefficient p.
 	 * @param q The coefficient q.
 	 * @return Boolean if the test is passed.
