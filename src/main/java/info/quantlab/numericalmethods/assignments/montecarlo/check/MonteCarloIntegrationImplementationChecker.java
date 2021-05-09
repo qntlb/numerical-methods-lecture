@@ -17,7 +17,7 @@ public class MonteCarloIntegrationImplementationChecker {
 	/**
 	 * Check if the class solves the exercise.
 	 *
-	 * @param theClass The class to test;
+	 * @param integratorFactory The integrator to test.
 	 * @param whatToCheck A string, currently "basic" or "accuracy".
 	 * @return Boolean if the test is passed.
 	 */
