@@ -8,7 +8,7 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration;
 public interface IntegrationDomain {
 
 	/**
-	 * Applied the transformation f : [0,1]^{n} \mapsto R^{n} for a parameter in the unit cube.
+	 * Applied the transformation \( f : [0,1]^{n} \mapsto R^{n} \) for a parameter in the unit cube.
 	 * 
 	 * @param parametersOnUnitCube A parameter value x in \( [0,1]^{n} \).
 	 * @return The value f(x).
