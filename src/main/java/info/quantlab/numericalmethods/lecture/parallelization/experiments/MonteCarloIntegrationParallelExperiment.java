@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.parallelization.experiments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +11,17 @@ import java.util.stream.IntStream;
 
 import net.finmath.randomnumbers.HaltonSequence;
 
-public class MonteCarloIntegrationParalellExperiment {
+public class MonteCarloIntegrationParallelExperiment {
 
 	private static double piAnalytic = Math.PI;
-
+	
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
-
+		
 		int numberOfSamples = 200000000; // 2 * 10^8
 
+		System.out.println("Monte-Carlo approximation of Pi:                                  error           time");
+		System.out.println("_".repeat(100));
+		
 		testHaltonWithStreamSeq(numberOfSamples);
 		testHaltonWithStreamPar(numberOfSamples);
 		testHaltonWithExecutor(numberOfSamples);
@@ -41,7 +44,8 @@ public class MonteCarloIntegrationParalellExperiment {
 
 		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Halton, sequential using stream....: " + (piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
+		System.out.println("Halton, sequential using stream..............................: " +
+				String.format("%10.2E", piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
 
 	private static void testHaltonWithStreamPar(int numberOfSamples) {
@@ -58,7 +62,8 @@ public class MonteCarloIntegrationParalellExperiment {
 
 		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Halton, parallel using stream......: " + (piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
+		System.out.println("Halton, parallel using stream................................: " +
+				String.format("%10.2E", piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
 
 	private static  void testMersenneWithStreamSeq(int numberOfSamples) {
@@ -77,7 +82,8 @@ public class MonteCarloIntegrationParalellExperiment {
 
 		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Mersenne, sequential using stream..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
+		System.out.println("Mersenne, sequential using stream............................: " +
+				String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
 
 	private static  void testMersenneWithStreamPar(int numberOfSamples) {
@@ -98,7 +104,8 @@ public class MonteCarloIntegrationParalellExperiment {
 
 		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Mersenne, parallel stream + synchronize....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
+		System.out.println("Mersenne, parallel using stream, synchonized.................: " +
+				String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 	}
 
 	private static void testMersenneWithExecutor(int numberOfSamples) throws InterruptedException, ExecutionException {
@@ -138,7 +145,8 @@ public class MonteCarloIntegrationParalellExperiment {
 
 			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-			System.out.println("Mersenne, parallel Executor w/ thread local generator..: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
+			System.out.println("Mersenne, parallel Executor w/ thread local generator........: " +
+					String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 		}
 		finally {
 			executor.shutdown();
@@ -180,7 +188,8 @@ public class MonteCarloIntegrationParalellExperiment {
 
 			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
-			System.out.println("Halton, parallel using Executor....: " + (piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
+			System.out.println("Halton, parallel using Executor..............................: " +
+					String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
 		}
 		finally {
 			executor.shutdown();
