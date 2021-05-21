@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.randomnumbers;
+package info.quantlab.numericalmethods.lecture.randomnumbers.experiments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +17,10 @@ public class NormalICDFExperiments {
 		 * Plot ICDF from different uniforms
 		 */
 
-		testICDFWithMersenneTwister();
-		testICDFWithVanDerCorput();
-		testICDFWithSobol();
-		testICDFJavaRandom();
-		testICDFWithMersenneTwister();
-
+		testNormalICDFJavaRandom();
+		testNormalICDFWithMersenneTwister();
+		testNormalICDFWithVanDerCorput();
+		testNormalICDFWithSobol();
 
 		testICDFImplementations();
 	}
@@ -33,114 +31,136 @@ public class NormalICDFExperiments {
 		p = 0.0;
 		testICDFImplementationApacheMath3(p);
 		testICDFImplementationFinmathWichura(p);
-
-		p = 1.0;
-		testICDFImplementationApacheMath3(p);
-		testICDFImplementationFinmathWichura(p);
-
-		p = Math.pow(2, -53);
-		testICDFImplementationApacheMath3(p);
-		testICDFImplementationFinmathWichura(p);
+		System.out.println("=".repeat(80));
 
 		p = Double.MIN_VALUE;
 		testICDFImplementationApacheMath3(p);
 		testICDFImplementationFinmathWichura(p);
+		System.out.println("=".repeat(80));
+
+		p = Math.pow(2, -53);
+		testICDFImplementationApacheMath3(p);
+		testICDFImplementationFinmathWichura(p);
+		System.out.println("=".repeat(80));
 
 		p = 1.0-Math.pow(2, -53);
 		testICDFImplementationApacheMath3(p);
 		testICDFImplementationFinmathWichura(p);
+		System.out.println("=".repeat(80));
 
-		p = 1.0-Math.pow(2, -54);
+		p = 1.0;
 		testICDFImplementationApacheMath3(p);
 		testICDFImplementationFinmathWichura(p);
 	}
 
-	private static void testICDFImplementationFinmathWichura(double p) {
+	private static void testICDFImplementationFinmathWichura(double uniform) {
 
+		System.out.println("Testing finmath lib Wichura implementation (u = uniform, x = normal)");
 		System.out.println("_".repeat(80));
-
-		System.out.println("Testing Wichura implementation");
 
 		org.apache.commons.math3.distribution.NormalDistribution normal = new org.apache.commons.math3.distribution.NormalDistribution();
 
-		System.out.println("p       = " + p);
+		System.out.println("        u = " + uniform);
 
-		double x = NormalDistribution.inverseCumulativeNormalDistributionWichura(p);
+		double x = NormalDistribution.inverseCumulativeNormalDistributionWichura(uniform);
 
-		System.out.println("x(p)    = " + x);
+		System.out.println("     x(u) = " + x);
 
-		double pFromX = normal.cumulativeProbability(x);
+		double p = normal.cumulativeProbability(x);
 
-		System.out.println("p(x(p)) = " + pFromX);
+		System.out.println("  u(x(u)) = " + p);
 
-		double expFromX = Math.exp(x);
+		double expPlusX = Math.exp(x);
 
-		System.out.println("exp(x)  = " + expFromX);
-	}
+		System.out.println("   exp(x) = " + expPlusX);
+		
+		double expMinusX = Math.exp(-x);
 
-	private static void testICDFImplementationApacheMath3(double p) {
+		System.out.println("  exp(-x) = " + expMinusX);
+
+		System.out.println("_".repeat(80));
+		System.out.println();
+}
+
+	private static void testICDFImplementationApacheMath3(double uniform) {
+
+		System.out.println("Testing Apache Common Math implementation (u = uniform, x = normal)");
 
 		System.out.println("_".repeat(80));
 
-		System.out.println("Testing Apache Common Math implementation");
-
 		org.apache.commons.math3.distribution.NormalDistribution normal = new org.apache.commons.math3.distribution.NormalDistribution();
 
-		System.out.println("p       = " + p);
+		System.out.println("        u = " + uniform);
 
-		double x = normal.inverseCumulativeProbability(p);
+		double x = normal.inverseCumulativeProbability(uniform);
 
-		System.out.println("x(p)    = " + x);
+		System.out.println("     x(u) = " + x);
 
-		double pFromX = normal.cumulativeProbability(x);
+		double p = normal.cumulativeProbability(x);
 
-		System.out.println("p(x(p)) = " + pFromX);
+		System.out.println("  u(x(u)) = " + p);
 
-		double expFromX = Math.exp(x);
+		double expPlusX = Math.exp(x);
 
-		System.out.println("exp(x)  = " + expFromX);
+		System.out.println("   exp(x) = " + expPlusX);
+		
+		double expMinusX = Math.exp(-x);
+
+		System.out.println("  exp(-x) = " + expMinusX);
+
+		System.out.println("_".repeat(80));
+		System.out.println();
 	}
 
 
-	private static void testICDFJavaRandom() throws Exception {
+	private static void testNormalICDFJavaRandom() throws Exception {
 		Random random = new Random(3636);
 
+		List<Double> valuesUniform = new ArrayList<>();
 		List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<100000; i++) {
 			double uniform = random.nextFloat();
 
 			double normal = NormalDistribution.inverseCumulativeNormalDistributionWichura(uniform);
 
+			valuesUniform.add(uniform);
 			valuesNormal.add(normal);
 		}
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesUniform, 300, 4.0)
+		.setTitle("Normal via ICDF from Java Random (LCG) sequence").show();
+
+		Plots.createDensity(valuesNormal, 300, 4.0)
 		.setTitle("Normal via ICDF from Java Random (LCG) sequence").show();
 	}
 
 
-	private static void testICDFWithSobol() throws Exception {
+	private static void testNormalICDFWithSobol() throws Exception {
 		SobolSequence1D sobol = new SobolSequence1D();
 		sobol.nextDouble();	// remove first number in sequence being u=0.
 
 		org.apache.commons.math3.distribution.NormalDistribution normalDistribution =
 				new org.apache.commons.math3.distribution.NormalDistribution();
 
+		List<Double> valuesUniform = new ArrayList<>();
 		List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<100000; i++) {
 			double uniform = sobol.nextDouble();
 
 			double normal = normalDistribution.inverseCumulativeProbability(uniform);
 
+			valuesUniform.add(uniform);
 			valuesNormal.add(normal);
-
 		}
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesUniform, 300, 4.0)
+		.setTitle("Normal via ICDF from Sobol sequence").show();
+
+		Plots.createDensity(valuesNormal, 300, 4.0)
 		.setTitle("Normal via ICDF from Sobol sequence").show();
 	}
 
-	private static void testICDFWithMersenneTwister() throws Exception {
+	private static void testNormalICDFWithMersenneTwister() throws Exception {
 
 		MersenneTwister mersenne = new MersenneTwister(3636);
 
@@ -158,14 +178,14 @@ public class NormalICDFExperiments {
 			valuesNormal.add(normal);
 		}
 
-		Plots.createHistogram(valuesUniform, 100, 4.0)
+		Plots.createDensity(valuesUniform, 300, 4.0)
 		.setTitle("Uniform from MersenneTwister").show();
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 300, 4.0)
 		.setTitle("Normal via ICDF from MersenneTwister").show();
 	}
 
-	private static void testICDFWithVanDerCorput() throws Exception {
+	private static void testNormalICDFWithVanDerCorput() throws Exception {
 
 		var uniformSequence = new net.finmath.randomnumbers.VanDerCorputSequence(2);
 
@@ -180,10 +200,10 @@ public class NormalICDFExperiments {
 			valuesNormal.add(normal);
 		}
 
-		Plots.createHistogram(valuesUniform, 100, 4.0)
+		Plots.createDensity(valuesUniform, 300, 4.0)
 		.setTitle("Uniform from VanDerCorput").show();
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 300, 4.0)
 		.setTitle("Normal via ICDF from VanDerCorput").show();
 	}
 }
