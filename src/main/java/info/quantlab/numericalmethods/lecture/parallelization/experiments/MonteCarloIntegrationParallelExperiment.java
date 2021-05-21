@@ -14,14 +14,14 @@ import net.finmath.randomnumbers.HaltonSequence;
 public class MonteCarloIntegrationParallelExperiment {
 
 	private static double piAnalytic = Math.PI;
-	
+
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		
+
 		int numberOfSamples = 200000000; // 2 * 10^8
 
 		System.out.println("Monte-Carlo approximation of Pi:                                  error           time");
 		System.out.println("_".repeat(100));
-		
+
 		testHaltonWithStreamSeq(numberOfSamples);
 		testHaltonWithStreamPar(numberOfSamples);
 		testHaltonWithExecutor(numberOfSamples);

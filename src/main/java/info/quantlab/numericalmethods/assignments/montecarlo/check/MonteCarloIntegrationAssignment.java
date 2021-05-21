@@ -8,16 +8,16 @@ public interface MonteCarloIntegrationAssignment {
 
 	/**
 	 * The solution of the first part of exercise, implementing a MonteCarloIntegratorFactory providing a MonteCarloIntegrator
-	 * 
+	 *
 	 * @return A class implementing MonteCarloIntegratorFactory
 	 */
 	MonteCarloIntegratorFactory getMonteCarloIntegratorFactory();
 
 	/**
 	 * The solution of the second part of exercise. Calculating the integral sin(x) * sin(y) dx dy
-	 * with integration domain [a,b] x [c,d] 
+	 * with integration domain [a,b] x [c,d]
 	 * using your Monte-Carlo Integrator.
-	 * 
+	 *
 	 * @param function The function to integrate, given as a {@link DoubleBinaryOperator}.
 	 * @param lowerBoundX The lower bound a for the integral of dx.
 	 * @param upperBoundX The upper bound b for the integral of dx.

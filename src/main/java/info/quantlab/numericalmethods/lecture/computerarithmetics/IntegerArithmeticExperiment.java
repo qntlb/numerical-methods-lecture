@@ -40,7 +40,7 @@ public class IntegerArithmeticExperiment {
 
 		/*
 		 * Experiment on overflow and remainder (%)
-		 * 
+		 *
 		 * For the remainder we have ((a % c) + (b % c)) % c = (a+b)%c,
 		 * but this is violated after an overflow.
 		 */
@@ -62,7 +62,7 @@ public class IntegerArithmeticExperiment {
 
 		System.out.println("Small integer b = " + integerSmall);
 		System.out.println("b % c           = " + modOfSmall);
-		
+
 		System.out.println("((a % c) + (b % c)) % c = " + sumOfModulusMod);
 		System.out.println("(a + b) % c             = " + modulusOfSum);
 	}

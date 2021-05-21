@@ -57,7 +57,7 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 		RandomVariable valueRelativeOption2InT2 = valueOption2InT2.div(model.getNumeraire(maturity2));
 		RandomVariable valueRelativeOption1InT1 = valueOption1InT1.div(model.getNumeraire(maturity1));
 		RandomVariable valueRelativeOption2InT1 = valueOption2InT1.div(model.getNumeraire(maturity1));
-		
+
 		RandomVariable bermudanPathwiseValueAdmissible = valueRelativeOption2InT1.sub(valueRelativeOption1InT1)
 				.choose(valueRelativeOption2InT2, valueRelativeOption1InT1);
 
@@ -85,11 +85,11 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 						continuationValues,
 						expectedContinuationValue2)
 				)
-		.setYRange(-5, 150)
-		.setIsLegendVisible(true)
-		.setXAxisLabel("S(T\u2081)")
-		.setYAxisLabel("V\u2082(T\u2081), V\u2082(T\u2082)")
-		.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
+				.setYRange(-5, 150)
+				.setIsLegendVisible(true)
+				.setXAxisLabel("S(T\u2081)")
+				.setYAxisLabel("V\u2082(T\u2081), V\u2082(T\u2082)")
+				.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
 		plotCondExpEstimate.show();
 		plotCondExpEstimate.saveAsSVG(new File("ConditionalExpectationEstimate.svg"),900,600);
 		plotCondExpEstimate.saveAsPDF(new File("ConditionalExpectationEstimate.png"),900,600);
@@ -101,11 +101,11 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 						exerciseValues,
 						expectedContinuationValue)
 				)
-		.setYRange(-5, 150)
-		.setIsLegendVisible(true)
-		.setXAxisLabel("S(T\u2081)")
-		.setYAxisLabel("V\u2081(T\u2081), V\u2082(T\u2081), V\u2082(T\u2082)")
-		.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
+				.setYRange(-5, 150)
+				.setIsLegendVisible(true)
+				.setXAxisLabel("S(T\u2081)")
+				.setYAxisLabel("V\u2081(T\u2081), V\u2082(T\u2081), V\u2082(T\u2082)")
+				.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
 		plotBermudanExercise.show();
 		plotBermudanExercise.saveAsSVG(new File("BermudanExerciseAdmissible.svg"),900,600);
 
@@ -116,11 +116,11 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 						exerciseValues,
 						expectedContinuationValue)
 				)
-		.setYRange(-5, 150)
-		.setIsLegendVisible(true)
-		.setXAxisLabel("S(T\u2081)")
-		.setYAxisLabel("V\u2081(T\u2081), V\u2082(T\u2081), V\u2082(T\u2082)")
-		.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
+				.setYRange(-5, 150)
+				.setIsLegendVisible(true)
+				.setXAxisLabel("S(T\u2081)")
+				.setYAxisLabel("V\u2081(T\u2081), V\u2082(T\u2081), V\u2082(T\u2082)")
+				.setTitle("Time T\u2081 and T\u2082 values related to a Bermudan option with exercises in T\u2081 and T\u2082.");
 		plotBermudanExerciseWithForesight.show();
 		plotBermudanExerciseWithForesight.saveAsSVG(new File("BermudanExerciseForesight.svg"),900,600);
 	}

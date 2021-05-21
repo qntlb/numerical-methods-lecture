@@ -20,7 +20,7 @@ import java.util.Random;
 public class MersenneTwister implements RandomNumberGenerator1D, Serializable {
 
 	private static final long serialVersionUID = -1827470318370174186L;
-	
+
 	private final long seed;
 
 	private final org.apache.commons.math3.random.MersenneTwister mersenneTwister;

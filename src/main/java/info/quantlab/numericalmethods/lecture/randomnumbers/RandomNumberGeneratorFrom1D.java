@@ -4,8 +4,8 @@ public class RandomNumberGeneratorFrom1D implements RandomNumberGenerator {
 
 	private final RandomNumberGenerator1D randomNumberGenerator;
 	private final int dimension;
-	
-	
+
+
 	public RandomNumberGeneratorFrom1D(RandomNumberGenerator1D randomNumberGenerator, int dimension) {
 		super();
 		this.randomNumberGenerator = randomNumberGenerator;
@@ -31,5 +31,5 @@ public class RandomNumberGeneratorFrom1D implements RandomNumberGenerator {
 		return "RandomNumberGeneratorFrom1D [randomNumberGenerator=" + randomNumberGenerator + ", dimension="
 				+ dimension + "]";
 	}
-	
+
 }

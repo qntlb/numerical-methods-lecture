@@ -29,7 +29,7 @@ public class RunningAverageOfIndicator {
 		plot.setTitle("Plot of running average of indicator function (x[i] == \u03C9[j]))");
 		plot.setXAxisLabel("n");
 		plot.setYAxisLabel("S(n)");
-//		plot.saveAsPNG(new File("RunningAverageOfIndicator.png"), 960, 600);
+		//		plot.saveAsPNG(new File("RunningAverageOfIndicator.png"), 960, 600);
 		plot.show();
 	}
 

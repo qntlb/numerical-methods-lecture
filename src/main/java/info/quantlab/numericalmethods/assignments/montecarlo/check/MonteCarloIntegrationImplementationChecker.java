@@ -95,7 +95,7 @@ public class MonteCarloIntegrationImplementationChecker {
 			@Override
 			public double getDeterminantOfDifferential(double[] parametersOnUnitCurve) {
 				return 4.0;
-			}			
+			}
 		};
 
 		double integralAnalytic = Math.PI;
@@ -150,7 +150,7 @@ public class MonteCarloIntegrationImplementationChecker {
 			@Override
 			public double getDeterminantOfDifferential(double[] parametersOnUnitCurve) {
 				return 8.0;
-			}			
+			}
 		};
 
 		double integralAnalytic = Math.pow(NormalDistribution.cumulativeDistribution(1)-NormalDistribution.cumulativeDistribution(-1), 3);

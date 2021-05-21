@@ -73,14 +73,14 @@ public class NormalICDFExperiments {
 		double expPlusX = Math.exp(x);
 
 		System.out.println("   exp(x) = " + expPlusX);
-		
+
 		double expMinusX = Math.exp(-x);
 
 		System.out.println("  exp(-x) = " + expMinusX);
 
 		System.out.println("_".repeat(80));
 		System.out.println();
-}
+	}
 
 	private static void testICDFImplementationApacheMath3(double uniform) {
 
@@ -103,7 +103,7 @@ public class NormalICDFExperiments {
 		double expPlusX = Math.exp(x);
 
 		System.out.println("   exp(x) = " + expPlusX);
-		
+
 		double expMinusX = Math.exp(-x);
 
 		System.out.println("  exp(-x) = " + expMinusX);

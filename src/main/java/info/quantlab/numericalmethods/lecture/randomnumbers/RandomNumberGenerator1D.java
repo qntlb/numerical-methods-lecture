@@ -1,6 +1,5 @@
 package info.quantlab.numericalmethods.lecture.randomnumbers;
 
-import java.io.Serializable;
 import java.util.function.DoubleSupplier;
 
 /**

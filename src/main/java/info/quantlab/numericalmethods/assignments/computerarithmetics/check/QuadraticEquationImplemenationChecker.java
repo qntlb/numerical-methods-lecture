@@ -6,6 +6,7 @@
 package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 
 import java.util.Arrays;
+
 import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquation;
 import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequation.QuadraticEquationFactory;
 
@@ -15,7 +16,7 @@ public class QuadraticEquationImplemenationChecker {
 
 	/**
 	 * Check if the class solves the exercise.
-	 * 
+	 *
 	 * @param quadraticEquationFactory The factory to create a QuadraticEquation.
 	 * @param whatToTest Specifies different tests.
 	 * @return Boolean if the test is passed.
@@ -98,7 +99,7 @@ public class QuadraticEquationImplemenationChecker {
 
 	private static boolean checkForSmallestRoot(QuadraticEquationFactory quadraticEquationFactory) {
 		boolean success = true;
-		
+
 		System.out.println("\tTesting ordering of the roots.");
 
 		// (x-1) * (x-2) = x^2 - 3 x + 2 => p = -3, q= 2

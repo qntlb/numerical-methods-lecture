@@ -3,7 +3,6 @@ package info.quantlab.numericalmethods.lecture.randomnumbers.experiments;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence;
 import net.finmath.functions.NormalDistribution;
 import net.finmath.plots.Plots;
 import net.finmath.randomnumbers.MersenneTwister;

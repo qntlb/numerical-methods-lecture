@@ -60,7 +60,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("2^(-53).... = " + Math.pow(2, -53));	// For double mantissa has p = 52 bits
 
 		System.out.println("_".repeat(79)+"\n");
-		
+
 		/*
 		 * Experiments with Double.MAX_VALUE
 		 */
@@ -130,7 +130,7 @@ public class FloatingPointArithmeticExperiment {
 
 		/*
 		 * Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0
-		 * 
+		 *
 		 * Note: In the lecture we considered the example x^2 - 2 p*x + q = 0 (i.e. p -> -p/2).
 		 */
 
@@ -138,14 +138,14 @@ public class FloatingPointArithmeticExperiment {
 
 		double p = -10000000.0;
 		double q = 1.0;
-		
+
 		double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
 		System.out.println("..................p = " +p);
 		System.out.println("..................q = " +q);
 		System.out.println("Solution.........x1 = " +x1);
 
 		System.out.println("x^2 + px + q (with x1) = " + (x1*x1 + p*x1 +q) );
-		
+
 		double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
 
 		System.out.println("Solution.........x2 = " +x2);
@@ -178,7 +178,7 @@ public class FloatingPointArithmeticExperiment {
 
 	/**
 	 * Returns the smallest root of x^2 + px + q = 0
-	 * 
+	 *
 	 * @param p coefficient p
 	 * @param q coefficient q
 	 * @return The root
@@ -189,7 +189,7 @@ public class FloatingPointArithmeticExperiment {
 
 	/**
 	 * Returns the smallest root of x^2 + px + q = 0
-	 * 
+	 *
 	 * @param p coefficient p
 	 * @param q coefficient q
 	 * @return The root
