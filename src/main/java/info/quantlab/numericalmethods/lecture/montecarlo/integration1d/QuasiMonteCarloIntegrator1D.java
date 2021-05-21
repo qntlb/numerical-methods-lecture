@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 
-	private int numberOfEvaluationPoints;
+	private final int numberOfEvaluationPoints;
 
 	public QuasiMonteCarloIntegrator1D(int numberOfEvaluationPoints) {
 		super();
@@ -17,6 +17,8 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
 		double range = upperBound-lowerBound;
+
+		// Generate sample points
 
 		DoubleStream randomNumbers = IntStream.range(0, numberOfEvaluationPoints).mapToDouble(
 				i -> (2*i+1)*1.0/(2*numberOfEvaluationPoints)
