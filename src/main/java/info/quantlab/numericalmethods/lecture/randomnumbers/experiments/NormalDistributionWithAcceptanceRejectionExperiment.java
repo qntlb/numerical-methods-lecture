@@ -59,7 +59,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		System.out.println("Time AR from MersenneTwister 3D...: " + timeSec + " sec.");
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from MersenneTwister 3D").show();
 
 	}
@@ -96,7 +96,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		System.out.println("Time AR from MersenneTwister 2D...: " + timeSec + " sec.");
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from MersenneTwister 2D").show();
 
 	}
@@ -135,7 +135,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		double acceptanceRate = (double)numberOfSamples/j;
 		System.out.println("Time AR from Halton-Sequence 3D...: " + timeSec + " sec. Acceptance rate: " + acceptanceRate);
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from Halton-Sequence 3D").show();
 	}
 
@@ -170,7 +170,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		System.out.println("Time AR from Halton-Sequence 2D...: " + timeSec + " sec.");
 
-		Plots.createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from Halton-Seq. 2D").show();
 	}
 
@@ -195,7 +195,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		System.out.println("Time ICDF from MersenneTwister 1D.: " + timeSec + " sec.");
 
-		Plots.createHistogram(valuesNormal, 100, 4.0).
+		Plots.createDensity(valuesNormal, 100, 4.0).
 		setTitle("Normal via ICDF from MersenneTwister").show();
 	}
 
@@ -219,7 +219,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		System.out.println("Time ICDF from Halton-Sequence 1D.: " + timeSec + " sec.");
 
-		Plots .createHistogram(valuesNormal, 100, 4.0)
+		Plots.createDensity(valuesNormal, 300, 4.0)
 		.setTitle("Normal via ICDF from Halton-Sequence").show();
 
 	}
