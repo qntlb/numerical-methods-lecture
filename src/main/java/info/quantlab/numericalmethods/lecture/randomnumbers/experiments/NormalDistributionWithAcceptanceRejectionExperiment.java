@@ -3,6 +3,7 @@ package info.quantlab.numericalmethods.lecture.randomnumbers.experiments;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence;
 import net.finmath.functions.NormalDistribution;
 import net.finmath.plots.Plots;
 import net.finmath.randomnumbers.MersenneTwister;
@@ -105,6 +106,8 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		long timeStart = System.currentTimeMillis();
 
+		HaltonSequence haltonSequence = new HaltonSequence(new int[] { 2, 3, 5 });
+
 		int j = 0;
 		List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<numberOfSamples; i++) {
@@ -113,9 +116,12 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 			boolean isRejected = true;
 
 			while(isRejected) {
-				double u = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 2);
-				double v = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 3);
-				double w = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 5);
+				j++;
+				double[] randomVector = haltonSequence.getNext();
+				double u = randomVector[0];
+				double v = randomVector[1];;
+				double w = randomVector[2];;
+
 				double s = w < 0.5 ? 1.0 : -1.0;
 
 				double x = -Math.log(1-v);

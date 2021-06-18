@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.valuation;
 
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
@@ -59,28 +59,27 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 	}
 
-	private double getMonteCarloValueRandomVariables() {
+	private double getAnalyticValue() {
+		return AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, optionMaturity, optionStrike);
+	}
 
-		// Uniform
+	private double getMonteCarloValueUsingLoop() {
+
+		// Uniform random numbers
 		MersenneTwister mersenne = new MersenneTwister(seed);
 
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, 1, optionMaturity);
+		double sum = 0.0;
+		for(int sampleIndex=0; sampleIndex<numberOfSamples; sampleIndex++) {
+			double uniform = mersenne.nextDouble();
+			double normal = NormalDistribution.inverseCumulativeDistribution(uniform);
+			double underlying = initialValue * Math.exp(
+					riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity
+					+ volatility * Math.sqrt(optionMaturity) * normal);
+			double payoff = Math.max(underlying-optionStrike, 0.0);
 
-		BrownianMotion brownianMotion = new BrownianMotionFromRandomNumberGenerator(
-				timeDiscretization, 1, (int) numberOfSamples, mersenne);
-
-		RandomVariable deltaW = brownianMotion.getBrownianIncrement(0.0, 0);
-
-		// Model
-		double drift = riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity;
-		RandomVariable diffusion = deltaW.mult(volatility);
-		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);
-
-		// Product
-		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * optionMaturity));
-
-		double value = payoffDiscounted.average().doubleValue();
-
+			sum += payoff * Math.exp(-riskFreeRate * optionMaturity);
+		}
+		double value = sum / numberOfSamples;
 		return value;
 	}
 
@@ -110,35 +109,34 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		DoubleStream payoffStream = underlying.map(payoffDiscounted);
 
 		double value = payoffStream.sum() / numberOfSamples;
-
 		return value;
-
 	}
 
-	private double getMonteCarloValueUsingLoop() {
+	private double getMonteCarloValueRandomVariables() {
 
-		// Uniform randoms
+		// Uniform
 		MersenneTwister mersenne = new MersenneTwister(seed);
 
-		double sum = 0.0;
-		for(int sampleIndex=0; sampleIndex<numberOfSamples; sampleIndex++) {
-			double uniform = mersenne.nextDouble();
-			double normal = NormalDistribution.inverseCumulativeDistribution(uniform);
-			double underlying = initialValue * Math.exp(
-					riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity
-					+ volatility * Math.sqrt(optionMaturity) * normal);
-			double payoff = Math.max(underlying-optionStrike, 0.0);
+		// Time Discretization
+		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, 1, optionMaturity);
 
-			sum += payoff * Math.exp(-riskFreeRate * optionMaturity);
-		}
+		// Stochastic Driver: Brownian Motion.
+		BrownianMotion brownianMotion = new BrownianMotionFromRandomNumberGenerator(
+				timeDiscretization, 1, (int) numberOfSamples, mersenne);
 
-		double value = sum / numberOfSamples;
+		RandomVariable deltaW = brownianMotion.getBrownianIncrement(0.0, 0);
+
+		// Model
+		double drift = riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity;
+		RandomVariable diffusion = deltaW.mult(volatility);
+		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);
+
+		// Product
+		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * optionMaturity));
+
+		// Expectation
+		double value = payoffDiscounted.average().doubleValue();
 
 		return value;
 	}
-
-	private double getAnalyticValue() {
-		return AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, optionMaturity, optionStrike);
-	}
-
 }

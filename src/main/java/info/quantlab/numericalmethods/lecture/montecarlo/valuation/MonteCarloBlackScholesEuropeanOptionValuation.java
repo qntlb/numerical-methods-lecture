@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.montecarlo;
+package info.quantlab.numericalmethods.lecture.montecarlo.valuation;
 
 import net.finmath.exception.CalculationException;
 import net.finmath.functions.AnalyticFormulas;
