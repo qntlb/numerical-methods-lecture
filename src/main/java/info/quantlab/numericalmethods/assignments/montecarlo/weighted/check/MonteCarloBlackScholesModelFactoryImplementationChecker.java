@@ -3,13 +3,13 @@
  *
  * Created on 12.04.2020
  */
-package info.quantlab.numericalmethods.assignments.montecarlo.check;
+package info.quantlab.numericalmethods.assignments.montecarlo.weighted.check;
 
 import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
-import info.quantlab.numericalmethods.lecture.montecarlo.MonteCarloBlackScholesModelFactory;
+import info.quantlab.numericalmethods.lecture.montecarlo.weighted.MonteCarloBlackScholesModelFactory;
 import info.quantlab.reflection.ObjectConstructor;
 import net.finmath.exception.CalculationException;
 import net.finmath.functions.AnalyticFormulas;
@@ -165,7 +165,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			return isValuationOK;
 		}
 		catch(Exception e) {
-			System.out.println("\nTest failed with exception:");
+			System.err.println("\nTest failed with exception:");
 			e.printStackTrace();
 			return false;
 		}
@@ -239,7 +239,7 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 			return isVarianceReductionForValuationOK;
 		}
 		catch(Exception e) {
-			System.out.println("\nTest failed with exception:");
+			System.err.println("\nTest failed with exception:");
 			e.printStackTrace();
 			return false;
 		}
@@ -310,7 +310,8 @@ public class MonteCarloBlackScholesModelFactoryImplementationChecker {
 
 		MonteCarloBlackScholesModelFactory modelFactory = ObjectConstructor.<MonteCarloBlackScholesModelFactory>create(theClass, MonteCarloBlackScholesModelFactory.class);
 
-		AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = modelFactory.getModel(initialValue, riskFreeRate, volatility, new TimeDiscretizationFromArray(initalTime, numberOfTimeSteps, deltaT), numberOfPaths);
+		AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = modelFactory.getModel(initialValue, riskFreeRate, volatility, new TimeDiscretizationFromArray(initalTime, numberOfTimeSteps, deltaT), numberOfPaths, seed);
+
 		return monteCarloBlackScholesModel;
 	}
 
