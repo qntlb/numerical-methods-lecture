@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.assignments.montecarlo.check;
+package info.quantlab.numericalmethods.lecture.montecarlo.controlvariate;
 
 import net.finmath.exception.CalculationException;
 import net.finmath.functions.AnalyticFormulas;
@@ -61,6 +61,7 @@ public class MonteCarloControlVariateExperiment {
 		double c = valuePlain.sub(valuePlain.average()).mult(valueExotic.sub(valueExotic.average())).getAverage() / valuePlain.getVariance();
 
 		RandomVariable valueControled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));
+
 		EuropeanOption option = new EuropeanOption(maturity, strike1);
 		double value = option.getValue(blackScholesMonteCarloModel);
 
