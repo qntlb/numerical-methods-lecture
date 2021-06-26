@@ -14,6 +14,26 @@ import net.finmath.stochastic.RandomVariable;
 import net.finmath.time.TimeDiscretization;
 import net.finmath.time.TimeDiscretizationFromArray;
 
+/**
+ * Experiment on control variates.
+ * 
+ * We value an exotic option without and with a control variate constructed from a plain option.
+ * 
+ * The payoff of the exotic option is
+ * <ul>
+ * 	<li>
+ * 		S(T)-K1 for K2 < S(T)
+ * 	</li>
+ * 	<li>
+ * 		(S(T)-K1)^2/(K2-K1) for K1 < S(T) < K2
+ * 	</li>
+ * 	<li>
+ * 		0 for S(T) < K1 .
+ * 	</li>
+ * </ul>
+ * 
+ * @author Christian Fries
+ */
 public class MonteCarloControlVariateExperiment {
 
 	public static void main(String[] args) throws CalculationException {
@@ -36,39 +56,37 @@ public class MonteCarloControlVariateExperiment {
 		// Model: Black Scholes
 		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
-		// Brownian Motion / Numerical Scheme
+		// Brownian Motion
 		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, numberOfPaths, seed);
+
+		// Numerical Scheme
 		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
 
 		// Monte-Carlo Valuation Model
 		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
 
+		// Valuation of plain and exotic payoff
+		RandomVariable underlying = blackScholesMonteCarloModel.getAssetValue(maturity, 0);			// S(T)
+		RandomVariable numeraireAtPayment = blackScholesMonteCarloModel.getNumeraire(maturity);		// N(T)
+		RandomVariable numeraireAtEval	= blackScholesMonteCarloModel.getNumeraire(0.0);			// N(t)
+
+		RandomVariable payoffPlain = underlying.sub(strike1).floor(0.0);								// V(T) for plain option
+		RandomVariable payoffExotic = underlying.sub(strike2).choose(payoffPlain, payoffPlain.squared().div(strike2-strike1));		// V(T) for exotic option
+
+		RandomVariable valuePlain = payoffPlain.div(numeraireAtPayment).mult(numeraireAtEval);			// Y
+		RandomVariable valueExotic = payoffExotic.div(numeraireAtPayment).mult(numeraireAtEval);		// X
+
 		// Analytic Value
 		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike1);
 
-
-		RandomVariable underlying = blackScholesMonteCarloModel.getAssetValue(maturity, 0);
-		RandomVariable numeraireAtPayment = blackScholesMonteCarloModel.getNumeraire(maturity);
-		RandomVariable numeraireAtEval	= blackScholesMonteCarloModel.getNumeraire(0.0);
-
-		RandomVariable payoffCall = underlying.sub(strike1).floor(0.0);
-		RandomVariable strangePayoff = underlying.sub(strike2).choose(payoffCall, payoffCall.squared().div(strike2-strike1));
-
-		RandomVariable valueExotic = strangePayoff.div(numeraireAtPayment).mult(numeraireAtEval);
-		RandomVariable valuePlain = payoffCall.div(numeraireAtPayment).mult(numeraireAtEval);
-
+		// Controlled value
 		double c = valuePlain.sub(valuePlain.average()).mult(valueExotic.sub(valueExotic.average())).getAverage() / valuePlain.getVariance();
+		RandomVariable valueControled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));			// Z
 
-		RandomVariable valueControled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));
-
-		EuropeanOption option = new EuropeanOption(maturity, strike1);
-		double value = option.getValue(blackScholesMonteCarloModel);
-
-		System.out.println("Plain call analytic valuation..........: " + valueAnalytic);
-		System.out.println("Plain call Monte-Carlo valuation (1)...: " + valuePlain.getAverage() + " \t\u00B1 " + valuePlain.getStandardError());
-		System.out.println("Plain call Monte-Carlo valuation (2)...: " + value);
-		System.out.println("Exotic product Monte-Carlo valuation...: " + valueExotic.getAverage() + " \t\u00B1 " + valueExotic.getStandardError());
-		System.out.println("Exotic product controled MC valuation..: " + valueControled.getAverage() + "\t\u00B1 " + valueControled.getStandardError());
+		System.out.println("Plain product analytic valuation........: " + valueAnalytic + "\t\u00B1 0.0");
+		System.out.println("Plain product Monte-Carlo valuation.....: " + valuePlain.getAverage() + " \t\u00B1 " + valuePlain.getStandardError());
+		System.out.println("Exotic product Monte-Carlo valuation....: " + valueExotic.getAverage() + " \t\u00B1 " + valueExotic.getStandardError());
+		System.out.println("Exotic product controlled MC valuation..: " + valueControled.getAverage() + "\t\u00B1 " + valueControled.getStandardError());
 	}
 }
