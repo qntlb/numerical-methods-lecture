@@ -30,7 +30,7 @@ public class BrownianMotionExperiment {
 		RandomVariable bm1 = brownianMotion.getBrownianIncrement(0, 0);
 		RandomVariable bm2 = brownianMotion.getBrownianIncrement(1, 0);
 
-		// Plot a Scatter of the two Brownian incements.
+		// Plot a Scatter of the two Brownian increments.
 		var plot = Plots.createScatter(bm1, bm2, -1, 1);
 		plot.setTitle("Two independent (Brownian) increments").setXAxisLabel("\u0394 W(0)").setYAxisLabel("\u0394 W(0.01)");
 		plot.show();
