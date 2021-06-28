@@ -1,8 +1,5 @@
 package info.quantlab.numericalmethods.assignments.montecarlo.check;
 
-import java.util.function.DoubleBinaryOperator;
-
-import info.quantlab.numericalmethods.lecture.montecarlo.integration.MonteCarloIntegratorFactory;
 import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
 import net.finmath.time.TimeDiscretization;
 

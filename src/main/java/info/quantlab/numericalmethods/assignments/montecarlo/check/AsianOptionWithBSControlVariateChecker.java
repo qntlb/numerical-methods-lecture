@@ -5,11 +5,9 @@
  */
 package info.quantlab.numericalmethods.assignments.montecarlo.check;
 
-import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
 
-import info.quantlab.reflection.ObjectConstructor;
 import net.finmath.exception.CalculationException;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.montecarlo.IndependentIncrements;
@@ -49,18 +47,18 @@ public class AsianOptionWithBSControlVariateChecker {
 	 * @param whatToCheck A string, currently "basic" or "accuracy".
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean check(Class<?> theClass, String whatToCheck) {
+	public static boolean check(AsianOptionWithBSControlVariateAssignment solution, String whatToCheck) {
 
 		switch(whatToCheck) {
-		case "control":
+		case "strong":
 		default:
 		{
-			if(!checkBasicFunctionality(theClass)) {
+			if(!checkBasicFunctionality(solution)) {
 				System.out.println("\t Before we test the variance reduction, the valuation has to be correct.");
 				return false;
 			}
 			else {
-				boolean success = checkControl(theClass);
+				boolean success = checkControl(solution);
 				if(success) {
 					System.out.println("\t Strong variance reduction test passed.");
 				}
@@ -70,13 +68,13 @@ public class AsianOptionWithBSControlVariateChecker {
 				return success;
 			}
 		}
-		case "accuracy":
-			if(!checkBasicFunctionality(theClass)) {
+		case "weak":
+			if(!checkBasicFunctionality(solution)) {
 				System.out.println("\t Before we test the variance reduction, the valuation has to be correct.");
 				return false;
 			}
 			else {
-				boolean success = checkAccuracy(theClass);
+				boolean success = checkAccuracy(solution);
 				if(success) {
 					System.out.println("\t Weak variance reduction test passed.");
 				}
@@ -86,7 +84,7 @@ public class AsianOptionWithBSControlVariateChecker {
 				return success;
 			}
 		case "basic":
-			boolean success = checkBasicFunctionality(theClass);
+			boolean success = checkBasicFunctionality(solution);
 			if(success) {
 				System.out.println("\t Valuation test passed.");
 			}
@@ -103,9 +101,9 @@ public class AsianOptionWithBSControlVariateChecker {
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean checkBasicFunctionality(Class<?> theClass) {
+	public static boolean checkBasicFunctionality(AsianOptionWithBSControlVariateAssignment solution) {
 
-		RandomVariable value = getValueForTestCase(theClass, 0);
+		RandomVariable value = getValueForTestCase(solution, 0);
 
 		return Math.abs(value.getAverage()- 0.3725) <= 0.02;
 	}
@@ -116,21 +114,21 @@ public class AsianOptionWithBSControlVariateChecker {
 	 * @param theClass The class to test;
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean checkAccuracy(Class<?> theClass) {
+	public static boolean checkAccuracy(AsianOptionWithBSControlVariateAssignment solution) {
 
-		RandomVariable value = getValueForTestCase(theClass, 0);
+		RandomVariable value = getValueForTestCase(solution, 0);
 
 		return Math.abs(value.getStandardError()) <= 0.0009;
 	}
 
-	private static boolean checkControl(Class<?> theClass) {
+	private static boolean checkControl(AsianOptionWithBSControlVariateAssignment solution) {
 
-		RandomVariable value = getValueForTestCase(theClass, 0);
+		RandomVariable value = getValueForTestCase(solution, 0);
 
 		return Math.abs(value.getStandardError()) <= 0.0004;
 	}
 
-	private static RandomVariable getValueForTestCase(Class<?> theClass, int testCase) {
+	private static RandomVariable getValueForTestCase(AsianOptionWithBSControlVariateAssignment solution, int testCase) {
 		double	maturity = 10.0;
 		double	strike = 1.05;
 		TimeDiscretization timesForAveraging = new TimeDiscretizationFromArray(5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
@@ -139,7 +137,7 @@ public class AsianOptionWithBSControlVariateChecker {
 		/*
 		 * Construct object
 		 */
-		AssetMonteCarloProduct product = createProduct(theClass, maturity, strike, timesForAveraging);
+		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging);
 
 		/*
 		 * Create model
@@ -184,41 +182,19 @@ public class AsianOptionWithBSControlVariateChecker {
 		final MonteCarloProcessFromProcessModel process = new EulerSchemeFromProcessModel(model, brownianMotion, Scheme.EULER);
 
 		// Using the process (Euler scheme), create an MC simulation of a Black-Scholes model
-		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = new MonteCarloAssetModel(model, process);
+		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = new MonteCarloAssetModel(process);
 
 		return monteCarloBlackScholesModel;
 	}
 
 
-	private static AssetMonteCarloProduct createProduct(Class<?> theClass, double maturity, double strike, TimeDiscretization timesForAveraging) {
+	private static AssetMonteCarloProduct createProduct(AsianOptionWithBSControlVariateAssignment solution, double maturity, double strike, TimeDiscretization timesForAveraging) {
 
 		/*
 		 * Try (double, double, TimeDiscretization)
 		 */
-		try {
-			List<Class<?>> argumentTypes = List.of(double.class, double.class, TimeDiscretization.class);
-			List<Object> arguments = List.of(maturity, strike, timesForAveraging);
+		AssetMonteCarloProduct product = solution.getAsianOption(maturity, strike, timesForAveraging);
 
-			AssetMonteCarloProduct product = ObjectConstructor.<AssetMonteCarloProduct>create(theClass, AssetMonteCarloProduct.class, argumentTypes, arguments);
-			return product;
-		}
-		catch(IllegalArgumentException e) {
-		}
-
-		/*
-		 * Try (Double, Double, TimeDiscretization)
-		 */
-		try {
-			List<Class<?>> argumentTypes = List.of(Double.class, Double.class, TimeDiscretization.class);
-			List<Object> arguments = List.of(maturity, strike, timesForAveraging);
-
-			AssetMonteCarloProduct product = ObjectConstructor.<AssetMonteCarloProduct>create(theClass, AssetMonteCarloProduct.class, argumentTypes, arguments);
-			return product;
-		}
-		catch(IllegalArgumentException e) {
-			System.out.println(e.getMessage());
-			throw e;
-		}
+		return product;
 	}
-
 }

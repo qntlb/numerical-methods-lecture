@@ -8,9 +8,7 @@ import net.finmath.montecarlo.BrownianMotion;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.plots.DoubleToRandomVariableFunction;
 import net.finmath.plots.PlotProcess2D;
-import net.finmath.plots.Plots;
 import net.finmath.stochastic.RandomVariable;
-import net.finmath.stochastic.Scalar;
 import net.finmath.time.TimeDiscretization;
 import net.finmath.time.TimeDiscretizationFromArray;
 
@@ -18,11 +16,14 @@ public class BrownianBridgeExperiment {
 
 	public static void main(String[] args) throws IOException {
 
-		plotBrownianBridgePaths();
+		plotBrownianBridgePaths(100);
 
 	}
 
-	private static void plotBrownianBridgePaths() {
+	/*
+	 * Show a Brownian Bridge.
+	 */
+	private static void plotBrownianBridgePaths(int bridgeNumberOfTimeSteps) {
 		int numberOfTimeSteps = 2;
 		double deltaT = 1.0;
 		int numberOfPaths = 10;
@@ -33,7 +34,6 @@ public class BrownianBridgeExperiment {
 		RandomVariable valuesStart = brownianMotion.getBrownianIncrement(0, 0);
 		RandomVariable valuesEnd = valuesStart.add(brownianMotion.getBrownianIncrement(1, 0));
 
-		int bridgeNumberOfTimeSteps = 100;
 		double bridgeDeltaT = 1.0/bridgeNumberOfTimeSteps;
 		TimeDiscretization bridgeTimeDiscretization = new TimeDiscretizationFromArray(1.0, bridgeNumberOfTimeSteps, bridgeDeltaT);
 
@@ -82,7 +82,7 @@ public class BrownianBridgeExperiment {
 			var plot = new PlotProcess2D(td2, process, 200 /* maxNumberOfPaths */);
 			plot.setTitle("Paths of Brownian bridge").setXAxisLabel("time (t)").setYAxisLabel("value (W(t))");
 			plot.show();
-			plot.saveAsPNG(new File("images/plot-"+String.format("%03d", numberOfTimeSteps2)+".png"), 1600, 1000);
+			plot.saveAsJPG(new File("images/plot-"+String.format("%03d", numberOfTimeSteps2)+".png"), 1600, 1000);
 		}
 	}
 }

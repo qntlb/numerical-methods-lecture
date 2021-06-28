@@ -6,7 +6,6 @@ import net.finmath.montecarlo.BrownianMotion;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
-import net.finmath.montecarlo.assetderivativevaluation.products.EuropeanOption;
 import net.finmath.montecarlo.model.ProcessModel;
 import net.finmath.montecarlo.process.EulerSchemeFromProcessModel;
 import net.finmath.montecarlo.process.MonteCarloProcess;
