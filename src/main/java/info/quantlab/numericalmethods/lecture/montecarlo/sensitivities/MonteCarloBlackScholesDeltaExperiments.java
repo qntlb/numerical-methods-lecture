@@ -41,7 +41,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
 
 		RandomOperator payoffFunctionZero = underlying -> new Scalar(0.0);
-		RandomOperator payoffFunctionBond = underlying -> new Scalar(1.0);
+		RandomOperator payoffFunctionOne = underlying -> new Scalar(1.0);
 		RandomOperator payoffFunctionForward = underlying -> underlying;
 		RandomOperator payoffFunctionOption = underlying -> underlying.sub(strike).floor(0.0);
 		RandomOperator payoffFunctionDigital = underlying -> underlying.sub(strike).choose(new Scalar(1.0), new Scalar(0.0));
@@ -53,11 +53,11 @@ public class MonteCarloBlackScholesDeltaExperiments {
 
 		System.out.println("\nBond:");
 		double valueDeltaBondAnalytic = 0.0;
-		checkDeltaApproximationMethods(model, maturity, payoffFunctionBond, payoffFunctionZero, valueDeltaBondAnalytic);
+		checkDeltaApproximationMethods(model, maturity, payoffFunctionOne, payoffFunctionZero, valueDeltaBondAnalytic);
 
 		System.out.println("\nForward:");
 		double valueDeltaForwardAnalytic = 1.0;
-		checkDeltaApproximationMethods(model, maturity, payoffFunctionForward, payoffFunctionBond, valueDeltaForwardAnalytic);
+		checkDeltaApproximationMethods(model, maturity, payoffFunctionForward, payoffFunctionOne, valueDeltaForwardAnalytic);
 
 		System.out.println("\nEuropean Option:");
 		double valueDeltaAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
@@ -68,19 +68,14 @@ public class MonteCarloBlackScholesDeltaExperiments {
 		checkDeltaApproximationMethods(model, maturity, payoffFunctionDigital, payoffFunctionNaN, valueDeltaDigitalAnalytic);
 
 
-		Plot2D plotEuropean = getPlotDeltaApproximationByShift(2, 12, model, maturity, payoffFunctionOption);
-		plotEuropean.setTitle("Finite Difference Approximation of Delta European Option")
-		.setXAxisLabel("scale (shift = S(0)*10^{-scale}")
-		.setYAxisLabel("value")
-		.setYAxisNumberFormat(new DecimalFormat("0.#####"));
-		plotEuropean.show();
+		Plot2D plotForward = getPlotDeltaApproximationByShift(-13, -1, model, maturity, payoffFunctionForward, valueDeltaForwardAnalytic);
+		plotForward.setTitle("Finite Difference Approximation of Delta of a Forward (f(S(T) = S(T)-K)").show();
 
-		Plot2D plotDigital = getPlotDeltaApproximationByShift(2, 12, model, maturity, payoffFunctionDigital);
-		plotDigital.setTitle("Finite Difference Approximation of Delta Digital Option")
-		.setXAxisLabel("scale (shift = S(0)*10^{-scale}")
-		.setYAxisLabel("value")
-		.setYAxisNumberFormat(new DecimalFormat("0.#####"));
-		plotDigital.show();
+		Plot2D plotEuropean = getPlotDeltaApproximationByShift(-13, -1, model, maturity, payoffFunctionOption, valueDeltaAnalytic);
+		plotEuropean.setTitle("Finite Difference Approximation of Delta of a European Option (f(S(T) = max(S(T)-K,0))").show();
+
+		Plot2D plotDigital = getPlotDeltaApproximationByShift(-13, -1, model, maturity, payoffFunctionDigital, valueDeltaDigitalAnalytic);
+		plotDigital.setTitle("Finite Difference Approximation of Delta of a Digital Option (f(S(T) = 1 for S(T) > K, otherwise 0)").show();
 	}
 
 	private static void checkDeltaApproximationMethods(MonteCarloAssetModel model, double maturity,
@@ -95,12 +90,41 @@ public class MonteCarloBlackScholesDeltaExperiments {
 		double valueDeltaPathwise = getDeltaPathwise(model, maturity, payoffFunctionDerivative);
 		printResult("Pathwise Method:", valueDeltaPathwise, valueDeltaAnalytic);
 
-		double valueDeltaLikehoodRatio = getDeltaLikelihoodRation(model, maturity, payoffFunction);
+		double valueDeltaLikehoodRatio = getDeltaLikelihoodRatio(model, maturity, payoffFunction);
 		printResult("Likelihood Ratio:", valueDeltaLikehoodRatio, valueDeltaAnalytic);
 
 	}
 
-	private static double getDeltaLikelihoodRation(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) throws CalculationException {
+	private static double getDeltaFiniteDifference(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction, double shift) {
+		try {
+			MonteCarloAssetModel modelUpShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue+shift));
+			double valueUpShift = getValueMonteCarlo(modelUpShift, maturity, payoffFunction);
+
+			MonteCarloAssetModel modelDnShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue-shift));
+			double valueDnShift = getValueMonteCarlo(modelDnShift, maturity, payoffFunction);
+
+			return (valueUpShift-valueDnShift)/(2*shift);
+		} catch (CalculationException e) {
+			return Double.NaN;
+		}
+	}
+
+	private static double getDeltaPathwise(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunctionDerivative) {
+		try {
+
+			var underlying = model.getAssetValue(maturity, 0);
+
+			var payoffDerivative = payoffFunctionDerivative.apply(underlying).mult(underlying).div(initialValue);
+
+			var valueDelta = payoffDerivative.div(model.getNumeraire(maturity)).mult(model.getNumeraire(0.0));
+
+			return valueDelta.average().doubleValue();
+		} catch (CalculationException e) {
+			return Double.NaN;
+		}
+	}
+
+	private static double getDeltaLikelihoodRatio(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) throws CalculationException {
 
 		BlackScholesModel blackScholesModel = (BlackScholesModel)model.getModel();
 
@@ -118,39 +142,37 @@ public class MonteCarloBlackScholesDeltaExperiments {
 		return getValueMonteCarlo(model, maturity, payoffLikelihoodRatioWeighted);
 	}
 
-	private static double getDeltaPathwise(MonteCarloAssetModel model, double maturity,
-			RandomOperator payoffFunctionDerivative) throws CalculationException {
 
-		var underlying = model.getAssetValue(maturity, 0);
-
-		var payoffDerivative = payoffFunctionDerivative.apply(underlying).mult(underlying).div(initialValue);
-
-		var valueDelta = payoffDerivative.div(model.getNumeraire(maturity)).mult(model.getNumeraire(0.0));
-
-		return valueDelta.average().doubleValue();
-	}
-
-	private static Plot2D getPlotDeltaApproximationByShift(double xmin, double xmax, MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) {
+	private static Plot2D getPlotDeltaApproximationByShift(double xmin, double xmax, MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction, double valueAnalytic) {
 		DoubleUnaryOperator finiteDifferenceApproximationByShift = scale -> getDeltaFiniteDifference(
-				model, maturity, payoffFunction, initialValue*Math.pow(10, -scale));
+				model, maturity, payoffFunction, initialValue*Math.pow(10, scale));
 
-		return new Plot2D(List.of(new PlotableFunction2D(xmin, xmax, 400, finiteDifferenceApproximationByShift)));
-	}
+		Plot2D plot = (new Plot2D(List.of(
+				new PlotableFunction2D(xmin, xmax, 400, finiteDifferenceApproximationByShift),
+				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)				
+				)))
+				.setXAxisLabel("scale (shift = S\u2080*10^{scale})")
+				.setYAxisLabel("value")
+				.setYAxisNumberFormat(new DecimalFormat("0.#####"));
 
-	private static double getDeltaFiniteDifference(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction, double shift) {
-		try {
-			MonteCarloAssetModel modelUpShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue+shift));
-			double valueUpShift = getValueMonteCarlo(modelUpShift, maturity, payoffFunction);
+		return plot;
+	}	
 
-			MonteCarloAssetModel modelDnShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue-shift));
-			double valueDnShift = getValueMonteCarlo(modelDnShift, maturity, payoffFunction);
+	private static Plot2D getPlotDeltaPathwiseApproximationByShift(double xmin, double xmax, MonteCarloAssetModel model, double maturity, RandomOperator payoffFunctionDerivative, double valueAnalytic) {
+		DoubleUnaryOperator finiteDifferenceApproximationByShift = scale -> getDeltaPathwise(
+				model, maturity, payoffFunctionDerivative);
 
-			return (valueUpShift-valueDnShift)/(2*shift);
-		} catch (CalculationException e) {
-			e.printStackTrace();
-			return Double.NaN;
-		}
-	}
+		Plot2D plot = (new Plot2D(List.of(
+				new PlotableFunction2D(xmin, xmax, 400, finiteDifferenceApproximationByShift),
+				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)				
+				)))
+				.setXAxisLabel("scale (shift = S\u2080*10^{scale})")
+				.setYAxisLabel("value")
+				.setYAxisNumberFormat(new DecimalFormat("0.#####"));
+
+		return plot;
+	}	
+
 
 	private static void printResult(String name, double valueMonteCarlo, double valueAnalytic) {
 		System.out.format("%24s\t%+10.6f\t%+10.6f\t%+9.5e\n", name, valueMonteCarlo, valueAnalytic, valueMonteCarlo-valueAnalytic);
