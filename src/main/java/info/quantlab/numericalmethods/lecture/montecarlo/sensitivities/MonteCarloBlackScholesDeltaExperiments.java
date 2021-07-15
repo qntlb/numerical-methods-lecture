@@ -45,7 +45,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 		RandomOperator payoffFunctionForward = underlying -> underlying.sub(strike);
 		RandomOperator payoffFunctionOne = underlying -> new Scalar(1.0);
 		RandomOperator payoffFunctionZero = underlying -> new Scalar(0.0);
-		
+
 		RandomOperator payoffFunctionOption = underlying -> underlying.sub(strike).floor(0.0);
 		RandomOperator payoffFunctionDigital = underlying -> underlying.sub(strike).choose(new Scalar(1.0), new Scalar(0.0));
 		RandomOperator payoffFunctionNaN = underlying -> new Scalar(Double.NaN);
@@ -92,7 +92,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 	}
 
 	private static void checkDeltaApproximationMethods(MonteCarloAssetModel model, double maturity,
-			RandomOperator payoffFunction, RandomOperator payoffFunctionDerivative, double valueDeltaAnalytic) throws CalculationException {
+			RandomOperator payoffFunction, RandomOperator payoffFunctionDerivative, double valueDeltaAnalytic) {
 
 		double valueDeltaFiniteDifference1 = getDeltaFiniteDifference(model, maturity, payoffFunction, 1E-1);
 		printResult("Finite Diff (h=1e-1):", valueDeltaFiniteDifference1, valueDeltaAnalytic);
@@ -140,31 +140,32 @@ public class MonteCarloBlackScholesDeltaExperiments {
 		}
 	}
 
-	private static double getDeltaLikelihoodRatio(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) throws CalculationException {
+	private static double getDeltaLikelihoodRatio(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) {
+		try {
+			BlackScholesModel blackScholesModel = (BlackScholesModel)model.getModel();
 
-		BlackScholesModel blackScholesModel = (BlackScholesModel)model.getModel();
+			double initialValue = model.getAssetValue(0.0, 0).doubleValue();
 
-		double initialValue = model.getAssetValue(0.0, 0).doubleValue();
+			var riskFreeRate = blackScholesModel.getRiskFreeRate();
+			var sigma = blackScholesModel.getVolatility();
+			var T = maturity;
+			var ST = model.getAssetValue(T, 0);
 
-		var riskFreeRate = blackScholesModel.getRiskFreeRate();
-		var sigma = blackScholesModel.getVolatility();
-		var T = maturity;
-		var ST = model.getAssetValue(T, 0);
+			var x = ST.div(initialValue).log().sub(riskFreeRate.mult(T)).add(sigma.squared().mult(0.5*T)).div(sigma).div(Math.sqrt(T));
 
-		var x = ST.div(initialValue).log().sub(riskFreeRate.mult(T)).add(sigma.squared().mult(0.5*T)).div(sigma).div(Math.sqrt(T));
+			var likelihoodRatio = x.div(initialValue).div(sigma).div(Math.sqrt(T));
 
-		var likelihoodRatio = x.div(initialValue).div(sigma).div(Math.sqrt(T));
+			RandomOperator payoffLikelihoodRatioWeighted = underlying -> payoffFunction.apply(underlying).mult(likelihoodRatio);
 
-		RandomOperator payoffLikelihoodRatioWeighted = underlying -> payoffFunction.apply(underlying).mult(likelihoodRatio);
-
-		return getValueOfEuropeanProduct(model, maturity, payoffLikelihoodRatioWeighted);
+			return getValueOfEuropeanProduct(model, maturity, payoffLikelihoodRatioWeighted);
+		} catch (CalculationException e) {
+			return Double.NaN;
+		}
 	}
 
 
 	private static double getDeltaLikelihoodRatioFiniteDifferenceOfDensity(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction, double shift) {
-
 		try {
-
 			BlackScholesModel blackScholesModel = (BlackScholesModel)model.getModel();
 
 			double initialValue = model.getAssetValue(0.0, 0).doubleValue();
@@ -238,8 +239,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 				.setYAxisNumberFormat(new DecimalFormat("0.#####"));
 
 		return plot;
-	}	
-
+	}
 
 	private static void printResult(String name, double valueMonteCarlo, double valueAnalytic) {
 		System.out.format("%24s\t%+10.6f\t%+10.6f\t%+9.5e\n", name, valueMonteCarlo, valueAnalytic, valueMonteCarlo-valueAnalytic);
@@ -248,10 +248,12 @@ public class MonteCarloBlackScholesDeltaExperiments {
 	private static double getValueOfEuropeanProduct(MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction) throws CalculationException {
 
 		var underlying = model.getAssetValue(maturity, 0);
+
 		var payoff = payoffFunction.apply(underlying);
+
 		var value = payoff.div(model.getNumeraire(maturity).mult(model.getNumeraire(0.0)));
 
-		return value.average().doubleValue();
+		return value.expectation().doubleValue();
 	}
 
 	private static MonteCarloAssetModel getMonteCarloBlackScholesModel(double initialValue, double riskFreeRate, double volatility, double timeHorizon, double dt, int numberOfPaths, int seed) {
