@@ -1,5 +1,6 @@
-package info.quantlab.computationalfinance.assignments.montecarlo.interestrates.simplehybrid;
+package info.quantlab.computationalfinance.assignments.montecarlo.interestrates.simplehybrid.check;
 
+import info.quantlab.computationalfinance.assignments.montecarlo.interestrates.simplehybrid.SimpleLognormalCrossCurrencyModelAssignment;
 import info.quantlab.computationalfinance.assignments.montecarlo.interestrates.simplehybrid.model.SimpleCrossCurrencyModel;
 import info.quantlab.computationalfinance.assignments.montecarlo.interestrates.simplehybrid.product.CrossCurrencyProduct;
 import net.finmath.functions.AnalyticFormulas;
