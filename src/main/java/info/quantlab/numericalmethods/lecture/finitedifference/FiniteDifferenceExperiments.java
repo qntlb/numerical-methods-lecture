@@ -3,8 +3,10 @@ package info.quantlab.numericalmethods.lecture.finitedifference;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 
+import net.finmath.plots.Named;
 import net.finmath.plots.Plot2D;
 
 /*
@@ -17,7 +19,7 @@ import net.finmath.plots.Plot2D;
  */
 public class FiniteDifferenceExperiments {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 
 		double x = 0.0;
 
@@ -55,7 +57,7 @@ public class FiniteDifferenceExperiments {
 		System.out.println("h = " + String.format("%2.3e", shift) + "  \t  finite difference approx \u0394f / \u0394h = " + finiteDifferenceApproximation);
 	}
 
-	private static void plotForwardFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) {
+	private static void plotForwardFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) throws IOException {
 
 		DoubleUnaryOperator finiteDifferenceApproxError = scale -> {
 
@@ -72,13 +74,16 @@ public class FiniteDifferenceExperiments {
 			return error;
 		};
 
-		Plot2D plot = new Plot2D(scaleMin, scaleMax, 200, finiteDifferenceApproxError);
+		Plot2D plot = new Plot2D(scaleMin, scaleMax, 200, List.of(
+				new Named<DoubleUnaryOperator>("Finite Difference Appoximation", finiteDifferenceApproxError),
+				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
 		plot.setTitle("(One Sided Finite Difference) Derivative of exp(x) at x = " + x)
 		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
 		.setYAxisLabel("error")
 		.setYAxisNumberFormat(new DecimalFormat("0.0E00"))
-//		.saveAsPNG(new File("images/exp-x-forward-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").png"), 800, 500)
 		.show();
+		plot.saveAsPDF(new File("images/exp-x-forward-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").pdf"), 800, 500);
+//		.saveAsPNG(new File("images/exp-x-forward-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").png"), 800, 500)
 	}
 
 	private static void plotCenteredFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) {
