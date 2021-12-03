@@ -47,6 +47,8 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 				volatilityDomestic, volatilityForeign, volatiltiyFXForward, correlationDomFor,
 				correlationFXDomenstic, correlationFXForeign, periodStart, maturity, domesticZeroBond, foreignZeroBond, brownianMotion);
 
+		if(simulationModel == null) System.out.println("\tYour solution did not return a model. Implement getSimpleCrossCurrencyModel");
+
 		double fixingTime = periodStart;
 		double strike = 0.035;
 
@@ -146,8 +148,19 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 		CrossCurrencyProduct product = solution.getGeneralizedCaplet(
 				currency, isQuanto, fixingTime, periodStart, periodEnd, paymentTime, strike);
 
-		RandomVariable valuation = product.getValue(evaluationTime, simulationModel);
-		double value = valuation.getAverage();
+		if(product == null) System.out.println("\tYour solution did not return a product. Implement getGeneralizedCaplet");
+
+		double value = Double.NaN;
+		try {
+			if(product != null) {
+				RandomVariable valuation = product.getValue(evaluationTime, simulationModel);
+				value = valuation.getAverage();
+			}
+		}
+		catch(Exception e) {
+			System.out.println("\tThe valuation failed with an exception:");
+			e.printStackTrace();
+		}
 
 		System.out.println("\tValue............: " + value);
 		System.out.println("\tValue analytic...: " + valueAnalytic);
