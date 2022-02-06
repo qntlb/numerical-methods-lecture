@@ -32,6 +32,18 @@ public class DICEModelOptimizationAssignmenChecker
 						return false;
 					}
 				}
+
+				/*
+				 * Rudimentary check: check that abatement is not all zero
+				 */
+				boolean isAbatementAllZero = true;
+				for(int i=0; i<abatement.length; i++) {
+					isAbatementAllZero &= (abatement[i] == 0);
+				}
+				if(isAbatementAllZero) {
+					System.out.println("\tAbatement vector is all zero, this is likly not the optimal soluation.");
+					return false;
+				}
 			}
 		}
 		catch(Exception e) {
