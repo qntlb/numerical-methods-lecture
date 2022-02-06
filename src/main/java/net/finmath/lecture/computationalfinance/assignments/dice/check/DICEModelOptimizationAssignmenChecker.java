@@ -17,7 +17,7 @@ public class DICEModelOptimizationAssignmenChecker
 				 * Rudimentary check: check that abatement vector is monotone
 				 */
 				for(int i=1; i<abatement.length; i++) {
-					if(abatement[i] > abatement[i-1]) {
+					if(abatement[i] < abatement[i-1]) {
 						System.out.println("\tAbatement vector is not monotone increasing.");
 						return false;
 					}
