@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.quantlab</groupId>
 	<artifactId>numerical-methods-lecture</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>Numerical Methods Lectures</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- libs -->
-		<finmath-lib.version>5.1.3</finmath-lib.version>
+		<finmath-lib.version>6.0.0</finmath-lib.version>
 		<finmath-plot.version>0.4.4</finmath-plot.version>
 		<junit.version>5.6.2</junit.version>
 		<!-- maven plugins -->
@@ -57,23 +57,10 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compiler-plugin.version}</version>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
-					<compilerVersion>11</compilerVersion>
+					<source>17</source>
+					<target>17</target>
+					<compilerVersion>17</compilerVersion>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven.source-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
