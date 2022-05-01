@@ -1,7 +1,7 @@
 /*
- * (c) Copyright Christian P. Fries, Germany. All rights reserved. Contact: email@christian-fries.de.
+ * (c) Copyright Christian P. Fries, Germany. Contact: email@christian-fries.de.
  *
- * Created on 23.04.2020, 16.04.2021
+ * Created on 23.04.2020, 26.04.2022
  */
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
@@ -45,6 +45,8 @@ public class IntegerArithmeticExperiment {
 		 * but this is violated after an overflow.
 		 */
 
+		System.out.println("The overflow will also lead that some rules for the modulus (%) are violated:\n");
+
 		// The sum of integerBig and intergerSmall will result in an overflow
 		int integerBig = Integer.MAX_VALUE-9;
 		int integerSmall = 20;
@@ -62,7 +64,7 @@ public class IntegerArithmeticExperiment {
 
 		System.out.println("Small integer b = " + integerSmall);
 		System.out.println("b % c           = " + modOfSmall);
-
+		
 		System.out.println("((a % c) + (b % c)) % c = " + sumOfModulusMod);
 		System.out.println("(a + b) % c             = " + modulusOfSum);
 	}
