@@ -1,7 +1,7 @@
 /*
- * (c) Copyright Christian P. Fries, Germany. All rights reserved. Contact: email@christian-fries.de.
+ * (c) Copyright Christian P. Fries, Germany. Contact: email@christian-fries.de.
  *
- * Created on 23.04.2020
+ * Created on 23.04.2020, 26.04.2022
  */
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
@@ -25,16 +25,17 @@ public class FloatingPointArithmeticExperiment {
 		 * Double: Smallest positive number
 		 */
 
-		System.out.println("Smallest positive number:\n");
+		System.out.println("Smallest positive number 2^{-k}:\n");
 
 		double tiny = 1.0;
-
-		while(tiny/2.0 > 0) {
-			tiny = tiny/2.0;
+		while(tiny/2.0 > 0 && tiny/2.0 < tiny) {
+			tiny = tiny / 2.0;
 		}
 
 		System.out.println("tiny............ = " + tiny);
-		System.out.println("2^{-1023+1-52}.. = " + Math.pow(2,-1023+1-52));
+
+		System.out.println("2^{eMin-p}...... = " + Math.pow(2,-1022 - 52));
+
 		System.out.println("tiny/2.......... = " + tiny/2);
 		System.out.println("tiny/2*2........ = " + (tiny/2)*2);
 		System.out.println("tiny*2/2........ = " + (tiny*2)/2);
@@ -42,10 +43,10 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("_".repeat(79)+"\n");
 
 		/*
-		 * Double: Smallest positive (i.e. non-zero) number x = eps for which 1+2x != 1
+		 * Double: Smallest positive (i.e. non-zero) number x = eps for which 1+2x > 1
 		 */
 
-		System.out.println("Smallest positive number with 1+2x != 1, that is 1+x = 1:\n");
+		System.out.println("Smallest positive number with 1+2x != 1 and 1+x = 1:\n");
 
 		double eps = 1.0;
 
@@ -57,10 +58,20 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("1+eps ..... = " + (1+eps));
 		System.out.println("1+eps == 1 is " + ((1+eps)==1));
 		System.out.println("1+2*eps ... = " + (1+2*eps));
-		System.out.println("2^(-53).... = " + Math.pow(2, -53));	// For double mantissa has p = 52 bits
+		System.out.println("2^(-p)/2... = " + Math.pow(2, -52-1));	// For double mantissa has p = 52 bits
+		
+		System.out.println();
+
+		System.out.println("1+1*eps ... = " + (1+1*eps));
+		System.out.println("1+2*eps ... = " + (1+2*eps));
+		System.out.println("1+3*eps ... = " + (1+3*eps));
+		System.out.println("1+4*eps ... = " + (1+4*eps));
+		System.out.println("1+5*eps ... = " + (1+5*eps));
+		System.out.println("1+6*eps ... = " + (1+6*eps));
 
 		System.out.println("_".repeat(79)+"\n");
 
+		
 		/*
 		 * Experiments with Double.MAX_VALUE
 		 */
@@ -160,7 +171,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("Experiment on loss of significance - summation.\n");
 
 		double value = 0.1;
-		int numberOfValues = 10;
+		int numberOfValues = 10;		// change this to 10000000;
 
 		double sumOfValuesClassical = getSumOfValuesClassical(value, numberOfValues);
 		double averageClassical = sumOfValuesClassical / numberOfValues;
