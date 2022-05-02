@@ -1,7 +1,7 @@
 /*
  * (c) Copyright Christian P. Fries, Germany. Contact: email@christian-fries.de.
  *
- * Created on 12.04.2020m 01.05.2022
+ * Created on 12.04.2020, 01.05.2022
  */
 package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 
