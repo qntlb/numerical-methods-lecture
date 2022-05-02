@@ -1,7 +1,7 @@
 /*
  * (c) Copyright Christian P. Fries, Germany. Contact: email@christian-fries.de.
  *
- * Created on 12.04.2020
+ * Created on 12.04.2020m 01.05.2022
  */
 package info.quantlab.numericalmethods.assignments.computerarithmetics.check;
 
@@ -24,7 +24,9 @@ public class DoubleVectorImplemenationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean check(DoubleVectorFactory solution, String whatToCheck) {
-		boolean success;
+		System.out.println("Running " + whatToCheck + " test on " + solution.getClass().getCanonicalName());
+
+		boolean success = false;
 		try {
 			switch(whatToCheck) {
 			case "basic":
@@ -37,7 +39,7 @@ public class DoubleVectorImplemenationChecker {
 			case "accuracy":
 			{
 				boolean checkSum = checkSimpleArray(solution) && checkRandom(solution);
-				boolean checkAccuracy = check3(solution);
+				boolean checkAccuracy = checkAccuracy(solution);
 				if(checkSum & !checkAccuracy) {
 					System.out.println("You almost solved the exercise. The sum is approximately correct, but not accurate enough.");
 				}
@@ -45,15 +47,21 @@ public class DoubleVectorImplemenationChecker {
 			}
 			break;
 			}
-			return success;
 		}
 		catch(Exception e) {
 			System.out.println("\tTest failed with exception: " + e.getMessage());
 			System.out.println("\nHere is a stack trace:");
 			e.printStackTrace();
-			System.out.println("_".repeat(79));
-			return false;
 		}
+
+		if(!success) {
+			System.out.println("Sorry, the test failed.");
+		}
+		else {
+			System.out.println("Congratulation! You solved the " + whatToCheck + " part of the exercise.");
+		}
+		System.out.println("_".repeat(79));
+		return success;
 	}
 
 	/**
@@ -67,14 +75,22 @@ public class DoubleVectorImplemenationChecker {
 
 		DoubleVector vector = solution.createDoubleVector(testArgument);
 
-		if(vector.sum() != 6) {
-			System.out.println("\t\u274cSimple test failed.");
+		if(vector.get(0) != testArgument[0] || vector.get(1) != testArgument[1]) {
+			System.out.println("\t\u274cSimple test failed: get appears to be wrong.");
 			return false;
 		}
-		else {
-			System.out.println("\t\u2705Simple test passed.");
+
+		if(vector.size() != testArgument.length) {
+			System.out.println("\t\u274cSimple test failed: size ist not correct.");
+			return false;
 		}
 
+		if(vector.sum() != 6) {
+			System.out.println("\t\u274cSimple test failed: sum ist not correct.");
+			return false;
+		}
+
+		System.out.println("\t\u2705Simple test passed.");
 		return true;
 	}
 
@@ -111,7 +127,7 @@ public class DoubleVectorImplemenationChecker {
 	 * @param solution The class to test;
 	 * @return Boolean if the test is passed.
 	 */
-	public static boolean check3(DoubleVectorFactory solution) {
+	public static boolean checkAccuracy(DoubleVectorFactory solution) {
 		/*
 		 * Create an array of 10000 times Math.Pi and 1 times 10000 * Math.Pi.
 		 * Then check if the sum is 20000 times Math.Pi.
