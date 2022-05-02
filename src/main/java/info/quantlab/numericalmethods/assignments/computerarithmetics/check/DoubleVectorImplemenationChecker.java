@@ -51,7 +51,7 @@ public class DoubleVectorImplemenationChecker {
 		catch(Exception e) {
 			System.out.println("\tTest failed with exception: " + e.getMessage());
 			System.out.println("\nHere is a stack trace:");
-			e.printStackTrace();
+			e.printStackTrace(System.out);
 		}
 
 		if(!success) {
