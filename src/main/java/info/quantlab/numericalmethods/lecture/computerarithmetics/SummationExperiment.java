@@ -1,7 +1,7 @@
 /*
- * (c) Copyright Christian P. Fries, Germany. All rights reserved. Contact: email@christian-fries.de.
+ * (c) Copyright Christian P. Fries, Germany. Contact: email@christian-fries.de.
  *
- * Created on 21.04.2021
+ * Created on 21.04.2021, 05.05.2022
  */
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
@@ -22,7 +22,7 @@ public class SummationExperiment {
 		System.out.println("Experiment on loss of significance - summation.\n");
 
 		double value = 0.1;
-		int numberOfValues = 10;
+		int numberOfValues = 10000000; // Change this to 10 or to 10000000 (10 million).
 
 		double sumOfValuesClassical = getSumOfValuesClassical(value, numberOfValues);
 		double averageClassical = sumOfValuesClassical / numberOfValues;
