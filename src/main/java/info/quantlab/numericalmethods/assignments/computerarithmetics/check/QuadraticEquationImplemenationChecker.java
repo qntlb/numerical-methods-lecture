@@ -12,7 +12,7 @@ import info.quantlab.numericalmethods.lecture.computerarithmetics.quadraticequat
 
 public class QuadraticEquationImplemenationChecker {
 
-	private static double accuracy = 3E-16;		// A bit larger than 2 times machine precision. You may achive this.
+	private static double accuracy = 3E-16;		// A bit larger than 2 times machine precision. You may achieve this.
 
 	/**
 	 * Check if the class solves the exercise.
