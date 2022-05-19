@@ -11,6 +11,8 @@ public class SimpsonsIntegrator1D implements Integrator1D {
 	public SimpsonsIntegrator1D(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
+		
+		if(numberOfEvaluationPoints % 2 != 1) throw new IllegalArgumentException("numberOfEvaluationPoints should be odd");
 	}
 
 	@Override

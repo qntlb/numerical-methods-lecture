@@ -18,6 +18,11 @@ public class DiscrepancyExperiment {
 
 		final List<Double> samples = DoubleStream.generate(new MersenneTwister(3216)).limit(5).boxed().collect(Collectors.toList());
 
+		plotDiscrepancyFunction(samples);
+	}
+
+	private static void plotDiscrepancyFunction(List<Double> samples) {
+
 		DoubleUnaryOperator lambda = x -> {
 
 			double d = x - (double)samples.stream().filter(y -> y < x).count()/samples.size();
@@ -31,7 +36,6 @@ public class DiscrepancyExperiment {
 				));
 		plot.setYRange(-0.5, 0.5);
 		plot.show();
-
 	}
 
 }
