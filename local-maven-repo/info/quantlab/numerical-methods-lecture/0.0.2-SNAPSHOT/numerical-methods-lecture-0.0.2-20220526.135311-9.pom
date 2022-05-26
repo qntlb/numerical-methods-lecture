@@ -16,6 +16,7 @@
 		<!-- maven plugins -->
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<maven.source-plugin.version>3.2.1</maven.source-plugin.version>
+		<maven.javadoc-plugin.version>3.3.2</maven.javadoc-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -74,6 +75,11 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven.javadoc-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
