@@ -1,5 +1,6 @@
 package info.quantlab.numericalmethods.lecture.montecarlo.integration;
 
+import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
 import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerator;
 
 /**
@@ -7,7 +8,7 @@ import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerato
  *
  * @author Christian Fries
  */
-public interface MonteCarloIntegratorFactory {
+public interface MonteCarloIntegratorFactory extends IntegratorFactory {
 
 	/**
 	 * Create a Monte-Carlo integrator using a specific RandomNumberGenerator and numberOfSamplePoints.
@@ -17,5 +18,8 @@ public interface MonteCarloIntegratorFactory {
 	 * @return A class implementing the Integrator interface.
 	 */
 	Integrator getIntegrator(RandomNumberGenerator randomNumberGenerator, long numberOfSamplePoints);
+	
+	@Override
+	default Integrator getIntegrator(long numberOfSamplePoints) { return getIntegrator(new MersenneTwister(3141), numberOfSamplePoints); }
 
 }
