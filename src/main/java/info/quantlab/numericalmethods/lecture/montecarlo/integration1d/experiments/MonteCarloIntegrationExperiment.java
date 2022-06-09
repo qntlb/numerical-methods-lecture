@@ -24,7 +24,7 @@ public class MonteCarloIntegrationExperiment {
 		System.out.println("n" + "\t" + "mersenne" + "\t" + "equidistant" + "\t" + "v.-d.-corput");
 
 		/*
-		 * Simultaneously "integrate" using Mersenne, on equidistributed and using Van-Der-Corput
+		 * Simultaneously calculate the partial integral using Mersenne, on equidistributed and using Van-Der-Corput
 		 */
 
 		double sumMersenneTwister = 0.0;

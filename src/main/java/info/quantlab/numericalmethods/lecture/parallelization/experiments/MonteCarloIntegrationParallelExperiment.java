@@ -24,9 +24,9 @@ public class MonteCarloIntegrationParallelExperiment {
 
 		testHaltonWithStreamSeq(numberOfSamples);
 		testHaltonWithStreamPar(numberOfSamples);
-		testHaltonWithExecutor(numberOfSamples);
 		testMersenneWithStreamSeq(numberOfSamples);
 		testMersenneWithStreamPar(numberOfSamples);
+		testHaltonWithExecutor(numberOfSamples);
 		testMersenneWithExecutor(numberOfSamples);
 	}
 

@@ -6,7 +6,9 @@ public class RandomNumberGeneratorFrom1D implements RandomNumberGenerator {
 	private final int dimension;
 
 
-	public RandomNumberGeneratorFrom1D(RandomNumberGenerator1D randomNumberGenerator, int dimension) {
+	public RandomNumberGeneratorFrom1D(
+			RandomNumberGenerator1D randomNumberGenerator,
+			int dimension) {
 		super();
 		this.randomNumberGenerator = randomNumberGenerator;
 		this.dimension = dimension;

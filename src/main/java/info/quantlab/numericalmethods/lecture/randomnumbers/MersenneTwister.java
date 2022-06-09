@@ -26,7 +26,7 @@ public class MersenneTwister implements RandomNumberGenerator1D, Serializable {
 	private final org.apache.commons.math3.random.MersenneTwister mersenneTwister;
 
 	public MersenneTwister(final long seed) {
-		this.seed = seed;
+		this.seed = seed;	// Stored for information purposes only (toString())
 		mersenneTwister	= new org.apache.commons.math3.random.MersenneTwister(seed);
 	}
 
