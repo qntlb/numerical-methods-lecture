@@ -30,7 +30,7 @@ public class PoissonProcessExperiment {
 
 		RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(3141);
 		/*
-		 * Part 1: Generate an array (numberOfPaths) containing the list of jump times < maturity.
+		 * Part 1: Generate array (paths) containing the list of jump times<maturity.
 		 */
 		List<List<Double>> jumpTimesPaths = new ArrayList<List<Double>>();
 		for(int pathIndex = 0; pathIndex<numberOfPaths; pathIndex++) {
@@ -43,7 +43,6 @@ public class PoissonProcessExperiment {
 				double timeStep = - Math.log(uniform) / lambda;
 
 				nextJumpTime += timeStep;
-
 				if(nextJumpTime < maturity) jumpTimes.add(nextJumpTime);
 			}
 			jumpTimesPaths.add(jumpTimes);
@@ -58,7 +57,7 @@ public class PoissonProcessExperiment {
 				long count = jumpTimesPaths.get(pathIndex).stream().filter(t -> t <= time).count();
 				values[pathIndex] = count - lambda * time;
 			}
-			return new RandomVariableFromDoubleArray(0.0, values);
+			return new RandomVariableFromDoubleArray(maturity, values);
 		};
 
 		/*
@@ -70,7 +69,7 @@ public class PoissonProcessExperiment {
 
 		// Plot a Scatter of the two Brownian incements.
 		var plot = new PlotProcess2D(td, process, 200 /* maxNumberOfPaths */);
-		plot.setTitle("Paths of Poisson process").setXAxisLabel("time (t)").setYAxisLabel("value (W(t))");
+		plot.setTitle("Paths of Poisson process").setXAxisLabel("time (t)").setYAxisLabel("value (N(t) - lambda t)");
 		plot.show();
 	}
 }
