@@ -3,6 +3,8 @@ package info.quantlab.numericalmethods.lecture.montecarlo.brownianmotion;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
+import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerator1D;
 import net.finmath.montecarlo.RandomVariableFromDoubleArray;
 import net.finmath.plots.DoubleToRandomVariableFunction;
 import net.finmath.plots.PlotProcess2D;
@@ -28,6 +30,7 @@ public class PoissonProcessExperiment {
 		double maturity = 10.0;
 		double lambda = 1.0;
 
+		RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(3141);
 		/*
 		 * Part 1: Generate an array (numberOfPaths) containing the list of jump times < maturity.
 		 */
@@ -38,7 +41,7 @@ public class PoissonProcessExperiment {
 			double nextJumpTime = 0;
 			while(nextJumpTime < maturity) {
 
-				double uniform = Math.random();
+				double uniform = randomNumberGenerator.nextDouble();
 				double timeStep = - Math.log(uniform) / lambda;
 
 				nextJumpTime += timeStep;
@@ -54,16 +57,15 @@ public class PoissonProcessExperiment {
 		DoubleToRandomVariableFunction process = time -> {
 			double[] values = new double[numberOfPaths];
 			for(int pathIndex = 0; pathIndex<numberOfPaths; pathIndex++) {
-				int count = 0;
-				for(Double jumpTime : jumpTimesPaths.get(pathIndex)) {
-					if(jumpTime > time) break;
-					count++;
-				}
+				long count = jumpTimesPaths.get(pathIndex).stream().filter(t -> t <= time).count();
 				values[pathIndex] = count - lambda * time;
 			}
 			return new RandomVariableFromDoubleArray(0.0, values);
 		};
 
+		/*
+		 * Plot N(t) on a fixed time grid (t_i, N(t_i))
+		 */
 		int numberOfTimeSteps = 1000;
 		double deltaT = 0.01;
 		TimeDiscretization td = new TimeDiscretizationFromArray(0.0, numberOfTimeSteps, deltaT);
