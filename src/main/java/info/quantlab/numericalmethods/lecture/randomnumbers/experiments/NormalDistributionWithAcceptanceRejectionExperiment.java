@@ -10,7 +10,9 @@ import net.finmath.randomnumbers.MersenneTwister;
 
 /**
  * Acceptance-Rejection sampling of the normal distribution.
- *
+ * 3D: The sign and the ICDF of the exponential are generated from two uniforms
+ * 2D: The sign and the exponential on |Y| is generated from one uniform
+ * 
  * @author Christian Fries
  */
 public class NormalDistributionWithAcceptanceRejectionExperiment {

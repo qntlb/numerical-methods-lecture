@@ -1,6 +1,5 @@
 package info.quantlab.numericalmethods.lecture.randomnumbers.experiments;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Collectors;
