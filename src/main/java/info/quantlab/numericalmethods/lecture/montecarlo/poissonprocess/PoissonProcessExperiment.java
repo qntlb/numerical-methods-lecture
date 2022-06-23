@@ -1,4 +1,4 @@
-package info.quantlab.numericalmethods.lecture.montecarlo.brownianmotion;
+package info.quantlab.numericalmethods.lecture.montecarlo.poissonprocess;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +19,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
 public class PoissonProcessExperiment {
 
 	public static void main(String[] args) {
-
 		plotPoissonPaths();
-
 	}
 
 	private static void plotPoissonPaths() {
@@ -52,7 +50,7 @@ public class PoissonProcessExperiment {
 		}
 
 		/*
-		 * Part 2: Generate the function t -> N(t)
+		 * Part 2: Generate the function t -> N(t) - lambda t
 		 */
 		DoubleToRandomVariableFunction process = time -> {
 			double[] values = new double[numberOfPaths];
