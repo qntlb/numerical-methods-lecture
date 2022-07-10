@@ -3,10 +3,19 @@ package info.quantlab.numericalmethods.lecture.montecarlo.valuation;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.DoubleStream;
 
+import net.finmath.exception.CalculationException;
 import net.finmath.functions.AnalyticFormulas;
 import net.finmath.functions.NormalDistribution;
 import net.finmath.montecarlo.BrownianMotion;
+import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.montecarlo.BrownianMotionFromRandomNumberGenerator;
+import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
+import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
+import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
+import net.finmath.montecarlo.assetderivativevaluation.products.EuropeanOption;
+import net.finmath.montecarlo.model.ProcessModel;
+import net.finmath.montecarlo.process.EulerSchemeFromProcessModel;
+import net.finmath.montecarlo.process.MonteCarloProcess;
 import net.finmath.randomnumbers.MersenneTwister;
 import net.finmath.stochastic.RandomVariable;
 import net.finmath.time.TimeDiscretization;
@@ -14,17 +23,17 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 public class MonteCarloBlackScholesCallOptionExperiment {
 
-	private double initialValue = 100.0;
-	private double riskFreeRate = 0.05;
-	private double volatility = 0.20;
+	private double initialValue = 100.0;	// S(0)
+	private double riskFreeRate = 0.05;		// r
+	private double volatility = 0.20;		// sigma
 
-	private double optionMaturity = 1.0;
-	private double optionStrike = 105;
+	private double optionMaturity = 1.0;	// T
+	private double optionStrike = 105;		// K
 
 	private long seed = 3216;
 	private long numberOfSamples = 20000000; // 2*10^7
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws CalculationException {
 
 		long timeStart, timeEnd;
 
@@ -36,13 +45,11 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 		System.out.println("Analytic value.......................: " + valueAnalytic + " \t(" + (timeEnd-timeStart)/1000.0 + " sec.)");
 
-
 		timeStart = System.currentTimeMillis();
 		double valueMonteCarloWithLoop = experiment.getMonteCarloValueUsingLoop();
 		timeEnd = System.currentTimeMillis();
 
 		System.out.println("Monte-Carlo (using plain for-loop)...: " + valueMonteCarloWithLoop + " \t(" + (timeEnd-timeStart)/1000.0 + " sec.)");
-
 
 		timeStart = System.currentTimeMillis();
 		double valueMonteCarloWithStreams = experiment.getMonteCarloValueUsingStreams();
@@ -50,13 +57,17 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 		System.out.println("Monte-Carlo (using Java Stream api)..: " + valueMonteCarloWithStreams + " \t(" + (timeEnd-timeStart)/1000.0 + " sec.)");
 
-
 		timeStart = System.currentTimeMillis();
 		double valueMonteCarloWithRandomVariables = experiment.getMonteCarloValueRandomVariables();
 		timeEnd = System.currentTimeMillis();
 
 		System.out.println("Monte-Carlo (using RandomVariable)...: " + valueMonteCarloWithRandomVariables + " \t(" + (timeEnd-timeStart)/1000.0 + " sec.)");
 
+		timeStart = System.currentTimeMillis();
+		double valueMonteCarloWithLib = experiment.getMonteCarloValueLib();
+		timeEnd = System.currentTimeMillis();
+
+		System.out.println("Monte-Carlo (using Lib)..............: " + valueMonteCarloWithLib + " \t(" + (timeEnd-timeStart)/1000.0 + " sec.)");
 	}
 
 	private double getAnalyticValue() {
@@ -72,11 +83,14 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		for(int sampleIndex=0; sampleIndex<numberOfSamples; sampleIndex++) {
 			double uniform = mersenne.nextDouble();
 			double normal = NormalDistribution.inverseCumulativeDistribution(uniform);
+			// S(T)
 			double underlying = initialValue * Math.exp(
 					riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity
 					+ volatility * Math.sqrt(optionMaturity) * normal);
+			// V(T)
 			double payoff = Math.max(underlying-optionStrike, 0.0);
 
+			// sum += V(T) * N(t)/N(T)
 			sum += payoff * Math.exp(-riskFreeRate * optionMaturity);
 		}
 		double value = sum / numberOfSamples;
@@ -124,18 +138,37 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		BrownianMotion brownianMotion = new BrownianMotionFromRandomNumberGenerator(
 				timeDiscretization, 1, (int) numberOfSamples, mersenne);
 
-		RandomVariable deltaW = brownianMotion.getBrownianIncrement(0.0, 0);
+		RandomVariable deltaW = brownianMotion.getBrownianIncrement(0.0, 0);		// W(T)
 
 		// Model
 		double drift = riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity;
 		RandomVariable diffusion = deltaW.mult(volatility);
-		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);
+		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);		// S(T)
 
-		// Product
+		// Product // V(T) * N(t) / N(T)
 		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * optionMaturity));
 
 		// Expectation
 		double value = payoffDiscounted.average().doubleValue();
+
+		return value;
+	}
+
+	private double getMonteCarloValueLib() throws CalculationException {
+
+		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
+
+		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, 1, optionMaturity);
+
+		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, (int)numberOfSamples, (int)seed);
+
+		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
+
+		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
+
+		AssetMonteCarloProduct option = new EuropeanOption(optionMaturity, optionStrike);
+
+		double value = option.getValue(0.0, blackScholesMonteCarloModel).expectation().doubleValue();
 
 		return value;
 	}

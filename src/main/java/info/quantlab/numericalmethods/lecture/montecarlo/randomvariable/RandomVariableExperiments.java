@@ -11,7 +11,7 @@ public class RandomVariableExperiments {
 		RandomVariable randomVariableDoublePrecision = new RandomVariableFromDoubleArray(0, new double[] { -1.0/3.0, -1.0/3.0,2.0/3.0 });
 		printMoments(randomVariableDoublePrecision);
 
-		RandomVariable randomVariableSinglePrecision = new RandomVariableFromFloatArray(0, new double[] { -1.0/3.0, -1.0/3.0,2.0/3.0 });		
+		RandomVariable randomVariableSinglePrecision = new RandomVariableFromFloatArray(0, new double[] { -1.0/3.0, -1.0/3.0, 2.0/3.0 });		
 		printMoments(randomVariableSinglePrecision);
 	}
 
