@@ -9,7 +9,7 @@ import java.util.function.DoubleUnaryOperator;
 import net.finmath.plots.Named;
 import net.finmath.plots.Plot2D;
 
-/*
+/**
  * An experiment illustrating issues in the finite difference approximation:
  * <ul>
  * 	<li>For large shifts we get a bias from the higher order terms.</li>
@@ -38,13 +38,13 @@ public class FiniteDifferenceExperiments {
 		printForwardFiniteDifferenceApproximationOfExp(x, 1.50*Math.pow(2, -52) /* shift */);
 
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
+		
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -10, -6);
 
 		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
 		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
 		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -7, -4);
-
 	}
 
 	private static void printForwardFiniteDifferenceApproximationOfExp(double x, double shift) {
@@ -53,8 +53,10 @@ public class FiniteDifferenceExperiments {
 		double value = Math.exp(x);
 		
 		double finiteDifferenceApproximation = (valueUpShift-value)/shift;
-
-		System.out.println("h = " + String.format("%2.3e", shift) + "  \t  finite difference approx \u0394f / \u0394h = " + finiteDifferenceApproximation);
+		
+		double error = finiteDifferenceApproximation - Math.exp(x);
+		
+		System.out.println("h = " + String.format("%2.3e", shift) + "  \t  finite difference approx \u0394f / \u0394h = " + String.format("%5.3f", finiteDifferenceApproximation) + "\t error: " + error);
 	}
 
 	private static void plotForwardFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) throws IOException {
@@ -74,7 +76,7 @@ public class FiniteDifferenceExperiments {
 			return error;
 		};
 
-		Plot2D plot = new Plot2D(scaleMin, scaleMax, 200, List.of(
+		Plot2D plot = new Plot2D(scaleMin, scaleMax, 1024, List.of(
 				new Named<DoubleUnaryOperator>("Finite Difference Appoximation", finiteDifferenceApproxError),
 				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
 		plot.setTitle("(One Sided Finite Difference) Derivative of exp(x) at x = " + x)
