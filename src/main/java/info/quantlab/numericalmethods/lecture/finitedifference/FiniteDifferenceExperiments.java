@@ -45,6 +45,8 @@ public class FiniteDifferenceExperiments {
 		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
 		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
 		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -7, -4);
+
+		plotThirdOrderFiniteDifferenceApproximationErrorOfExp(x, -4.5, -1);
 	}
 
 	private static void printForwardFiniteDifferenceApproximationOfExp(double x, double shift) {
@@ -105,9 +107,42 @@ public class FiniteDifferenceExperiments {
 			return error;
 		};
 
-		Plot2D plot = new Plot2D(scaleMin, scaleMax , 200, finiteDifferenceApproxError);
+		Plot2D plot = new Plot2D(scaleMin, scaleMax, 1024, List.of(
+				new Named<DoubleUnaryOperator>("Finite Difference Appoximation", finiteDifferenceApproxError),
+				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
 		plot.setYAxisNumberFormat(new DecimalFormat("0.0"))
 		.setTitle("(Centered Finite Difference) Derivative of exp(x) at x = " + x)
+		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
+		.setYAxisLabel("error")
+		.setYAxisNumberFormat(new DecimalFormat("0.0E00"))
+//		.saveAsPNG(new File("images/exp-x-centered-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").png"), 800, 500)
+		.show();
+	}
+
+	private static void plotThirdOrderFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) {
+
+		DoubleUnaryOperator finiteDifferenceApproxError = scale -> {
+
+			double shift = Math.pow(10, scale);
+
+			double value2UShift = Math.exp(x + 2* shift);
+			double value2DShift = Math.exp(x - 2* shift);
+			double value1UShift = Math.exp(x + shift);
+			double value1DShift = Math.exp(x - shift);
+			double finiteDifferenceApproximation = (value2UShift - 2*value1UShift + 2*value1DShift - value2DShift)/shift/shift/shift;
+
+			double derivativeAnalytic = Math.exp(x);
+
+			double error = finiteDifferenceApproximation - derivativeAnalytic - 1;
+
+			return error;
+		};
+
+		Plot2D plot = new Plot2D(scaleMin, scaleMax, 1024, List.of(
+				new Named<DoubleUnaryOperator>("Finite Difference Appoximation", finiteDifferenceApproxError),
+				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
+		plot.setYAxisNumberFormat(new DecimalFormat("0.0"))
+		.setTitle("(Centered Finite Difference) 3rd Order Derivative of exp(x) at x = " + x)
 		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
 		.setYAxisLabel("error")
 		.setYAxisNumberFormat(new DecimalFormat("0.0E00"))
