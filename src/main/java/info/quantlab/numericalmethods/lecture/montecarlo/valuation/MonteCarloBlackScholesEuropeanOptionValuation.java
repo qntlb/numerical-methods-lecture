@@ -5,7 +5,6 @@ import net.finmath.functions.AnalyticFormulas;
 import net.finmath.montecarlo.BrownianMotion;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
-import net.finmath.montecarlo.assetderivativevaluation.models.BachelierModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
 import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
 import net.finmath.montecarlo.assetderivativevaluation.products.EuropeanOption;
