@@ -37,7 +37,6 @@ public interface MonteCarloBachelierModelFactory {
 	 * @param timeDiscretization The time discretization of the Euler scheme.
 	 * @param numberOfPaths The number of paths.
 	 * @param seed The seed for the Monte-Carlo random number generator.
-	 * @param shiftOfSimulatedValuesAfterFirstTimeStep A shift applied to the values in the first simulation time step. The Monte-Carlo weights correct for this shift.
 	 * @return The corresponding model.
 	 */
 	default AssetModelMonteCarloSimulationModel getModel(double initialValue, double riskFreeRate, double volatility,

@@ -60,7 +60,8 @@ public class StochasticVolatilityExperiments {
 	 * Run the experiment.
 	 * 
 	 * @param args Not used.
-	 * @throws IIOException Thrown if the image could not be stored.
+	 * @throws CalculationException Thrown if Euler scheme fails.
+	 * @throws IOException Thrown if the image could not be stored.
 	 */
 	public static void main(String[] args) throws CalculationException, IOException {
 
@@ -102,16 +103,16 @@ public class StochasticVolatilityExperiments {
 		/*
 		 * Generate some interesting objects (underlying, paths, quadratcVariation)
 		 */
-		RandomVariable underlying = simulation.getAssetValue(optionMaturity, 0);
+		RandomVariable underlying = simulation.getAssetValue(optionMaturity, 0);		// S(T), T=5.0
 
-		DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex);
+		DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex);		// t -> S(t)
 
 		RandomVariable quadraticVariation = IntStream.range(0, timeDiscretization.getNumberOfTimeSteps())
 				.mapToObj(i -> {
 					try {
-						return simulation.getAssetValue(i+1, assetIndex).log()
+						return simulation.getAssetValue(i+1, assetIndex).log()		// log(S(t_{i+1})
 								.sub(
-										simulation.getAssetValue(i, assetIndex).log())
+										simulation.getAssetValue(i, assetIndex).log())		// log(S(t_{i})
 								.squared()
 								.div(optionMaturity);
 					} catch (CalculationException e) {
@@ -123,22 +124,22 @@ public class StochasticVolatilityExperiments {
 		/*
 		 * Plots: Implied volatility
 		 */
-		plotImpliedVolatility(simulation);
+//		plotImpliedVolatility(simulation);
 
 		/*
 		 * Plots: Density of underlying
 		 */
-		plotDensityUnderlying(underlying);
+//		plotDensityUnderlying(underlying);
 
 		/*
 		 * Plots: Density of quadraticVariation
 		 */
-		plotDensityQuadraticVariation(quadraticVariation);
+//		plotDensityQuadraticVariation(quadraticVariation);
 
 		/*
 		 * Plots: Sample paths
 		 */
-		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
+//		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
 
 		/*
 		 * Plots: Scatter S(T) versus QV
@@ -173,7 +174,7 @@ public class StochasticVolatilityExperiments {
 	private void plotDensityUnderlying(RandomVariable underlying) throws IOException {
 		Plots.createDensity(underlying.log(), 200, 6.0)
 		.setTitle("Density (\u03C3=" + volatility + ", \u03be=" + xi + ")")
-		.setXAxisLabel("S(T)")
+		.setXAxisLabel("log(S(T))")
 		.setYRange(0, 0.8)
 		.saveAsPDF(new File("images/StochasticVolatilityExperiments-density-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
 		.show();
@@ -209,7 +210,7 @@ public class StochasticVolatilityExperiments {
 			}
 		};
 		new Plot2D(1/4.0, 4.0, volatilitySmile)
-			.setTitle("Implied Black-Schholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+			.setTitle("Implied Black-Scholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
 			.setXAxisLabel("Strike")
 			.setYAxisLabel("Implied Volatility")
 			.setYRange(0.0, 0.6)
@@ -217,7 +218,7 @@ public class StochasticVolatilityExperiments {
 			.show();
 
 		new Plot2D(-1.0, 1.0, logStrike -> volatilitySmile.applyAsDouble(Math.exp(logStrike)))
-			.setTitle("Implied Black-Schholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+			.setTitle("Implied Black-Scholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
 			.setXAxisLabel("log(Strike)")
 			.setYAxisLabel("Implied Volatility")
 			.setYRange(0.0, 0.6)

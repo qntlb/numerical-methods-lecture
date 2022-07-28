@@ -3,6 +3,9 @@ package info.quantlab.numericalmethods.assignments.montecarlo.check;
 import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
 import net.finmath.time.TimeDiscretization;
 
+/**
+ * Interface to be implemented by the solution of the assignment.
+ */
 public interface AsianOptionWithBSControlVariateAssignment {
 
 	/**

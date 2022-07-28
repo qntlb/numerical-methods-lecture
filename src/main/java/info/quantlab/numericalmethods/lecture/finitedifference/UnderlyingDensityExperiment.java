@@ -21,7 +21,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
  * Plotting the (numerically approximated) (risk neutral) probability density
  * of different models.
  * 
- * Literature: Breeden & Litzenberger (1978)
+ * Literature: Breeden &amp; Litzenberger (1978)
  * 
  * Note that the Heston model requires a 2-factor Brownian motion. The other models only use the first factor of the Brownian motion.
  * 

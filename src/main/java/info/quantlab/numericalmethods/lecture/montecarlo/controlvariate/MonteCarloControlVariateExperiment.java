@@ -21,13 +21,13 @@ import net.finmath.time.TimeDiscretizationFromArray;
  * The payoff of the exotic option is
  * <ul>
  * 	<li>
- * 		S(T)-K1 for K2 < S(T)
+ * 		S(T)-K1 for K2 &lt; S(T)
  * 	</li>
  * 	<li>
- * 		(S(T)-K1)^2/(K2-K1) for K1 < S(T) < K2
+ * 		(S(T)-K1)^2/(K2-K1) for K1 &lt; S(T) &lt; K2
  * 	</li>
  * 	<li>
- * 		0 for S(T) < K1 .
+ * 		0 for S(T) &lt; K1 .
  * 	</li>
  * </ul>
  * 

@@ -37,8 +37,7 @@ public class ImpliedVolatilityExperiments {
 		
 		double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
 		DoubleUnaryOperator values = strike -> {
-//			double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
-			double value = AnalyticFormulas.blackScholesGeneralizedOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
+			double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
 			return value;
 		};
 		
@@ -49,7 +48,7 @@ public class ImpliedVolatilityExperiments {
 		};
 
 		new Plot2D(1/4.0, 4.0, volatilitySmile)
-			.setTitle("Implied Black-Schholes Volatility of Bachelier Values")
+			.setTitle("Implied Black-Scholes Volatility of Bachelier Values")
 			.setXAxisLabel("Strike")
 			.setYAxisLabel("Implied Volatility")
 			.setYRange(0.0, 0.6)

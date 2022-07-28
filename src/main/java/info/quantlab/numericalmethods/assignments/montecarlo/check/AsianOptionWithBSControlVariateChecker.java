@@ -120,7 +120,7 @@ public class AsianOptionWithBSControlVariateChecker {
 	/**
 	 * Check basic functionality
 	 *
-	 * @param theClass The class to test;
+	 * @param solution The solution.
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkBasicFunctionality(AsianOptionWithBSControlVariateAssignment solution) {
@@ -133,7 +133,7 @@ public class AsianOptionWithBSControlVariateChecker {
 	/**
 	 * Check accuracy of the implementation.
 	 *
-	 * @param theClass The class to test;
+	 * @param solution The solution.
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkAccuracy(AsianOptionWithBSControlVariateAssignment solution) {
