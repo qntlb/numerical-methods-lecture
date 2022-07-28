@@ -35,21 +35,10 @@ public class ImpliedVolatilityExperiments {
 	
 	public void plotImpliedVols() throws IOException {
 		
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(0.2, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(0.4, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(0.6, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(0.8, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(1.0, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(1.2, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(1.4, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(1.6, riskFreeRate, volatility, optionMaturity, 1.0));
-		System.out.println(AnalyticFormulas.blackScholesOptionValue(1.8, riskFreeRate, volatility, optionMaturity, 1.0));
-
-		System.out.println(AnalyticFormulas.blackScholesOptionDelta(0.8, riskFreeRate, volatility, optionMaturity, 1.0));
-
 		double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
 		DoubleUnaryOperator values = strike -> {
-			double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
+//			double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
+			double value = AnalyticFormulas.blackScholesGeneralizedOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
 			return value;
 		};
 		

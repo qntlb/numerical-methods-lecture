@@ -104,7 +104,7 @@ public class StochasticVolatilityExperiments {
 		 */
 		RandomVariable underlying = simulation.getAssetValue(optionMaturity, 0);
 
-		DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex).log();
+		DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex);
 
 		RandomVariable quadraticVariation = IntStream.range(0, timeDiscretization.getNumberOfTimeSteps())
 				.mapToObj(i -> {
@@ -121,9 +121,9 @@ public class StochasticVolatilityExperiments {
 				.reduce((x1,x2)-> x2.add(x1)).get();
 
 		/*
-		 * Plots: Sample paths
+		 * Plots: Implied volatility
 		 */
-		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
+		plotImpliedVolatility(simulation);
 
 		/*
 		 * Plots: Density of underlying
@@ -131,19 +131,19 @@ public class StochasticVolatilityExperiments {
 		plotDensityUnderlying(underlying);
 
 		/*
-		 * Plots: Scatter S(T) versus QV
-		 */
-		plotScatterSvsQV(underlying, quadraticVariation);
-
-		/*
 		 * Plots: Density of quadraticVariation
 		 */
 		plotDensityQuadraticVariation(quadraticVariation);
-		
+
 		/*
-		 * Plots: Implied volatility
+		 * Plots: Sample paths
 		 */
-		plotImpliedVolatility(simulation);
+		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
+
+		/*
+		 * Plots: Scatter S(T) versus QV
+		 */
+		plotScatterSvsQV(underlying, quadraticVariation);
 	}
 
 	private void plotSamplePaths(TimeDiscretization timeDiscretization, DoubleToRandomVariableFunction paths, RandomVariable quadratcVariation) throws IOException {
@@ -161,7 +161,7 @@ public class StochasticVolatilityExperiments {
 			colors[i] = new Color(red, green, blue); 
 		}
 
-		new PlotProcess2D(timeDiscretization, paths, numberOfPathsToPlot)
+		new PlotProcess2D(timeDiscretization, (DoubleToRandomVariableFunction) t -> paths.apply(t).log(), numberOfPathsToPlot)
 			.setColors(colors)
 			.setTitle("Simulation path (colored by quatratic variation) (\u03C3=" + volatility + ", \u03be=" + xi + ")")
 			.setXAxisLabel("t")
