@@ -1,11 +1,8 @@
-package info.quantlab.numericalmethods.lecture.montecarlo.stochasticvolatility;
+package info.quantlab.numericalmethods.lecture.montecarlo.volatility;
 
 import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.util.Locale;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.IntStream;
 
@@ -30,7 +27,7 @@ import net.finmath.time.TimeDiscretization;
 import net.finmath.time.TimeDiscretizationFromArray;
 
 /**
- * 
+ * Experiment illustrating the impact of a volatility-of-volatility \( \xi \).
  * 
  * @author Christian Fries
  */
@@ -58,15 +55,13 @@ public class StochasticVolatilityExperiments {
 	// Product properties
 	private final int		assetIndex = 0;
 	private final double	optionMaturity = 5.0;
-	private final double	optionStrike = 1.10;
 
-	private static DecimalFormat formatReal3 = new DecimalFormat("####0.000", new DecimalFormatSymbols(Locale.ENGLISH));
-
-	public StochasticVolatilityExperiments(double xi) {
-		this.xi = xi;
-	}
-
-
+	/**
+	 * Run the experiment.
+	 * 
+	 * @param args Not used.
+	 * @throws IIOException Thrown if the image could not be stored.
+	 */
 	public static void main(String[] args) throws CalculationException, IOException {
 
 		// Model corresponds to a Black-Scholes model
@@ -76,7 +71,21 @@ public class StochasticVolatilityExperiments {
 		new StochasticVolatilityExperiments(0.15).analyse();
 	}
 
+	/**
+	 * Create the experiment with a given volatility-of-volatility.
+	 * 
+	 * @param xi The volatility-of-volatility.
+	 */
+	public StochasticVolatilityExperiments(double xi) {
+		this.xi = xi;
+	}
 
+	/**
+	 * Create plots.
+	 * 
+	 * @throws CalculationException Thrown if the numerical scheme failed.
+	 * @throws IOException Thrown if the image could not be stored. 
+	 */
 	public void analyse() throws CalculationException, IOException {
 		// Create a time discretization
 		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0 /* initial */, numberOfTimeSteps, deltaT);
@@ -97,7 +106,7 @@ public class StochasticVolatilityExperiments {
 
 		DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex).log();
 
-		RandomVariable quadratcVariation = IntStream.range(0, timeDiscretization.getNumberOfTimeSteps())
+		RandomVariable quadraticVariation = IntStream.range(0, timeDiscretization.getNumberOfTimeSteps())
 				.mapToObj(i -> {
 					try {
 						return simulation.getAssetValue(i+1, assetIndex).log()
@@ -114,6 +123,31 @@ public class StochasticVolatilityExperiments {
 		/*
 		 * Plots: Sample paths
 		 */
+		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
+
+		/*
+		 * Plots: Density of underlying
+		 */
+		plotDensityUnderlying(underlying);
+
+		/*
+		 * Plots: Scatter S(T) versus QV
+		 */
+		plotScatterSvsQV(underlying, quadraticVariation);
+
+		/*
+		 * Plots: Density of quadraticVariation
+		 */
+		plotDensityQuadraticVariation(quadraticVariation);
+		
+		/*
+		 * Plots: Implied volatility
+		 */
+		plotImpliedVolatility(simulation);
+	}
+
+	private void plotSamplePaths(TimeDiscretization timeDiscretization, DoubleToRandomVariableFunction paths, RandomVariable quadratcVariation) throws IOException {
+
 		int numberOfPathsToPlot = 1000;
 		Color[] colors = new Color[numberOfPathsToPlot];
 		double x1 = 0.06;//quadratcVariation.getAverage()+0*quadratcVariation.getStandardDeviation();
@@ -134,29 +168,35 @@ public class StochasticVolatilityExperiments {
 			.setYAxisLabel("log(S(t))")
 			.saveAsPDF(new File("images/StochasticVolatilityExperiments-paths-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
 			.show();
+	}
 
-		/*
-		 * Plots: Density of underlying
-		 */
+	private void plotDensityUnderlying(RandomVariable underlying) throws IOException {
 		Plots.createDensity(underlying.log(), 200, 6.0)
-			.setTitle("Density (\u03C3=" + volatility + ", \u03be=" + xi + ")")
-			.setXAxisLabel("S(T)")
-			.setYRange(0, 0.8)
-			.saveAsPDF(new File("images/StochasticVolatilityExperiments-density-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
-			.show();
+		.setTitle("Density (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+		.setXAxisLabel("S(T)")
+		.setYRange(0, 0.8)
+		.saveAsPDF(new File("images/StochasticVolatilityExperiments-density-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
+		.show();
+	}
 
-		/*
-		 * Plots: Density of quadratcVariation
-		 */
-		Plots.createDensity(quadratcVariation, 200, 6.0)
+	private void plotScatterSvsQV(RandomVariable underlying, RandomVariable quadratcVariation) throws IOException {
+		Plots.createScatter(underlying.log(), quadratcVariation).setXRange(-3,3).setYRange(0.0, 0.20)
+		.setTitle("Quadratc Variation by S(T) (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+		.setXAxisLabel("log(S(T))")
+		.setYAxisLabel("Quadratic Variation")
+		.saveAsPDF(new File("images/StochasticVolatilityExperiments-qv-by-underlying-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
+		.show();
+	}
+
+	private void plotDensityQuadraticVariation(RandomVariable quadraticVariation) throws IOException {		
+		Plots.createDensity(quadraticVariation, 200, 6.0)
 			.setTitle("Quadratc Variation (\u03C3=" + volatility + ", \u03be=" + xi + ")")
 			.setXAxisLabel("Quadratc Variation")
 			.saveAsPDF(new File("images/StochasticVolatilityExperiments-density-quadratic-variation-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
 			.show();
-		
-		/*
-		 * Plots: Implied volatility
-		 */
+	}
+
+	private void plotImpliedVolatility(MonteCarloAssetModel simulation) throws IOException {
 		DoubleUnaryOperator volatilitySmile = strike -> {
 			try {
 				double value = new EuropeanOption(optionMaturity, strike, assetIndex).getValue(simulation);
