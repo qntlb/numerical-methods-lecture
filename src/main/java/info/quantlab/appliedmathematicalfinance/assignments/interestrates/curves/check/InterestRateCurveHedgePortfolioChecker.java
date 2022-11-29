@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.Assertions;
 
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.InterestRateCurveHedgePortfolio;
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.InterestRateCurveHedgePortfolioAssignment;
@@ -69,17 +70,17 @@ public class InterestRateCurveHedgePortfolioChecker {
 			case BASIC:
 			default:
 			{
-				success = checkBasicParRate(solution);
+				success = checkBasics(solution);
 			}
 			break;
 			case PAR_RATE:
 			{
-				success = false;
+				success = checkParRate(solution);
 			}
 			break;
 			case SENSITIVITIES:
 			{
-				success = false;
+				success = checkSensitivities(solution);
 			}
 			break;
 			}
@@ -104,8 +105,75 @@ public class InterestRateCurveHedgePortfolioChecker {
 		return success;
 	}
 
-	private static boolean checkBasicParRate(InterestRateCurveHedgePortfolioAssignment solution) {
-		// Change the InterpolationMethod from LINEAR to CUBIC and check what is happening.
+	private static boolean checkSensitivities(InterestRateCurveHedgePortfolioAssignment solution) {
+		ModelFactory modelFactory = new ModelFactoryImplementation(InterpolationMethod.LINEAR, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
+		ProductFactory swapFactory = new ProductFactoryImplementation();
+		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
+
+		// The vector 1.0, 2.0, ..., 30.0
+		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();
+
+		// The vector 0.05, 0.05, ..., 0.05
+		double[] zeroRates = IntStream.range(0, 30).mapToDouble(x -> 0.05).toArray();
+
+		String discountCurveName = "EURSTR";
+		String forwardCurveName = "EURSTR forward";
+		
+		/**
+		 * Create non-standard swap
+		 */
+		AnalyticProduct swapToTest = swapFactory.getSwap(6.5, 0.05, forwardCurveName, discountCurveName);
+		double[] phi = hedgePortfolio.getReplicationPortfolio(maturities, zeroRates, discountCurveName, forwardCurveName, swapToTest);
+
+		boolean success = true;
+		for(int i=7; i<phi.length; i++) {
+			success &= Math.abs(phi[i]) < 1E-12;
+		}
+		if(!success) System.out.println("\t\tSensitivity should be zero one bucket after the maturity of the product.");
+
+		for(int i=0; i<=4; i++) {
+			success &= Math.abs(phi[i]) < 1E-3;
+		}
+		if(!success) System.out.println("\t\tSensitivity should be small one bucket before the maturity of the product when using LINEAR.");
+
+		success &= Math.abs(phi[5] - 0.493) < 1E-2;
+		success &= Math.abs(phi[6] - 0.506) < 1E-2;
+		if(!success) System.out.println("\t\tSensitivity in bucket 5Y and 6Y looks unplausible for 6.5Y swap.");
+		
+		return success;
+	}
+
+	private static boolean checkParRate(InterestRateCurveHedgePortfolioAssignment solution) {
+		ModelFactory modelFactory = new ModelFactoryImplementation(InterpolationMethod.LINEAR, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
+		ProductFactory swapFactory = new ProductFactoryImplementation();
+		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
+
+		// The vector 1.0, 2.0, ..., 30.0
+		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();
+
+		// The vector 0.05, 0.05, ..., 0.05
+		double[] zeroRates = IntStream.range(0, 30).mapToDouble(x -> 0.05).toArray();
+
+		String discountCurveName = "EURSTR";
+		String forwardCurveName = "EURSTR forward";
+		
+		/**
+		 * Create non-standard swap
+		 */
+		AnalyticProduct swapToTest = swapFactory.getSwap(6.5, 0.05, forwardCurveName, discountCurveName);
+		
+		AnalyticModel model = modelFactory.getModel(maturities, zeroRates, discountCurveName, forwardCurveName);
+
+		double parRateExpected = 0.05063;
+		double parRateTolerance = 0.0001;
+		double parRate = hedgePortfolio.getParRate(6.5, forwardCurveName, discountCurveName, model);
+		boolean success = Math.abs(parRate - parRateExpected) < parRateTolerance;
+		
+		if(!success) System.out.println("\t\tPar rate devitates from expected value " + parRateExpected + " by more than " + parRateTolerance + ".");
+		return success;
+	}
+
+	private static boolean checkBasics(InterestRateCurveHedgePortfolioAssignment solution) {
 		ModelFactory modelFactory = new ModelFactoryImplementation(InterpolationMethod.LINEAR, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
 		ProductFactory swapFactory = new ProductFactoryImplementation();
 		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
@@ -125,15 +193,11 @@ public class InterestRateCurveHedgePortfolioChecker {
 		AnalyticProduct swapToHedge = swapFactory.getSwap(6.5, 0.05, forwardCurveName, discountCurveName);
 
 		double parRate = hedgePortfolio.getParRate(6.5, forwardCurveName, discountCurveName, modelFactory.getModel(maturities, zeroRates, discountCurveName, forwardCurveName));
-//		Assert.assertTrue("par swap rate pausibility: should be between 0.0 and 0.10 for our model", (0 < parRate && parRate < 0.1));
+		Assertions.assertTrue((0 < parRate && parRate < 0.1), "par swap rate pausibility: should be between 0.0 and 0.10 for our model");
 		
 		double[] phi = hedgePortfolio.getReplicationPortfolio(maturities, zeroRates, discountCurveName, forwardCurveName, swapToHedge);
-//		Assert.assertTrue("length of hedge portfolio matches number of maturities", (maturities.length == phi.length));
+		Assertions.assertTrue((maturities.length == phi.length), "length of hedge portfolio matches number of maturities");
 
-		System.out.println(Arrays.toString(phi));
-		
-//		Plot2DBarFX plot = Plot2DBarFX.of("Sensitivity", Arrays.stream(maturities).<String>mapToObj(T -> "" + (int)T).toArray(String[]::new), phi, "Sensitivity", "maturity bucket", "value", null, false);
-//		plot.show();
 		return true;
 	}
 	
