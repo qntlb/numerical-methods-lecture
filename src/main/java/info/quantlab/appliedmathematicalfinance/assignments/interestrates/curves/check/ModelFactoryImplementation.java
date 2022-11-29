@@ -7,13 +7,13 @@ import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelFromCurvesAndVols;
 import net.finmath.marketdata.model.curves.Curve;
+import net.finmath.marketdata.model.curves.CurveInterpolation.ExtrapolationMethod;
+import net.finmath.marketdata.model.curves.CurveInterpolation.InterpolationEntity;
+import net.finmath.marketdata.model.curves.CurveInterpolation.InterpolationMethod;
 import net.finmath.marketdata.model.curves.DiscountCurve;
 import net.finmath.marketdata.model.curves.DiscountCurveInterpolation;
 import net.finmath.marketdata.model.curves.ForwardCurve;
 import net.finmath.marketdata.model.curves.ForwardCurveFromDiscountCurve;
-import net.finmath.marketdata.model.curves.CurveInterpolation.ExtrapolationMethod;
-import net.finmath.marketdata.model.curves.CurveInterpolation.InterpolationEntity;
-import net.finmath.marketdata.model.curves.CurveInterpolation.InterpolationMethod;
 
 public class ModelFactoryImplementation implements ModelFactory {
 

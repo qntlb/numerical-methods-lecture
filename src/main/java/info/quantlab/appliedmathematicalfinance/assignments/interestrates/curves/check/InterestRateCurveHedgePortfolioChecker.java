@@ -7,10 +7,8 @@ package info.quantlab.appliedmathematicalfinance.assignments.interestrates.curve
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.stream.IntStream;
 
-import org.junit.Assert;
 
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.InterestRateCurveHedgePortfolio;
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.InterestRateCurveHedgePortfolioAssignment;
@@ -127,15 +125,15 @@ public class InterestRateCurveHedgePortfolioChecker {
 		AnalyticProduct swapToHedge = swapFactory.getSwap(6.5, 0.05, forwardCurveName, discountCurveName);
 
 		double parRate = hedgePortfolio.getParRate(6.5, forwardCurveName, discountCurveName, modelFactory.getModel(maturities, zeroRates, discountCurveName, forwardCurveName));
-		Assert.assertTrue("par swap rate pausibility: should be between 0.0 and 0.10 for our model", (0 < parRate && parRate < 0.1));
+//		Assert.assertTrue("par swap rate pausibility: should be between 0.0 and 0.10 for our model", (0 < parRate && parRate < 0.1));
 		
 		double[] phi = hedgePortfolio.getReplicationPortfolio(maturities, zeroRates, discountCurveName, forwardCurveName, swapToHedge);
-		Assert.assertTrue("length of hedge portfolio matches number of maturities", (maturities.length == phi.length));
+//		Assert.assertTrue("length of hedge portfolio matches number of maturities", (maturities.length == phi.length));
 
 		System.out.println(Arrays.toString(phi));
 		
-		Plot2DBarFX plot = Plot2DBarFX.of("Sensitivity", Arrays.stream(maturities).<String>mapToObj(T -> "" + (int)T).toArray(String[]::new), phi, "Sensitivity", "maturity bucket", "value", null, false);
-		plot.show();
+//		Plot2DBarFX plot = Plot2DBarFX.of("Sensitivity", Arrays.stream(maturities).<String>mapToObj(T -> "" + (int)T).toArray(String[]::new), phi, "Sensitivity", "maturity bucket", "value", null, false);
+//		plot.show();
 		return true;
 	}
 	
