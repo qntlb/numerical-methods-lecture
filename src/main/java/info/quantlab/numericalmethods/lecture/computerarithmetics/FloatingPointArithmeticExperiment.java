@@ -49,8 +49,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("Smallest positive number with 1+2x != 1 and 1+x = 1:\n");
 
 		double eps = 1.0;
-
-		while(1 + eps > 1) {
+		while(1+eps > 1 && 1+eps < 1+2*eps) {
 			eps = eps / 2.0;
 		}
 
@@ -141,8 +140,6 @@ public class FloatingPointArithmeticExperiment {
 
 		/*
 		 * Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0
-		 *
-		 * Note: In the lecture we considered the example x^2 - 2 p*x + q = 0 (i.e. p -> -p/2).
 		 */
 
 		System.out.println("Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0.\n");
