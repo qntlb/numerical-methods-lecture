@@ -1,6 +1,6 @@
 # Numerical Methods Lecture
 
-This repository contains the material created during the lecture *Numerical Methods for Mathematical Finance* (Summer 2021).
+This repository contains the material created during the lecture *Numerical Methods for Mathematical Finance* (Summer 2023).
 
 In addition it contains code used in the exercise, e.g. interfaces which are to be implemented.
 
@@ -26,7 +26,6 @@ https://github.com/qntlb/numerical-methods-quadraticequation-exercise
 
 https://github.com/qntlb/numerical-methods-summation-exercise
 
-
 ## Monte-Carlo Simulation
 
 ### Sessions
@@ -41,7 +40,4 @@ Integrand
 IntegrationDomain
 Integrator
 Monte-CarloIntegratorFactory
-
-
-
 

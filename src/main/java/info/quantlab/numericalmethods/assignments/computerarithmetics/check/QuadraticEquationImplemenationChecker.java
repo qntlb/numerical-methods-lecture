@@ -81,7 +81,7 @@ public class QuadraticEquationImplemenationChecker {
 
 		}
 		catch(UnsupportedOperationException e) {
-			System.out.println("You assigment does not implement the factory method that should create"
+			System.out.println("Your assigment does not implement the factory method that should create"
 					+ " an object of type QuadraticEquation.");
 			System.out.println(e.getMessage());
 
