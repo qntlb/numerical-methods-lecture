@@ -69,6 +69,11 @@ The integrators are then tested in a unit test (so this time, there is no "Exper
 info.quantlab.numericalmethods.lecture.montecarlo.integration1d
 ```
 
+#### Monte-Carlo Approximation of Pi
+
+The code for the example at the end of the section can be found in the [finmath-experiments repository](https://github.com/finmath/finmath-experiments) at [https://github.com/finmath/finmath-experiments](https://github.com/finmath/finmath-experiments) in the class `MonteCarloIntegrationExperiment` in the package `net.finmath.experiments.montecarlo`.
+
+
 #### Java Streams
 
 The code of the excursus on Java streams can be found in 
