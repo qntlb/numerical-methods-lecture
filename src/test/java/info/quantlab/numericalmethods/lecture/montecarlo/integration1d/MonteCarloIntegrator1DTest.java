@@ -35,7 +35,7 @@ public class MonteCarloIntegrator1DTest {
 		long seed = 3141;
 
 		DoubleSupplier randomNumberGenerator = new MersenneTwister(seed);
-		Integrator1D integrator = new MonteCarloIntegrator1D(randomNumberGenerator, numberOfEvaluationPoints);
+		Integrator1D integrator = new MonteCarloIntegrator1DWithStreams(randomNumberGenerator, numberOfEvaluationPoints);
 
 		double integralValueNumeric = integrator.integrate(integrand, lowerBound, upperBound);
 		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);

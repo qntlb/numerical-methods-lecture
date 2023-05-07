@@ -18,7 +18,7 @@ public class SimpsonsIntegrator1DTest {
 
 		int numberOfEvaluationPoints = 101;
 
-		Integrator1D integrator = new SimpsonsIntegrator1D(numberOfEvaluationPoints);
+		Integrator1D integrator = new SimpsonsIntegrator1DWithStreams(numberOfEvaluationPoints);
 
 		double integralValueNumeric = integrator.integrate(integrand, lowerBound, upperBound);
 		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);

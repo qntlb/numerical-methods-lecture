@@ -16,7 +16,7 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
-		double range = upperBound-lowerBound;
+		double domainSize = upperBound-lowerBound;
 
 		// Generate sample points
 
@@ -24,9 +24,9 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 				i -> (2*i+1)*1.0/(2*numberOfEvaluationPoints)
 				);
 
-		double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+range*x)).sum();
+		double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+domainSize*x)).sum();
 
-		return sum/numberOfEvaluationPoints * range;
+		return sum/numberOfEvaluationPoints * domainSize;
 	}
 
 }
