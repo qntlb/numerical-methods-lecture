@@ -31,7 +31,7 @@ public class MonteCarloIntegrator1DTest {
 
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		int numberOfEvaluationPoints = 1000;
+		int numberOfEvaluationPoints = 100000;
 		long seed = 3141;
 
 		DoubleSupplier randomNumberGenerator = new MersenneTwister(seed);
