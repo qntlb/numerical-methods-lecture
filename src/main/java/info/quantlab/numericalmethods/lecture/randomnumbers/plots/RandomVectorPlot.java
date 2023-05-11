@@ -17,6 +17,7 @@ public class RandomVectorPlot {
 
 		int numberOfSamplePoints = 1000;
 		
+		// Initialize the random number generator with a seed
 		Random random = new Random(3141);
 
 		List<Double> xValues = new ArrayList<Double>();
@@ -32,7 +33,9 @@ public class RandomVectorPlot {
 				
 		}
 		
-		Plots.createScatter(xValues, yValues, 0, 1, 3).show();;
+		Plots.createScatter(xValues, yValues, 0, 1, 3)
+		.setTitle("Sample of a two dimensional random sequence with i.i.d. uniform components")
+		.show();;
 	}
 
 }
