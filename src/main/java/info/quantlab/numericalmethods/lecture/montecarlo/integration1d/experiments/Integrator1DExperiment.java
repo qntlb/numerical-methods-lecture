@@ -1,6 +1,5 @@
 package info.quantlab.numericalmethods.lecture.montecarlo.integration1d.experiments;
 
-import java.util.function.DoubleSupplier;
 import java.util.function.DoubleUnaryOperator;
 
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
