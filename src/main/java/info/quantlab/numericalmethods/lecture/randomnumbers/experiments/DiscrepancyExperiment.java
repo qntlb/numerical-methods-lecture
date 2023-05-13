@@ -60,8 +60,10 @@ public class DiscrepancyExperiment {
 				new PlotableFunction2D(0, 1, 100, lambda),
 				new PlotablePoints2D("Samples", samples.stream().map(x -> new Point2D(x,0)).collect(Collectors.toList()), null)
 				));
-		plot.setYRange(-0.5, 0.5);
-		plot.setTitle(label);
+		plot.setYRange(-0.5, 0.5)
+		.setTitle(label)
+		.setXAxisLabel("x")
+		.setYAxisLabel("\u03bb([0,x) - |x\u1d62 \u2208 [0,x)| / n");
 		plot.show();
 	}
 	
