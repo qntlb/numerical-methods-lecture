@@ -36,6 +36,7 @@ public class MonteCarloIntegrationExperiment {
 			sumEquidistributed += function.applyAsDouble((double)i/numberOfSamplePoints);
 			sumVanDerCorput += function.applyAsDouble(VanDerCorputSequence.getVanDerCorputNumber(i, 2));
 
+			// Calculate the integral approximated "so far"
 			int currentNumberOfSamplePoints = (i+1);
 
 			double integralMersenneTwister = sumMersenneTwister / currentNumberOfSamplePoints;
