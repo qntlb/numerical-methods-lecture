@@ -12,6 +12,15 @@ import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence
 import net.finmath.plots.Plot;
 import net.finmath.plots.Plots;
 
+/**
+ * Plot three different sampling of a 2-D vector in [0,1]^2 - where one method is wrong!
+ * 
+ * 1) sample a 2D vector by alternating on a pseudo random number generator (correct).
+ * 2) sample a 2D vector by alternating on a quasi random number generator (incorrect).
+ * 3) sample a 2D vector using a 2D quasi random number generator (correct).
+ * 
+ * @author Christian Fries
+ */
 public class RandomNumberGenerator2DExperiment {
 
 	public static void main(String[] args) throws Exception {
