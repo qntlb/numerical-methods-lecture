@@ -12,6 +12,26 @@ import net.finmath.functions.NormalDistribution;
 import net.finmath.plots.Plots;
 import net.finmath.randomnumbers.SobolSequence1D;
 
+/**
+ * Experiments related to the ICDF methods: Apply the inverse of the cumulative distribution function.
+ * 
+ * <ul>
+ *   <li>
+ *   	Plot the uniform input distribution and the transformed normal distribution for different uniform random number sequences:
+ *   	<ul>
+ *   		<li>java.util.Random</li>
+ *   		<li>MersenneTwister</li>
+ *   		<li>VanDerCorputSequence</li>
+ *   		<li>SobolSquence</li>
+ *   	</ul>
+ *   </li>
+ *   <li>
+ *   	For different implementations of the CDF and ICDF analyse the round trip CDF(ICDF(u)) for different input values u.
+ *   </li>
+ * </ul>
+ * 
+ * @author Christian Fries
+ */
 public class NormalICDFExperiments {
 
 	public static void main(String[] args) throws Exception {
@@ -19,15 +39,15 @@ public class NormalICDFExperiments {
 		/*
 		 * Plot ICDF from different uniforms
 		 */
-//		plotDensityUniformAndNormalViaICDFJavaRandom();
-//		plotDensityUniformAndNormalViaICDFMersenneTwister();
-//		plotDensityUniformAndNormalViaICDFVanDerCorput();
+		plotDensityUniformAndNormalViaICDFJavaRandom();
+		plotDensityUniformAndNormalViaICDFMersenneTwister();
+		plotDensityUniformAndNormalViaICDFVanDerCorput();
 		plotDensityUniformAndNormalViaICDFSobol();
 
 		/*
 		 * Check the round trip u -> x(u) -> u(x) for different cdf/icdf
 		 */
-//		testICDFImplementations();
+		testICDFImplementations();
 	}
 
 	private static void plotDensityUniformAndNormalViaICDF(RandomNumberGenerator1D randomNumberGenerator, DoubleUnaryOperator icdf) throws Exception {
@@ -49,20 +69,6 @@ public class NormalICDFExperiments {
 		.setTitle("Normal via ICDF from " + randomNumberGenerator).show();
 	}
 
-	private static void plotDensityUniformAndNormalViaICDFMersenneTwister() throws Exception {
-
-		RandomNumberGenerator1D mersenne = new MersenneTwister(3636);
-
-		plotDensityUniformAndNormalViaICDF(mersenne, NormalDistribution::inverseCumulativeDistribution);
-	}
-
-	private static void plotDensityUniformAndNormalViaICDFVanDerCorput() throws Exception {
-
-		RandomNumberGenerator1D uniformSequence = new VanDerCorputSequence(2);
-
-		plotDensityUniformAndNormalViaICDF(uniformSequence, NormalDistribution::inverseCumulativeDistribution);
-	}
-
 	private static void plotDensityUniformAndNormalViaICDFJavaRandom() throws Exception {
 		Random random = new Random(3636);
 
@@ -81,9 +87,17 @@ public class NormalICDFExperiments {
 		plotDensityUniformAndNormalViaICDF(randomNumberGenerator1D, NormalDistribution::inverseCumulativeDistribution);
 	}
 
+	private static void plotDensityUniformAndNormalViaICDFMersenneTwister() throws Exception {
+		plotDensityUniformAndNormalViaICDF(new MersenneTwister(3636), NormalDistribution::inverseCumulativeDistribution);		
+	}
+
+	private static void plotDensityUniformAndNormalViaICDFVanDerCorput() throws Exception {
+		plotDensityUniformAndNormalViaICDF(new VanDerCorputSequence(2), NormalDistribution::inverseCumulativeDistribution);
+	}
+
 	private static void plotDensityUniformAndNormalViaICDFSobol() throws Exception {
 		SobolSequence1D sobol = new SobolSequence1D();
-//		sobol.nextDouble();	// remove first number in sequence being u=0.
+		sobol.nextDouble();	// remove first number in sequence being u=0.
 
 		RandomNumberGenerator1D randomNumberGenerator1D = new RandomNumberGenerator1D() {
 			@Override
@@ -133,6 +147,9 @@ public class NormalICDFExperiments {
 
 	private static void testICDFImplementations(double uniform) {
 
+		/*
+		 * Testing Apache Common Math implementation
+		 */
 		org.apache.commons.math3.distribution.NormalDistribution normal = new org.apache.commons.math3.distribution.NormalDistribution();
 		
 		DoubleUnaryOperator icdfApacheCommonsMath = u -> normal.inverseCumulativeProbability(u);
@@ -143,10 +160,12 @@ public class NormalICDFExperiments {
 
 		testICDFImplementation(icdfApacheCommonsMath, cdfApacheCommonsMath, uniform);
 
-		
 		System.out.println("_".repeat(80));
 		System.out.println();
 
+		/*
+		 * Testing finmath lib Wichura implementation
+		 */
 		System.out.println("Testing finmath lib Wichura implementation: u = " + uniform);
 		System.out.println("_".repeat(80));
 		
