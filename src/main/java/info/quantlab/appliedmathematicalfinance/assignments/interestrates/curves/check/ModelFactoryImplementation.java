@@ -31,14 +31,14 @@ public class ModelFactoryImplementation implements ModelFactory {
 		this.extrapolationMethod = extrapolationMethod;
 		this.interpolationEntity = interpolationEntity;
 	}
-	
+
 	public ModelFactoryImplementation() {
 		this(InterpolationMethod.LINEAR, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
 	}
 
 	/**
 	 * Create a model with a discount curve and a forward curve using the given zero rates in the discount curve.
-	 * 
+	 *
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.
@@ -52,7 +52,7 @@ public class ModelFactoryImplementation implements ModelFactory {
 
 	/**
 	 * Create a model with a discount curve and a forward curve using a flat zero rate curve and a shift in one bucket.
-	 * 
+	 *
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.
@@ -81,7 +81,7 @@ public class ModelFactoryImplementation implements ModelFactory {
 		ForwardCurve forwardCurve = new ForwardCurveFromDiscountCurve(forwardCurveName, discountCurve.getName(), referenceDate, null);
 
 		AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve, forwardCurve });
-		
+
 		return model;
 	}
 

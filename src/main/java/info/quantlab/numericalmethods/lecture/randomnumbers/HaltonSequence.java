@@ -30,8 +30,8 @@ public class HaltonSequence implements RandomNumberGenerator {
 	 * @param base The array of base integers. The length of the array defines the dimension of the sequence.
 	 */
 	public HaltonSequence(final int[] base) {
-		for(int i=0; i<base.length; i++) {
-			if(base[i] <= 1) {
+		for (int element : base) {
+			if(element <= 1) {
 				throw new IllegalArgumentException("base needs to be larger than 1");
 			}
 		}

@@ -15,7 +15,7 @@ public class ProductFactoryImplementation implements ProductFactory {
 
 	private final LocalDate referenceDate;
 	private final Double periodLength;
-	
+
 	public ProductFactoryImplementation(LocalDate referenceDate, Double periodLength) {
 		super();
 		this.referenceDate = referenceDate;
@@ -25,18 +25,18 @@ public class ProductFactoryImplementation implements ProductFactory {
 	public ProductFactoryImplementation() {
 		this(LocalDate.now(), 0.5);
 	}
-	
+
 	@Override
 	public AnalyticProduct getSwap(double maturity, double rateFix, String forwardCurveName, String discountCurveName) {
-		
+
 		int numberOfPeriods = (int) Math.round(maturity/periodLength);
 
 		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, numberOfPeriods, periodLength);
 		Schedule legSchedule = new RegularSchedule(timeDiscretization);
-					
+
 		AnalyticProduct swapLegFloat = new SwapLeg(legSchedule, forwardCurveName, 0.0, discountCurveName);
 		AnalyticProduct swapLegFix = new SwapLeg(legSchedule, null, rateFix, discountCurveName);
-		
+
 		AnalyticProduct swap = new Swap(swapLegFloat, swapLegFix);
 
 		return swap;

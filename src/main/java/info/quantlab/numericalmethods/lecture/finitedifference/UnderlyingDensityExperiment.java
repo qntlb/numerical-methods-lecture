@@ -20,11 +20,11 @@ import net.finmath.time.TimeDiscretizationFromArray;
 /**
  * Plotting the (numerically approximated) (risk neutral) probability density
  * of different models.
- * 
+ *
  * Literature: Breeden &amp; Litzenberger (1978)
- * 
+ *
  * Note that the Heston model requires a 2-factor Brownian motion. The other models only use the first factor of the Brownian motion.
- * 
+ *
  * @author Christian Fries
  */
 public class UnderlyingDensityExperiment {
@@ -87,19 +87,19 @@ public class UnderlyingDensityExperiment {
 			}
 		};
 
-		// Density 
+		// Density
 		DoubleUnaryOperator density = strike -> ((value.applyAsDouble(strike+shift) - 2 * value.applyAsDouble(strike) + value.applyAsDouble(strike-shift)) / (shift * shift));
 
 		return density;
 	}
-	
+
 	private static DoubleUnaryOperator impliedBlackScholesVolatiltiyModel(double amplitude, double width) {
 		double forward = initialValue*Math.exp(riskFreeRate * maturity);
 		DoubleUnaryOperator volatilityCurve = strike -> volatility * (1 + amplitude * Math.cos((strike-forward)/width/Math.PI));
-		
+
 		return volatilityCurve;
 	}
-	
+
 	private static DoubleUnaryOperator densityFromImpliedVol(DoubleUnaryOperator impliedBlackScholesVolatiltiyModel) {
 
 		DoubleUnaryOperator value = strike -> AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, impliedBlackScholesVolatiltiyModel.applyAsDouble(strike), maturity, strike);

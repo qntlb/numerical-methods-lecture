@@ -13,7 +13,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 /**
  * Plot the path of a Poisson process.
- * 
+ *
  * @author Christian Fries
  */
 public class PoissonProcessExperiment {
@@ -32,7 +32,7 @@ public class PoissonProcessExperiment {
 		/*
 		 * Part 1: Generate array (paths) containing the list of jump times<maturity.
 		 */
-		List<List<Double>> jumpTimesPaths = new ArrayList<List<Double>>();
+		List<List<Double>> jumpTimesPaths = new ArrayList<>();
 		for(int pathIndex = 0; pathIndex<numberOfPaths; pathIndex++) {
 			List<Double> jumpTimes = new ArrayList<>();
 

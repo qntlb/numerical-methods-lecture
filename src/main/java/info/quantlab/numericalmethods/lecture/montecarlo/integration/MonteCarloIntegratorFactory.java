@@ -18,7 +18,7 @@ public interface MonteCarloIntegratorFactory extends IntegratorFactory {
 	 * @return A class implementing the Integrator interface.
 	 */
 	Integrator getIntegrator(RandomNumberGenerator randomNumberGenerator, long numberOfSamplePoints);
-	
+
 	@Override
 	default Integrator getIntegrator(long numberOfSamplePoints) { return getIntegrator(new MersenneTwister(3141), numberOfSamplePoints); }
 

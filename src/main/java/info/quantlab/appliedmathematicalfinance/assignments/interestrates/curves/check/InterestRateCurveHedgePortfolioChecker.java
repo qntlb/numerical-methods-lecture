@@ -28,7 +28,6 @@ import net.finmath.marketdata.model.curves.ForwardCurveFromDiscountCurve;
 import net.finmath.marketdata.products.AnalyticProduct;
 import net.finmath.marketdata.products.Swap;
 import net.finmath.marketdata.products.SwapLeg;
-import net.finmath.plots.Plot2DBarFX;
 import net.finmath.time.RegularSchedule;
 import net.finmath.time.Schedule;
 import net.finmath.time.TimeDiscretization;
@@ -42,11 +41,11 @@ public class InterestRateCurveHedgePortfolioChecker {
 		SENSITIVITIES("calculation of swap sensitivities");
 
 		private final String name;
-		
+
 		Check(String name) {
 			this.name = name;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
@@ -54,9 +53,9 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 	/**
 	 * Perform the test of different sub-tasks (whatToCheck) on solution.
-	 * 
+	 *
 	 * Perform exception handling.
-	 * 
+	 *
 	 * @param solution Solution of MonteCarloIntegrationAssignment
 	 * @param whatToCheck Name of the subtask.
 	 * @return true if successful, otherwise false.
@@ -118,7 +117,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 		String discountCurveName = "EURSTR";
 		String forwardCurveName = "EURSTR forward";
-		
+
 		/**
 		 * Create non-standard swap
 		 */
@@ -139,7 +138,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 		success &= Math.abs(phi[5] - 0.493) < 1E-2;
 		success &= Math.abs(phi[6] - 0.506) < 1E-2;
 		if(!success) System.out.println("\t\tSensitivity in bucket 5Y and 6Y looks unplausible for 6.5Y swap.");
-		
+
 		return success;
 	}
 
@@ -156,19 +155,19 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 		String discountCurveName = "EURSTR";
 		String forwardCurveName = "EURSTR forward";
-		
+
 		/**
 		 * Create non-standard swap
 		 */
 		AnalyticProduct swapToTest = swapFactory.getSwap(6.5, 0.05, forwardCurveName, discountCurveName);
-		
+
 		AnalyticModel model = modelFactory.getModel(maturities, zeroRates, discountCurveName, forwardCurveName);
 
 		double parRateExpected = 0.05063;
 		double parRateTolerance = 0.0001;
 		double parRate = hedgePortfolio.getParRate(6.5, forwardCurveName, discountCurveName, model);
 		boolean success = Math.abs(parRate - parRateExpected) < parRateTolerance;
-		
+
 		if(!success) System.out.println("\t\tPar rate devitates from expected value " + parRateExpected + " by more than " + parRateTolerance + ".");
 		return success;
 	}
@@ -186,7 +185,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 		String discountCurveName = "EURSTR";
 		String forwardCurveName = "EURSTR forward";
-		
+
 		/**
 		 * Create non-standard swap
 		 */
@@ -194,23 +193,23 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 		double parRate = hedgePortfolio.getParRate(6.5, forwardCurveName, discountCurveName, modelFactory.getModel(maturities, zeroRates, discountCurveName, forwardCurveName));
 		Assertions.assertTrue((0 < parRate && parRate < 0.1), "par swap rate pausibility: should be between 0.0 and 0.10 for our model");
-		
+
 		double[] phi = hedgePortfolio.getReplicationPortfolio(maturities, zeroRates, discountCurveName, forwardCurveName, swapToHedge);
 		Assertions.assertTrue((maturities.length == phi.length), "length of hedge portfolio matches number of maturities");
 
 		return true;
 	}
-	
+
 	public static AnalyticProduct getSwap(double maturity, double periodLength, double rateFix, String forwardCurveName, String discountCurveName) {
-		
+
 		int numberOfPeriods = (int) Math.round(maturity/periodLength);
 
 		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, numberOfPeriods, periodLength);
 		Schedule legSchedule = new RegularSchedule(timeDiscretization);
-					
+
 		AnalyticProduct swapLegFloat = new SwapLeg(legSchedule, forwardCurveName, 0.0, discountCurveName);
 		AnalyticProduct swapLegFix = new SwapLeg(legSchedule, null, rateFix, discountCurveName);
-		
+
 		AnalyticProduct swap = new Swap(swapLegFloat, swapLegFix);
 
 		return swap;
@@ -218,7 +217,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 	/**
 	 * Create a model with a discount curve and a forward curve using a flat zero rate curve and a shift in one bucket.
-	 * 
+	 *
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.
@@ -250,7 +249,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 		ForwardCurve forwardCurve = new ForwardCurveFromDiscountCurve(forwardCurveName, discountCurve.getName(), referenceDate, null);
 
 		AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve, forwardCurve });
-		
+
 		return model;
 	}
 

@@ -18,7 +18,7 @@ public class MonteCarloIntegrator1DSeedExperiment {
 				Testing Monte-Carlo integration usings different seed.
 				"""
 				);
-		
+
 		int numberOfEvaluationPoints = 10000;
 
 
@@ -29,13 +29,13 @@ public class MonteCarloIntegrator1DSeedExperiment {
 			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, new MersenneTwister(seed));
 			testIntegrator(integratorMonteCarlo, true);
 		}
-		
-		
+
+
 		/*
 		 * Test with random seeds (and plot the distribution of errors)
 		 */
 		List<Double> errors = new ArrayList<>();
-		
+
 		Random randomSeed = new Random(3141);
 		for(int i=0; i< 10000; i++) {
 			int seed = randomSeed.nextInt();
@@ -43,25 +43,25 @@ public class MonteCarloIntegrator1DSeedExperiment {
 			double error = testIntegrator(integratorMonteCarlo, false);
 			errors.add(error);
 		}
-		
+
 		Plots.createHistogram(errors, 50, 4.0).setTitle("Distribution of Monte-Carlo error").show();
-				
-		
+
+
 	}
 
 	private static double testIntegrator(Integrator1D integrator, boolean isPrintResult) {
-		
-		DoubleUnaryOperator integrand = x -> Math.cos(x);		
+
+		DoubleUnaryOperator integrand = x -> Math.cos(x);
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
-		
+
 		double lowerBound = 0.0;
 		double upperBound = 5.0;
-		
+
 		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound) - integralAnalytic.applyAsDouble(lowerBound);
 		double integralValueSimpsons = integrator.integrate(integrand, lowerBound, upperBound);
-		
+
 		double error = integralValueSimpsons - integralValueAnalytic;
-		
+
 		if(isPrintResult) System.out.println(String.format("%-35s  %20.16f  \u00b1 %5.3e", integrator.getClass().getSimpleName(), integralValueSimpsons, error));
 
 		return error;

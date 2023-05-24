@@ -25,41 +25,41 @@ import net.finmath.time.TimeDiscretizationFromArray;
 public class CurveExperiments {
 
 	public static void main(String[] args) {
-		
+
 //		testCurve();
-		
+
 		testSwapLeg();
-		
+
 	}
 
 	private static void testSwapLeg() {
 
 		LocalDate referenceDate = LocalDate.of(2022, 11, 23);
-		
+
 		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, 10, 0.5);	// 0.0, 0.5, 1.0, ..., 5.0;
 		Schedule schedule = new RegularSchedule(timeDiscretization);
 		double maturity = schedule.getPayment(schedule.getNumberOfPeriods()-1);
-		
-		
+
+
 		DiscountCurve discountCurve = DiscountCurveInterpolation.createDiscountCurveFromZeroRates("EURSTR", referenceDate,
 				new double[] { 1.0, 2.0, maturity, 5.5, 6.0, 6.5 },
 				new double[] { 0.05, 0.05, 0.05,   0.01, 0.05, 0.05 },
 				InterpolationMethod.CUBIC_SPLINE, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
-		
+
 		ForwardCurve forwardCurve = new ForwardCurveFromDiscountCurve(discountCurve.getName(), referenceDate, null);
-		
+
 		AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve, forwardCurve});
 
-		
+
 		AnalyticProduct swapLegFloat = new SwapLeg(schedule, forwardCurve.getName(), 0.0, discountCurve.getName());
-		
+
 		double value = swapLegFloat.getValue(0.0, model);
 		double valueCheck = discountCurve.getValue(0.0) - discountCurve.getValue(maturity);
-		
+
 		System.out.println("Float Leg");
 		System.out.println("value = " + value);
 		System.out.println("value = " + valueCheck);
-		
+
 		AnalyticProduct swapLegFix = new SwapLeg(schedule, null, 0.05, discountCurve.getName());
 		double valueFix = swapLegFix.getValue(0.0, model);
 		System.out.println("Fixed Leg");
@@ -75,12 +75,12 @@ public class CurveExperiments {
 				new double[] { 1.0, 0.9, 0.8, 0.6, 0.4 });
 
 		plotCurve(curve);
-		
+
 	}
 
 	private static void plotCurve(Curve curve) {
 		DoubleUnaryOperator interpolation = x -> curve.getValue(x);
-		
+
 		(new Plot2D(0.0, 15.0, interpolation)).show();
 	}
 

@@ -10,7 +10,7 @@ public interface SimpleLognormalCrossCurrencyModelAssignment {
 	 * The solution of the exercise consists of the implementation of a class,
 	 * implementing a SimpleCrossCurrencyModel providing a simulation of
 	 * a simple cross currency model simulating a single interest rate period.
-	 * 
+	 *
 	 */
 	SimpleCrossCurrencyModel getSimpleCrossCurrencyModel(double initialValueDomesticForwardRate,
 			double initialValueForeignForwardRate, double initialValueFX, double volatilityDomestic,

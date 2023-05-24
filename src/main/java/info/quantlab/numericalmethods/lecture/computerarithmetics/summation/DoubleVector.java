@@ -36,7 +36,7 @@ public interface DoubleVector {
 	/**
 	 * Calculates the averages of the elements of the vector.
 	 * If size() is not zero, returns sum()/size(), otherwise Double.NAN.
-	 * 
+	 *
 	 * @return If size() is not zero, returns sum()/size(), otherwise Double.NAN.
 	 */
 	default double average() {

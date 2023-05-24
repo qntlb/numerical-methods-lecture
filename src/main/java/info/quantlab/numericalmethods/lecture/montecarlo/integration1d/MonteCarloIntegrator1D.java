@@ -16,16 +16,16 @@ public class MonteCarloIntegrator1D implements Integrator1D {
 
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
-		
+
 		double domainSize = upperBound-lowerBound;
 
 		double sum = 0.0;
 		for(int i=0; i<numberOfEvaluationPoints; i++) {
-			
+
 			double randomNumber = uniformRandomNumberGenerator.getAsDouble();
 			double argument = lowerBound + randomNumber * domainSize;
 			double value = integrand.applyAsDouble(argument);
-			
+
 			sum += value;
 		}
 		return sum / numberOfEvaluationPoints * domainSize;

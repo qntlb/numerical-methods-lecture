@@ -11,7 +11,7 @@ public class SimpsonsIntegrator1DWithStreams implements Integrator1D {
 	public SimpsonsIntegrator1DWithStreams(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
-		
+
 		if(numberOfEvaluationPoints % 2 != 1) throw new IllegalArgumentException("numberOfEvaluationPoints should be odd");
 	}
 

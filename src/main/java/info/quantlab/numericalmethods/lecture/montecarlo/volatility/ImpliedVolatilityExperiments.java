@@ -9,11 +9,11 @@ import net.finmath.plots.Plot2D;
 
 /**
  * Small experiment to illustrate the implied volatility smile.
- * 
+ *
  * @author Christian Fries
  */
 public class ImpliedVolatilityExperiments {
-	
+
 	// Model properties
 	private final double	initialValue   = 1.0;
 	private final double	riskFreeRate   = 0.00;
@@ -24,26 +24,26 @@ public class ImpliedVolatilityExperiments {
 
 	/**
 	 * Run the experiment.
-	 * 
+	 *
 	 * @param args Not used.
 	 * @throws IOException Thrown if the image could not be stored.
 	 */
 	public static void main(String[] args) throws IOException {
-		
+
 		new ImpliedVolatilityExperiments().plotImpliedVols();
 	}
-	
+
 	public void plotImpliedVols() throws IOException {
-		
+
 		double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
 		DoubleUnaryOperator values = strike -> {
 			double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
 			return value;
 		};
-		
+
 		DoubleUnaryOperator volatilitySmile = strike -> {
 			double value = values.applyAsDouble(strike);
-			double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(forward, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);				
+			double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(forward, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);
 			return impliedVolatility;
 		};
 

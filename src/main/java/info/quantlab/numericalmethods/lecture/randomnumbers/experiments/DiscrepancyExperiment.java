@@ -15,7 +15,7 @@ import net.finmath.randomnumbers.MersenneTwister;
 /**
  * Plots the function that appears in the definition of the star-discrepancy
  * for different sequences of sample points.
- * 
+ *
  * @author Christian Fries
  */
 public class DiscrepancyExperiment {
@@ -33,8 +33,8 @@ public class DiscrepancyExperiment {
 
 		analyse("Van der Corput, n=9",
 				DoubleStream.generate(new VanDerCorputSequence(2)).limit(9).boxed().collect(Collectors.toList()));
-		
-	
+
+
 		analyse("Refined left to right, n=5",
 				List.of(1.0/8, 2.0/8, 3.0/8, 2.0/4,        3.0/4 ));
 
@@ -66,23 +66,23 @@ public class DiscrepancyExperiment {
 		.setYAxisLabel("\u03bb([0,x) - |x\u1d62 \u2208 [0,x)| / n");
 		plot.show();
 	}
-	
+
 	private static double getDiscrepancy(List<Double> samples) {
-		
+
 		List<Double> samplesSorted = samples.stream().sorted().toList();
-		
+
 		double discrepance = 0.0;
-		
+
 		int count = 0;
 		for(double sample : samplesSorted) {
-			
+
 			double low = sample - (double)count/samples.size();
 			count++;
 			double high = (double)count/samples.size() - sample;
-			
+
 			discrepance = Math.max(discrepance, Math.max(low, high));
 		}
-		
+
 		return discrepance;
 	}
 

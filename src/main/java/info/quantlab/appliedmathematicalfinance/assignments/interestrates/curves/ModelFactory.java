@@ -6,7 +6,7 @@ public interface ModelFactory {
 
 	/**
 	 * Create a model with a discount curve and a forward curve using the given zero rates in the discount curve.
-	 * 
+	 *
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.
@@ -17,7 +17,7 @@ public interface ModelFactory {
 
 	/**
 	 * Create a model with a discount curve and a forward curve using a flat zero rate curve and a shift in one bucket.
-	 * 
+	 *
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.

@@ -3,7 +3,7 @@ package info.quantlab.numericalmethods.lecture.randomnumbers;
 /**
  * Sample an d-dimensional sample vector from a 1-dimensional sequence,
  * populating the vector elementwise.
- * 
+ *
  * @author Christian Fries
  */
 public class RandomNumberGeneratorFrom1D implements RandomNumberGenerator {

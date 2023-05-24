@@ -130,7 +130,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 
 			var underlying = model.getAssetValue(maturity, 0);
 
-			var payoffDerivative = payoffFunctionDerivative.apply(underlying).mult(underlying).div(initialValue); // f'(S(T)) * 
+			var payoffDerivative = payoffFunctionDerivative.apply(underlying).mult(underlying).div(initialValue); // f'(S(T)) *
 
 			var valueDelta = payoffDerivative.div(model.getNumeraire(maturity)).mult(model.getNumeraire(0.0));
 
@@ -202,14 +202,14 @@ public class MonteCarloBlackScholesDeltaExperiments {
 
 		Plot2D plot = (new Plot2D(List.of(
 				new PlotableFunction2D(xmin, xmax, 400, finiteDifferenceApproximationByShift),
-				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)				
+				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)
 				)))
 				.setXAxisLabel("scale (shift = S\u2080*10^{scale})")
 				.setYAxisLabel("value")
 				.setYAxisNumberFormat(new DecimalFormat("0.#####"));
 
 		return plot;
-	}	
+	}
 
 	private static Plot2D getPlotDeltaLRApproximationByShift(double xmin, double xmax, MonteCarloAssetModel model, double maturity, RandomOperator payoffFunction, double valueAnalytic) throws CalculationException {
 		double initialValue = model.getAssetValue(0.0, 0).doubleValue();
@@ -219,14 +219,14 @@ public class MonteCarloBlackScholesDeltaExperiments {
 
 		Plot2D plot = (new Plot2D(List.of(
 				new PlotableFunction2D(xmin, xmax, 400, finiteDifferenceApproximationByShift),
-				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)				
+				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)
 				)))
 				.setXAxisLabel("scale (shift = S\u2080*10^{scale})")
 				.setYAxisLabel("value")
 				.setYAxisNumberFormat(new DecimalFormat("0.#####"));
 
 		return plot;
-	}	
+	}
 
 	private static Plot2D getPlotDeltaPathwiseApproximationByShift(double xmin, double xmax, MonteCarloAssetModel model, double maturity, RandomOperator payoffFunctionDerivative, double valueAnalytic) {
 		DoubleUnaryOperator finiteDifferenceApproximationByShift = scale -> getDeltaPathwise(
@@ -234,7 +234,7 @@ public class MonteCarloBlackScholesDeltaExperiments {
 
 		Plot2D plot = (new Plot2D(List.of(
 				new PlotableFunction2D(xmin, xmax, 400, finiteDifferenceApproximationByShift),
-				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)				
+				new PlotableFunction2D(xmin, xmax, 400, x -> valueAnalytic)
 				)))
 				.setXAxisLabel("scale (shift = S\u2080*10^{scale})")
 				.setYAxisLabel("value")

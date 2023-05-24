@@ -97,7 +97,7 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			isInAdvance = true;
 			paymentTime = isInAdvance ? periodStart : periodEnd;
 
-			double valueAnalyticDomestic = AnalyticFormulas.blackModelCapletValue(initialValueDomesticForwardRate, volatilityDomestic, periodStart, strike, periodEnd-periodStart, domesticZeroBond);		
+			double valueAnalyticDomestic = AnalyticFormulas.blackModelCapletValue(initialValueDomesticForwardRate, volatilityDomestic, periodStart, strike, periodEnd-periodStart, domesticZeroBond);
 			double inAdvanceAdjustment = Math.exp(+volatilityDomestic*volatilityDomestic*periodStart*(periodEnd-periodStart));
 			valueAnalytic = (
 					valueAnalyticDomestic
@@ -113,7 +113,7 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			isInAdvance = true;
 			paymentTime = isInAdvance ? periodStart : periodEnd;
 
-			double valueAnalyticForeign = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate, volatilityForeign, periodStart, strike, periodEnd-periodStart, foreignZeroBond);		
+			double valueAnalyticForeign = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate, volatilityForeign, periodStart, strike, periodEnd-periodStart, foreignZeroBond);
 
 			double inAdvanceAdjustment = Math.exp(+volatilityForeign*volatilityForeign*periodStart*(periodEnd-periodStart));
 			valueAnalytic = (

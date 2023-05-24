@@ -28,7 +28,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 /**
  * Experiment illustrating the impact of a volatility-of-volatility \( \xi \).
- * 
+ *
  * @author Christian Fries
  */
 public class StochasticVolatilityExperiments {
@@ -58,7 +58,7 @@ public class StochasticVolatilityExperiments {
 
 	/**
 	 * Run the experiment.
-	 * 
+	 *
 	 * @param args Not used.
 	 * @throws CalculationException Thrown if Euler scheme fails.
 	 * @throws IOException Thrown if the image could not be stored.
@@ -74,7 +74,7 @@ public class StochasticVolatilityExperiments {
 
 	/**
 	 * Create the experiment with a given volatility-of-volatility.
-	 * 
+	 *
 	 * @param xi The volatility-of-volatility.
 	 */
 	public StochasticVolatilityExperiments(double xi) {
@@ -83,9 +83,9 @@ public class StochasticVolatilityExperiments {
 
 	/**
 	 * Create plots.
-	 * 
+	 *
 	 * @throws CalculationException Thrown if the numerical scheme failed.
-	 * @throws IOException Thrown if the image could not be stored. 
+	 * @throws IOException Thrown if the image could not be stored.
 	 */
 	public void analyse() throws CalculationException, IOException {
 		// Create a time discretization
@@ -155,11 +155,11 @@ public class StochasticVolatilityExperiments {
 		double x2 = 0.12;//quadratcVariation.getAverage()+1*quadratcVariation.getStandardDeviation();
 		double x3 = 0.20;//quadratcVariation.getAverage()+3*quadratcVariation.getStandardDeviation();
 		for(int i=0; i<numberOfPathsToPlot; i++) {
-			double v = quadratcVariation.get(i); 
+			double v = quadratcVariation.get(i);
 			float green = (float) Math.min(Math.max(x2-v,0)/x2,1);
 			float blue = (float) Math.max(1-(Math.abs(((v-x1)-(x2-x1)/2))/((x2-x1)/2)),0);
 			float red = (float) Math.min(Math.max(v/x3,0),1);
-			colors[i] = new Color(red, green, blue); 
+			colors[i] = new Color(red, green, blue);
 		}
 
 		new PlotProcess2D(timeDiscretization, (DoubleToRandomVariableFunction) t -> paths.apply(t).log(), numberOfPathsToPlot)
@@ -189,7 +189,7 @@ public class StochasticVolatilityExperiments {
 		.show();
 	}
 
-	private void plotDensityQuadraticVariation(RandomVariable quadraticVariation) throws IOException {		
+	private void plotDensityQuadraticVariation(RandomVariable quadraticVariation) throws IOException {
 		Plots.createDensity(quadraticVariation, 200, 6.0)
 			.setTitle("Quadratc Variation (\u03C3=" + volatility + ", \u03be=" + xi + ")")
 			.setXAxisLabel("Quadratc Variation")
@@ -203,7 +203,7 @@ public class StochasticVolatilityExperiments {
 				double value = new EuropeanOption(optionMaturity, strike, assetIndex).getValue(simulation);
 				double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(
 						initialValue * Math.exp(riskFreeRate * optionMaturity),
-						optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);				
+						optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);
 				return impliedVolatility;
 			} catch (CalculationException e) {
 				return Double.NaN;

@@ -12,7 +12,7 @@ public class QuasiRandomNumberExperiments {
 
 		final int numberOfSamplePoints = 1000000;	// or use 1 << 20;
 		System.out.println("numberOfSamplePoints = " + numberOfSamplePoints);
-		
+
 		// f(x) = x^3 then \int_0^1 f(x) dx = 0.25
 		DoubleUnaryOperator function = x -> x*x*x;
 

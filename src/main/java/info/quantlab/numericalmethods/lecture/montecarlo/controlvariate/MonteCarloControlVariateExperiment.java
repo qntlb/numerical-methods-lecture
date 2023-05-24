@@ -15,9 +15,9 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 /**
  * Experiment on control variates.
- * 
+ *
  * We value an exotic option without and with a control variate constructed from a plain option.
- * 
+ *
  * The payoff of the exotic option is
  * <ul>
  * 	<li>
@@ -30,7 +30,7 @@ import net.finmath.time.TimeDiscretizationFromArray;
  * 		0 for S(T) &lt; K1 .
  * 	</li>
  * </ul>
- * 
+ *
  * @author Christian Fries
  */
 public class MonteCarloControlVariateExperiment {

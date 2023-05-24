@@ -58,7 +58,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("1+eps == 1 is " + ((1+eps)==1));
 		System.out.println("1+2*eps ... = " + (1+2*eps));
 		System.out.println("2^(-p)/2... = " + Math.pow(2, -52-1));	// For double mantissa has p = 52 bits
-		
+
 		System.out.println();
 
 		System.out.println("1+1*eps ... = " + (1+1*eps));
@@ -70,7 +70,7 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("_".repeat(79)+"\n");
 
-		
+
 		/*
 		 * Experiments with Double.MAX_VALUE
 		 */

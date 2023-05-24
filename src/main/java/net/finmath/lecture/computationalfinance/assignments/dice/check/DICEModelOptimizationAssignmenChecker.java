@@ -8,11 +8,11 @@ public class DICEModelOptimizationAssignmenChecker
 
 		System.out.println("Note: This is just a very rudimentary test.");
 		System.out.println("If this test passes, it is not a guarantee that the calibration found the optimal solution (sorry).");
-		
+
 		try {
 			for(double discountRate : new double[] { 0.005, 0.01, 0.015 }) {
 				double[] abatement = solution.getDICEModelOptimalAbatementPath(discountRate);
-				
+
 				/*
 				 * Rudimentary check: check that abatement vector is monotone
 				 */
@@ -26,8 +26,8 @@ public class DICEModelOptimizationAssignmenChecker
 				/*
 				 * Rudimentary check: check that abatement vector is >= 0
 				 */
-				for(int i=0; i<abatement.length; i++) {
-					if(abatement[i] < 0) {
+				for (double element : abatement) {
+					if(element < 0) {
 						System.out.println("\tAbatement vector is negative.");
 						return false;
 					}
@@ -37,8 +37,8 @@ public class DICEModelOptimizationAssignmenChecker
 				 * Rudimentary check: check that abatement is not all zero
 				 */
 				boolean isAbatementAllZero = true;
-				for(int i=0; i<abatement.length; i++) {
-					isAbatementAllZero &= (abatement[i] == 0);
+				for (double element : abatement) {
+					isAbatementAllZero &= (element == 0);
 				}
 				if(isAbatementAllZero) {
 					System.out.println("\tAbatement vector is all zero, this is likly not the optimal soluation.");

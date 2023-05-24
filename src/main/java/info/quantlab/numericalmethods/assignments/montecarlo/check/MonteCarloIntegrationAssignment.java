@@ -16,11 +16,11 @@ public interface MonteCarloIntegrationAssignment {
 
 	/**
 	 * The solution of the second part of exercise.
-	 * 
+	 *
 	 * Calculating the integral f(x,y) dx dy for a general binary operator
-	 * using the integration domain [a,b] x [c,d] 
+	 * using the integration domain [a,b] x [c,d]
 	 * using your Monte-Carlo Integrator.
-	 * 
+	 *
 	 * @param function The function to integrate, given as a {@link DoubleBinaryOperator}.
 	 * @param lowerBoundX The lower bound a for the integral of dx.
 	 * @param upperBoundX The upper bound b for the integral of dx.
@@ -32,7 +32,7 @@ public interface MonteCarloIntegrationAssignment {
 
 	/**
 	 * The solution of the third part of exercise, implementing a IntegratorFactory providing a SimpsonsIntegrator
-	 * 
+	 *
 	 * @return A class implementing IntegratorFactory
 	 */
 	IntegratorFactory getSimpsonsIntegratorFactory();

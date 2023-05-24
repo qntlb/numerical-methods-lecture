@@ -33,11 +33,11 @@ public class AsianOptionWithBSControlVariateChecker {
 		STRONGEST("strong variance reduction");
 
 		private final String name;
-		
+
 		Check(String name) {
 			this.name = name;
 		}
-		
+
 		public String getName() {
 			return name;
 		}
@@ -60,9 +60,9 @@ public class AsianOptionWithBSControlVariateChecker {
 
 	/**
 	 * Perform the test of different sub-tasks (whatToCheck) on solution.
-	 * 
+	 *
 	 * Perform exception handling.
-	 * 
+	 *
 	 * @param solution Solution of MonteCarloIntegrationAssignment
 	 * @param whatToCheck Name of the subtask.
 	 * @return true if successful, otherwise false.

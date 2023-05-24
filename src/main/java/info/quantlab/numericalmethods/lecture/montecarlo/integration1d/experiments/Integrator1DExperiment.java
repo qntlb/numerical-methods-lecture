@@ -18,7 +18,7 @@ public class Integrator1DExperiment {
 				(Note that the Java streams implementation uses Kahan summation / error correction when performing .sum())
 				"""
 				);
-		
+
 		int numberOfEvaluationPoints = 10001;
 
 		Integrator1D integratorSimpsons = new SimpsonsIntegrator1D(numberOfEvaluationPoints);
@@ -35,16 +35,16 @@ public class Integrator1DExperiment {
 	}
 
 	private static void testIntegrator(Integrator1D integrator) {
-		
-		DoubleUnaryOperator integrand = x -> Math.cos(x);		
+
+		DoubleUnaryOperator integrand = x -> Math.cos(x);
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
-		
+
 		double lowerBound = 0.0;
 		double upperBound = 5.0;
-		
+
 		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound) - integralAnalytic.applyAsDouble(lowerBound);
 		double integralValueSimpsons = integrator.integrate(integrand, lowerBound, upperBound);
-		
+
 		double error = integralValueSimpsons - integralValueAnalytic;
 		System.out.println(String.format("%-35s  %20.16f  \u00b1 %5.3e", integrator.getClass().getSimpleName(), integralValueSimpsons, error));
 	}

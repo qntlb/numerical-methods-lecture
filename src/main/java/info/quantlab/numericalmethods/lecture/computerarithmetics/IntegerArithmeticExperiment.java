@@ -64,7 +64,7 @@ public class IntegerArithmeticExperiment {
 
 		System.out.println("Small integer b = " + integerSmall);
 		System.out.println("b % c           = " + modOfSmall);
-		
+
 		System.out.println("((a % c) + (b % c)) % c = " + sumOfModulusMod);
 		System.out.println("(a + b) % c             = " + modulusOfSum);
 	}

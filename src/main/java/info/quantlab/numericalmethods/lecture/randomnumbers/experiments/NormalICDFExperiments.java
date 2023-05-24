@@ -14,7 +14,7 @@ import net.finmath.randomnumbers.SobolSequence1D;
 
 /**
  * Experiments related to the ICDF methods: Apply the inverse of the cumulative distribution function.
- * 
+ *
  * <ul>
  *   <li>
  *   	Plot the uniform input distribution and the transformed normal distribution for different uniform random number sequences:
@@ -29,7 +29,7 @@ import net.finmath.randomnumbers.SobolSequence1D;
  *   	For different implementations of the CDF and ICDF analyse the round trip CDF(ICDF(u)) for different input values u.
  *   </li>
  * </ul>
- * 
+ *
  * @author Christian Fries
  */
 public class NormalICDFExperiments {
@@ -77,18 +77,18 @@ public class NormalICDFExperiments {
 			public double nextDouble() {
 				return random.nextDouble();
 			}
-			
+
 			@Override
 			public String toString() {
 				return "Java Random (LCG)";
 			}
 		};
-		
+
 		plotDensityUniformAndNormalViaICDF(randomNumberGenerator1D, NormalDistribution::inverseCumulativeDistribution);
 	}
 
 	private static void plotDensityUniformAndNormalViaICDFMersenneTwister() throws Exception {
-		plotDensityUniformAndNormalViaICDF(new MersenneTwister(3636), NormalDistribution::inverseCumulativeDistribution);		
+		plotDensityUniformAndNormalViaICDF(new MersenneTwister(3636), NormalDistribution::inverseCumulativeDistribution);
 	}
 
 	private static void plotDensityUniformAndNormalViaICDFVanDerCorput() throws Exception {
@@ -104,13 +104,13 @@ public class NormalICDFExperiments {
 			public double nextDouble() {
 				return sobol.nextDouble();
 			}
-			
+
 			@Override
 			public String toString() {
 				return "Sobol Sequence";
 			}
 		};
-		
+
 		org.apache.commons.math3.distribution.NormalDistribution normalDistribution =
 				new org.apache.commons.math3.distribution.NormalDistribution();
 
@@ -151,10 +151,10 @@ public class NormalICDFExperiments {
 		 * Testing Apache Common Math implementation
 		 */
 		org.apache.commons.math3.distribution.NormalDistribution normal = new org.apache.commons.math3.distribution.NormalDistribution();
-		
+
 		DoubleUnaryOperator icdfApacheCommonsMath = u -> normal.inverseCumulativeProbability(u);
 		DoubleUnaryOperator cdfApacheCommonsMath = x -> normal.cumulativeProbability(x);
-		
+
 		System.out.println("Testing Apache Common Math implementation: u = " + uniform);
 		System.out.println("_".repeat(80));
 
@@ -168,15 +168,15 @@ public class NormalICDFExperiments {
 		 */
 		System.out.println("Testing finmath lib Wichura implementation: u = " + uniform);
 		System.out.println("_".repeat(80));
-		
+
 		testICDFImplementation(NormalDistribution::inverseCumulativeNormalDistributionWichura, cdfApacheCommonsMath, uniform);
 
-		
+
 	}
 	private static void testICDFImplementation(DoubleUnaryOperator icdf, DoubleUnaryOperator cdf, double uniform) {
 
 		System.out.println("u: uniform, x: normal");
-		
+
 		System.out.println("        u = " + uniform);
 
 		double x = icdf.applyAsDouble(uniform);

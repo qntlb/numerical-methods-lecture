@@ -26,9 +26,9 @@ public class MonteCarloIntegrationImplementationChecker {
 
 	/**
 	 * Perform the test of different sub-tasks (whatToCheck) on solution.
-	 * 
+	 *
 	 * Perform exception handling.
-	 * 
+	 *
 	 * @param solution Solution of MonteCarloIntegrationAssignment
 	 * @param whatToCheck Name of the subtask.
 	 * @return true if successful, otherwise false.
@@ -75,7 +75,7 @@ public class MonteCarloIntegrationImplementationChecker {
 
 	/**
 	 * Check the MonteCarloIntegratorFactory with different functions.
-	 * 
+	 *
 	 * @param solution Solution of MonteCarloIntegrationAssignment
 	 */
 	public static boolean checkMonteCarloIntegrator(MonteCarloIntegrationAssignment solution) {
@@ -104,7 +104,7 @@ public class MonteCarloIntegrationImplementationChecker {
 
 	/**
 	 * Check the MonteCarloIntegratorFactory with different functions.
-	 * 
+	 *
 	 * @param solution Solution of MonteCarloIntegrationAssignment
 	 */
 	public static boolean checkSimpsonsIntegrator(MonteCarloIntegrationAssignment solution) {
@@ -133,7 +133,7 @@ public class MonteCarloIntegrationImplementationChecker {
 
 	/**
 	 * Check the MonteCarloIntegratorFactory with different seeds.
-	 * 
+	 *
 	 * @param integratorFactory
 	 * @param integratorTestCase
 	 * @return
@@ -160,7 +160,7 @@ public class MonteCarloIntegrationImplementationChecker {
 	}
 
 	/**
-	 * Check the 
+	 * Check the
 	 */
 	public static boolean checkIntegralOfDoubleBinaryOperator(MonteCarloIntegrationAssignment solution) {
 		System.out.println("Testing getIntegral(...)");
@@ -175,7 +175,7 @@ public class MonteCarloIntegrationImplementationChecker {
 
 	/**
 	 * Check the Simpsons IntegratorFactory with different seeds.
-	 * 
+	 *
 	 * @param integratorFactory
 	 * @param integratorTestCase
 	 * @return
