@@ -10,9 +10,12 @@ import net.finmath.randomnumbers.MersenneTwister;
 
 /**
  * Acceptance-Rejection sampling of the normal distribution.
- * 3D: The sign and the ICDF of the exponential are generated from two uniforms
- * 2D: The sign and the exponential on |Y| is generated from one uniform
+ * 
+ * 3D: The sign and the ICDF of the exponential are generated from two uniforms, one additional uniform for the acceptance condition.
+ * 2D: The sign and the exponential on |Y| is generated from one uniform, one additional uniform for the acceptance condition.
  *
+ * We illustrate the method with pseudo random numbers (MersenneTwister) and quasi random numbers (HaltonSequence).
+ * 
  * @author Christian Fries
  */
 public class NormalDistributionWithAcceptanceRejectionExperiment {
@@ -23,11 +26,16 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		testARWithMersenneTwister3D();
 		testARWithMersenneTwister2D();
+		testICDFWithMersenneTwister();
+		
 		testARWithHalton3D();
 		testARWithHalton2D();
-		testICDFWithMersenneTwister();
 		testICDFWithHalton();
 	}
+
+	/*
+	 * Using the Acceptance-Rejection sampling 3 uniforms (sign, value of |X| and condition
+	 */
 
 	private static void testARWithMersenneTwister3D() {
 
@@ -67,6 +75,10 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 	}
 
+	/*
+	 * Using the Acceptance-Rejection sampling 2 uniforms (value of X and condition)
+	 */
+
 	private static void testARWithMersenneTwister2D() {
 
 		long timeStart = System.currentTimeMillis();
@@ -103,6 +115,40 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		.setTitle("Normal via AR from MersenneTwister 2D").show();
 
 	}
+
+	/*
+	 * Using the ICDF Method
+	 */
+	
+	private static void testICDFWithMersenneTwister() {
+
+		long timeStart = System.currentTimeMillis();
+
+		MersenneTwister mersenne = new MersenneTwister(3636);
+
+		List<Double> valuesNormal = new ArrayList<>();
+		for(int i = 0; i<numberOfSamples; i++) {
+			double uniform = mersenne.nextDouble();
+
+			double normal = NormalDistribution.inverseCumulativeNormalDistributionWichura(uniform);
+
+			valuesNormal.add(normal);
+		}
+
+		long timeEnd = System.currentTimeMillis();
+
+		double timeSec = (timeEnd-timeStart) / 1000.0;
+
+		System.out.println("Time ICDF from MersenneTwister 1D.: " + timeSec + " sec.");
+
+		Plots.createDensity(valuesNormal, 100, 4.0).
+		setTitle("Normal via ICDF from MersenneTwister").show();
+	}
+
+
+	/*
+	 * The same experiment with the Halton sequence
+	 */
 
 	private static void testARWithHalton3D() {
 
@@ -146,7 +192,6 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from Halton-Sequence 3D").show();
 	}
-
 	private static void testARWithHalton2D() {
 
 		long timeStart = System.currentTimeMillis();
@@ -181,32 +226,6 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from Halton-Seq. 2D").show();
 	}
-
-	private static void testICDFWithMersenneTwister() {
-
-		long timeStart = System.currentTimeMillis();
-
-		MersenneTwister mersenne = new MersenneTwister(3636);
-
-		List<Double> valuesNormal = new ArrayList<>();
-		for(int i = 0; i<numberOfSamples; i++) {
-			double uniform = mersenne.nextDouble();
-
-			double normal = NormalDistribution.inverseCumulativeNormalDistributionWichura(uniform);
-
-			valuesNormal.add(normal);
-		}
-
-		long timeEnd = System.currentTimeMillis();
-
-		double timeSec = (timeEnd-timeStart) / 1000.0;
-
-		System.out.println("Time ICDF from MersenneTwister 1D.: " + timeSec + " sec.");
-
-		Plots.createDensity(valuesNormal, 100, 4.0).
-		setTitle("Normal via ICDF from MersenneTwister").show();
-	}
-
 	private static void testICDFWithHalton() {
 
 		long timeStart = System.currentTimeMillis();
