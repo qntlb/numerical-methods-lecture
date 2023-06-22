@@ -17,21 +17,44 @@ import net.finmath.montecarlo.model.ProcessModel;
 import net.finmath.montecarlo.process.EulerSchemeFromProcessModel;
 import net.finmath.montecarlo.process.MonteCarloProcess;
 import net.finmath.randomnumbers.MersenneTwister;
+import net.finmath.randomnumbers.RandomNumberGenerator;
 import net.finmath.stochastic.RandomVariable;
 import net.finmath.time.TimeDiscretization;
 import net.finmath.time.TimeDiscretizationFromArray;
 
+/**
+ * This experiment illustrates different means of calculating
+ * the value of a European option under a Black-Scholes model
+ * using Monte-Carlo simulation.
+ * 
+ * The Euler scheme is the exact solution using one time step
+ * (Euler scheme applied to log(S)).
+ * 
+ * The valuation is illustrated:
+ * <ol>
+ * 	<li>Direct loop evaluating the valuation function V(T) on the uniform random numbers.</li>
+ * 	<li>Stream of uniform random numbers, mapped by the model function to S(T), mapped by the product function to V(T), then averaged.</li>
+ * 	<li>Arithmetic operations on <code>RandomVariable</code> using a <code>TimeDiscretization</code> and <code>BrownianMotion</code>.</li>
+ * 	<li>Using a <code>Model</code>, an <code>EulerScheme</code> and a <code>Product</code>.</li>
+ * </ol>
+ * 
+ * @author Christian Fries
+ */
 public class MonteCarloBlackScholesCallOptionExperiment {
 
-	private double initialValue = 100.0;	// S(0)
-	private double riskFreeRate = 0.05;		// r
-	private double volatility = 0.20;		// sigma
+	private double	initialValue = 100.0;		// S_0 = S(t_0)
+	private double	riskFreeRate = 0.05;		// r
+	private double	volatility = 0.20;			// sigma
 
-	private double optionMaturity = 1.0;	// T
-	private double optionStrike = 105;		// K
+	private double	optionMaturity = 1.0;		// T
+	private double	optionStrike = 105;			// K
 
-	private long seed = 3216;
-	private long numberOfSamples = 20000000; // 2*10^7
+	private double	initialTime = 0.0;			// t_0
+	private int		numberOfTimeSteps = 1;
+	
+	private long	seed = 3216;
+	private int		numberOfFactors = 1;		// dimension of the Brownian Motion 
+	private long	numberOfSamples = 20000000;	// 2*10^7
 
 	public static void main(String[] args) throws CalculationException {
 
@@ -70,10 +93,16 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		System.out.println("Monte-Carlo (using Lib)..............: " + valueMonteCarloWithLib + " \t(" + (timeEnd-timeStart)/1000.0 + " sec.)");
 	}
 
+	/*
+	 * The analytic valuation formula
+	 */
 	private double getAnalyticValue() {
 		return AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, optionMaturity, optionStrike);
 	}
 
+	/*
+	 * Calculation of the expectation using a classical loop.
+	 */
 	private double getMonteCarloValueUsingLoop() {
 
 		// Uniform random numbers
@@ -97,6 +126,9 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		return value;
 	}
 
+	/*
+	 * Calculation of the expectation using a stream and two separate transformations (operators): model and product
+	 */
 	private double getMonteCarloValueUsingStreams() {
 
 		/*
@@ -126,41 +158,49 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		return value;
 	}
 
+	/*
+	 * Calculation using RandomVariable and RandomNumberGenerator, TimeDiscretization, BrownianMotion
+	 * 
+	 * Remark: the library implementation in getMonteCarloValueLib uses a different order which explains a small difference in rounding error. To get the same value use
+	 * RandomVariable underlying = diffusion.add(Math.log(initialValue)).add(drift).exp();		// S(T)
+	 */
 	private double getMonteCarloValueRandomVariables() {
 
 		// Uniform
-		MersenneTwister mersenne = new MersenneTwister(seed);
+		RandomNumberGenerator randomNumberGenerator = new MersenneTwister(seed);
 
 		// Time Discretization
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, 1, optionMaturity);
+		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, optionMaturity);
 
 		// Stochastic Driver: Brownian Motion.
-		BrownianMotion brownianMotion = new BrownianMotionFromRandomNumberGenerator(
-				timeDiscretization, 1, (int) numberOfSamples, mersenne);
+		BrownianMotion brownianMotion = new BrownianMotionFromRandomNumberGenerator(timeDiscretization, 1, (int) numberOfSamples, randomNumberGenerator);
 
-		RandomVariable deltaW = brownianMotion.getBrownianIncrement(0.0, 0);		// W(T)
+		RandomVariable deltaW = brownianMotion.getBrownianIncrement(initialTime, 0);		// W(T)
 
 		// Model
 		double drift = riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity;
 		RandomVariable diffusion = deltaW.mult(volatility);
 		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);		// S(T)
-
+		
 		// Product // V(T) * N(t) / N(T)
 		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * optionMaturity));
 
 		// Expectation
-		double value = payoffDiscounted.average().doubleValue();
+		double value = payoffDiscounted.expectation().doubleValue();
 
 		return value;
 	}
 
+	/*
+	 * Calculation using ProcessModel and EulerSchemeFromProcessModel and AssetMonteCarloProduct (and TimeDiscretization and BrownianMotion)
+	 */
 	private double getMonteCarloValueLib() throws CalculationException {
 
 		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(0.0, 1, optionMaturity);
+		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, optionMaturity);
 
-		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, (int)numberOfSamples, (int)seed);
+		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, (int)numberOfSamples, (int)seed);
 
 		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
 
@@ -168,7 +208,7 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 		AssetMonteCarloProduct option = new EuropeanOption(optionMaturity, optionStrike);
 
-		double value = option.getValue(0.0, blackScholesMonteCarloModel).expectation().doubleValue();
+		double value = option.getValue(initialTime, blackScholesMonteCarloModel).expectation().doubleValue();
 
 		return value;
 	}
