@@ -28,11 +28,12 @@ public class BrownianBridgeExperiment {
 		double deltaT = 1.0;
 		int numberOfPaths = 10;
 
+		// W(0), W(1), W(2)
 		TimeDiscretization td = new TimeDiscretizationFromArray(0.0, numberOfTimeSteps, deltaT);
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(td, 1, numberOfPaths, 3231);
 
-		RandomVariable valuesStart = brownianMotion.getBrownianIncrement(0, 0);
-		RandomVariable valuesEnd = valuesStart.add(brownianMotion.getBrownianIncrement(1, 0));
+		RandomVariable valuesStart = brownianMotion.getBrownianIncrement(0, 0); // W(1) = Delta W(0)
+		RandomVariable valuesEnd = valuesStart.add(brownianMotion.getBrownianIncrement(1, 0)); // W(2) = W(1) + Delta W(1)
 
 		double bridgeDeltaT = 1.0/bridgeNumberOfTimeSteps;
 		TimeDiscretization bridgeTimeDiscretization = new TimeDiscretizationFromArray(1.0, bridgeNumberOfTimeSteps, bridgeDeltaT);
