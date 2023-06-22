@@ -12,7 +12,7 @@ import net.finmath.time.TimeDiscretization;
 import net.finmath.time.TimeDiscretizationFromArray;
 
 /**
- * Plot the path of a Poisson process.
+ * Plot the path of a (compensated) Poisson process.
  *
  * @author Christian Fries
  */
@@ -36,25 +36,32 @@ public class PoissonProcessExperiment {
 		for(int pathIndex = 0; pathIndex<numberOfPaths; pathIndex++) {
 			List<Double> jumpTimes = new ArrayList<>();
 
-			double nextJumpTime = 0;
+			double nextJumpTime = 0;			// T_0
 			while(nextJumpTime < maturity) {
 
+				// Sample exponential distributed timeStep
 				double uniform = randomNumberGenerator.nextDouble();
 				double timeStep = - Math.log(uniform) / lambda;
 
 				nextJumpTime += timeStep;
-				if(nextJumpTime < maturity) jumpTimes.add(nextJumpTime);
+				if(nextJumpTime <= maturity) jumpTimes.add(nextJumpTime);		
+
+				System.out.print(nextJumpTime + ", ");
 			}
 			jumpTimesPaths.add(jumpTimes);
+
+			System.out.println();
 		}
 
 		/*
-		 * Part 2: Generate the function t -> N(t) - lambda t
+		 * Part 2: Generate the function t -> M(t) = N(t) - lambda t
+		 * 
+		 * M(t) for a fixed time t = <code>time</code>.
 		 */
 		DoubleToRandomVariableFunction process = time -> {
 			double[] values = new double[numberOfPaths];
 			for(int pathIndex = 0; pathIndex<numberOfPaths; pathIndex++) {
-				long count = jumpTimesPaths.get(pathIndex).stream().filter(t -> t <= time).count();
+				long count = jumpTimesPaths.get(pathIndex).stream().filter(t -> t <= time).count();	// Count T_{i} <= t
 				values[pathIndex] = count - lambda * time;
 			}
 			return new RandomVariableFromDoubleArray(maturity, values);
