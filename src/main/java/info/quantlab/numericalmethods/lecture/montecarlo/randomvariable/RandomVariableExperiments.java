@@ -23,12 +23,13 @@ public class RandomVariableExperiments {
 	private static void printMoments(RandomVariable randomVariable) {
 		System.out.println(randomVariable.getClass().getSimpleName());
 
-		RandomVariable valueSquared = randomVariable.mult(randomVariable);
-
+		// Calculate E(X)
 		RandomVariable expectation = randomVariable.expectation();
-		RandomVariable expectationOfSquared = valueSquared.expectation();
-
 		System.out.println("\tE(X)   = " + expectation.doubleValue());
+
+		// Calculate E(X^2)
+		RandomVariable valueSquared = randomVariable.mult(randomVariable);
+		RandomVariable expectationOfSquared = valueSquared.expectation();
 		System.out.println("\tE(X^2) = " + expectationOfSquared.doubleValue());
 
 		System.out.println();
