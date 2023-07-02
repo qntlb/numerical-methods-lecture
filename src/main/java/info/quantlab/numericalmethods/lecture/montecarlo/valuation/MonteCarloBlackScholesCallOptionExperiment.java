@@ -170,7 +170,7 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		RandomNumberGenerator randomNumberGenerator = new MersenneTwister(seed);
 
 		// Time Discretization
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, optionMaturity);
+		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, (optionMaturity-initialTime)/numberOfTimeSteps);
 
 		// Stochastic Driver: Brownian Motion.
 		BrownianMotion brownianMotion = new BrownianMotionFromRandomNumberGenerator(timeDiscretization, 1, (int) numberOfSamples, randomNumberGenerator);
@@ -183,7 +183,7 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);		// S(T)
 		
 		// Product // V(T) * N(t) / N(T)
-		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * optionMaturity));
+		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * (optionMaturity-initialTime)));
 
 		// Expectation
 		double value = payoffDiscounted.expectation().doubleValue();
@@ -198,7 +198,7 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, optionMaturity);
+		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, (optionMaturity-initialTime)/numberOfTimeSteps);
 
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, (int)numberOfSamples, (int)seed);
 
