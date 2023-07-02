@@ -193,7 +193,7 @@ public class AsianOptionWithBSControlVariateChecker {
 		/*
 		 * Construct object
 		 */
-		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging);
+		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging, 1.0);
 
 		/*
 		 * Create model
@@ -244,12 +244,12 @@ public class AsianOptionWithBSControlVariateChecker {
 	}
 
 
-	private static AssetMonteCarloProduct createProduct(AsianOptionWithBSControlVariateAssignment solution, double maturity, double strike, TimeDiscretization timesForAveraging) {
+	private static AssetMonteCarloProduct createProduct(AsianOptionWithBSControlVariateAssignment solution, double maturity, double strike, TimeDiscretization timesForAveraging, double callOrPutSign) {
 
 		/*
 		 * Try (double, double, TimeDiscretization)
 		 */
-		AssetMonteCarloProduct product = solution.getAsianOption(maturity, strike, timesForAveraging);
+		AssetMonteCarloProduct product = solution.getAsianOption(maturity, strike, timesForAveraging, callOrPutSign);
 
 		return product;
 	}
