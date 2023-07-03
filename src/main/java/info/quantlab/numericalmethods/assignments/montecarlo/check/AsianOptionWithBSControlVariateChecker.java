@@ -125,9 +125,15 @@ public class AsianOptionWithBSControlVariateChecker {
 	 */
 	public static boolean checkBasicFunctionality(AsianOptionWithBSControlVariateAssignment solution) {
 
-		RandomVariable value = getValueForTestCase(solution, 0);
+		boolean success = true;
 
-		return Math.abs(value.getAverage()- 0.3725) <= 0.02;
+		RandomVariable value1 = getValueForTestCase(solution, 0);
+		success &= Math.abs(value1.getAverage()- 0.3725) <= 0.02;
+
+		RandomVariable value2 = getValueForTestCase(solution, 1);
+		success &= Math.abs(value2.getAverage()- 0.1244) <= 0.02;
+
+		return success;
 	}
 
 	/**
@@ -143,9 +149,15 @@ public class AsianOptionWithBSControlVariateChecker {
 			return false;
 		}
 
-		RandomVariable value = getValueForTestCase(solution, 0);
+		boolean success = true;
 
-		return Math.abs(value.getStandardError()) <= 0.0009;
+		RandomVariable value1 = getValueForTestCase(solution, 0);
+		success &= Math.abs(value1.getStandardError()) <= 0.0009;
+		
+		RandomVariable value2 = getValueForTestCase(solution, 1);
+		success &= Math.abs(value2.getStandardError()) <= 0.0009;
+		
+		return success;
 	}
 
 	private static boolean checkControlStrong(AsianOptionWithBSControlVariateAssignment solution) {
@@ -155,9 +167,15 @@ public class AsianOptionWithBSControlVariateChecker {
 			return false;
 		}
 
-		RandomVariable value = getValueForTestCase(solution, 0);
+		boolean success = true;
 
-		return Math.abs(value.getStandardError()) <= 0.0004;
+		RandomVariable value1 = getValueForTestCase(solution, 0);
+		success &= Math.abs(value1.getStandardError()) <= 0.0004;
+		
+		RandomVariable value2 = getValueForTestCase(solution, 1);
+		success &= Math.abs(value2.getStandardError()) <= 0.0004;
+		
+		return success;
 	}
 
 	private static boolean checkControlStronger(AsianOptionWithBSControlVariateAssignment solution) {
@@ -167,9 +185,15 @@ public class AsianOptionWithBSControlVariateChecker {
 			return false;
 		}
 
-		RandomVariable value = getValueForTestCase(solution, 0);
+		boolean success = true;
 
-		return Math.abs(value.getStandardError()) <= 0.0001;
+		RandomVariable value1 = getValueForTestCase(solution, 0);
+		success &= Math.abs(value1.getStandardError()) <= 0.0001;
+		
+		RandomVariable value2 = getValueForTestCase(solution, 1);
+		success &= Math.abs(value2.getStandardError()) <= 0.0001;
+		
+		return success;
 	}
 
 	private static boolean checkControlStrongest(AsianOptionWithBSControlVariateAssignment solution) {
@@ -179,21 +203,27 @@ public class AsianOptionWithBSControlVariateChecker {
 			return false;
 		}
 
-		RandomVariable value = getValueForTestCase(solution, 0);
+		boolean success = true;
 
-		return Math.abs(value.getStandardError()) <= 0.00006;
+		RandomVariable value1 = getValueForTestCase(solution, 0);
+		success &= Math.abs(value1.getStandardError()) <= 0.00006;
+		
+		RandomVariable value2 = getValueForTestCase(solution, 1);
+		success &= Math.abs(value2.getStandardError()) <= 0.00006;
+		
+		return success;
 	}
 
 	private static RandomVariable getValueForTestCase(AsianOptionWithBSControlVariateAssignment solution, int testCase) {
 		double	maturity = 10.0;
 		double	strike = 1.05;
 		TimeDiscretization timesForAveraging = new TimeDiscretizationFromArray(5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
-
+		double callOrPutSign = testCase == 0 ? 1.0 : -1.0;
 
 		/*
 		 * Construct object
 		 */
-		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging, 1.0);
+		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging, callOrPutSign);
 
 		/*
 		 * Create model
@@ -219,7 +249,8 @@ public class AsianOptionWithBSControlVariateChecker {
 		Function<RandomVariable, String> printAvgAndErr = x ->
 		String.format("%10.7f \u00B1 %10.7f (\u03c3=%-9.7f)", x.getAverage(), x.getStandardError(), x.getStandardDeviation());
 
-		System.out.println("value Asian.................: " + printAvgAndErr.apply(valueAsian));
+		String callPut = callOrPutSign > 0 ? "call" : "put.";
+		System.out.println("value Asian " + callPut + "............: " + printAvgAndErr.apply(valueAsian));
 
 		return valueAsian;
 	}
