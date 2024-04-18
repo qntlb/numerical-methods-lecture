@@ -9,6 +9,8 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics;
  * A simple class illustrating some aspects related to floating point arithmetic.
  * Experiments related to summation.
  *
+ * See also {@link FloatingPointArithmeticExperiment}.
+ * 
  * @author Christian Fries
  */
 public class SummationExperiment {
