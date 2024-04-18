@@ -6,41 +6,16 @@
 package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
 /**
- * A simple class illustrating some aspects related to floating point arithmetic.
+ * A simple class illustrating some aspects related to floating point numbers.
+ * 
+ * See also {@link QuadraticEquationExperiment}.
+ * See also {@link SummationExperiment}.
  *
  * @author Christian Fries
  */
 public class FloatingPointArithmeticExperiment {
 
 	public static void main(String[] args) {
-
-		/*
-		 * Explore Double
-		 */
-
-		System.out.println("\nSome experiments related to floating point arithmetic (IEEE 754).\n");
-		System.out.println("_".repeat(79)+"\n");
-
-		/*
-		 * Double: Smallest positive number
-		 */
-
-		System.out.println("Smallest positive number 2^{-k}:\n");
-
-		double tiny = 1.0;
-		while(tiny/2.0 > 0 && tiny/2.0 < tiny) {
-			tiny = tiny / 2.0;
-		}
-
-		System.out.println("tiny............ = " + tiny);
-
-		System.out.println("2^{eMin-p}...... = " + Math.pow(2,-1022 - 52));
-
-		System.out.println("tiny/2.......... = " + tiny/2);
-		System.out.println("tiny/2*2........ = " + (tiny/2)*2);
-		System.out.println("tiny*2/2........ = " + (tiny*2)/2);
-
-		System.out.println("_".repeat(79)+"\n");
 
 		/*
 		 * Double: Smallest positive (i.e. non-zero) number x = eps for which 1+2x > 1
@@ -54,10 +29,14 @@ public class FloatingPointArithmeticExperiment {
 		}
 
 		System.out.println("eps ....... = " + eps);
+		System.out.println("0.5 ulp(1). = " + 0.5 * Math.ulp(1.0));
+		System.out.println("2^(-p)/2... = " + Math.pow(2, -52-1));	// For double mantissa has q = 52 bits
+		
+		System.out.println();
+
 		System.out.println("1+eps ..... = " + (1+eps));
 		System.out.println("1+eps == 1 is " + ((1+eps)==1));
 		System.out.println("1+2*eps ... = " + (1+2*eps));
-		System.out.println("2^(-p)/2... = " + Math.pow(2, -52-1));	// For double mantissa has p = 52 bits
 
 		System.out.println();
 
@@ -70,9 +49,8 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("_".repeat(79)+"\n");
 
-
 		/*
-		 * Experiments with Double.MAX_VALUE
+		 * Rounding to Infinity - Experiments with Double.MAX_VALUE
 		 */
 
 		System.out.println("Small experiments with Double.MAX_VALUE (largest positive floating point number (before infinity).\n");
@@ -168,7 +146,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("Experiment on loss of significance - summation.\n");
 
 		double value = 0.1;
-		int numberOfValues = 10;		// change this to 10000000;
+		int numberOfValues = 100;		// change this to 10000000;
 
 		double sumOfValuesClassical = getSumOfValuesClassical(value, numberOfValues);
 		double averageClassical = sumOfValuesClassical / numberOfValues;
@@ -180,7 +158,6 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("Kahan     summation average = " + averageKahan);
 
 		System.out.println("_".repeat(79)+"\n");
-
 	}
 
 

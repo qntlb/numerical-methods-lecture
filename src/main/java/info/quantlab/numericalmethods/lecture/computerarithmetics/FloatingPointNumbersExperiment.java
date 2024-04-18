@@ -71,7 +71,6 @@ public class FloatingPointNumbersExperiment {
 		System.out.println("eps ....... = " + eps);
 		System.out.println("1+eps ..... = " + (1+eps));
 		System.out.println("1+eps == 1 is " + ((1+eps)==1));
-		System.out.println("1+2*eps ... = " + (1+2*eps));
 		System.out.println("2^(-q)/2... = " + Math.pow(2, -52-1));	// For double mantissa has q = 52 bits
 
 		System.out.println("_".repeat(79)+"\n");
