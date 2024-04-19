@@ -53,7 +53,9 @@ public class SummationExperiment {
 
 	private static void experimentWithOneAndEpsilon() {
 		/*
-		 * Experiment on loss of significance - summation 2: one large value, many small		 */
+		 * Experiment on loss of significance - summation 2: one large value, many small
+		 * Suggestion: Debug the Kahan summation to see whats going on.
+		 */
 
 		System.out.println("Experiment on loss of significance - summation: one large, many small.\n");
 
