@@ -50,6 +50,24 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("_".repeat(79)+"\n");
 
 		/*
+		 * Operations are not commutative .
+		 */
+
+		System.out.println("eps............ = " + eps);
+		System.out.println("eps+1+eps...... = " + (eps+1+eps));
+		System.out.println("eps+eps+1...... = " + (eps+eps+1));
+
+		System.out.println();
+
+		double tiny = Math.ulp(0.0);
+		System.out.println("tiny............ = " + tiny);
+		System.out.println("tiny/2.......... = " + tiny/2);
+		System.out.println("tiny/2*2........ = " + (tiny/2)*2);
+		System.out.println("tiny*2/2........ = " + (tiny*2)/2);
+		
+		System.out.println("_".repeat(79)+"\n");
+		
+		/*
 		 * Rounding to Infinity - Experiments with Double.MAX_VALUE
 		 */
 
