@@ -110,7 +110,12 @@ public class QuadraticEquationImplemenationChecker {
 		// x * (x+2) = x^2 + 2 x => p = 2, q= 0
 		System.out.println("\t\tTesting q = 0, p = 2.");
 		double x2 = quadraticEquationFactory.createQuadraticEquation(0, 2).getSmallestRoot();
-		success &= x2 < -0.5;
+		success &= Math.abs(x2-(-2.0)) < 1E-10;
+
+		// x * (x-2) = x^2 - 2 x => p = -2, q= 0
+		System.out.println("\t\tTesting q = 0, p = -2.");
+		double x3 = quadraticEquationFactory.createQuadraticEquation(0, -2).getSmallestRoot();
+		success &= Math.abs(x3-0.0) < 1E-10;
 
 		if(!success) {
 			System.out.println("\t\u274cThe method getSmallestRoot does not report the smallest (!) root.");
