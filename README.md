@@ -1,21 +1,31 @@
 # Numerical Methods Lecture
 
-This repository contains the material created during the lecture *Numerical Methods for Mathematical Finance* (Summer 2023).
+This repository contains the material created for and during the lecture *Numerical Methods for Mathematical Finance*.
 
 In addition it contains code used in the exercise, e.g. interfaces which are to be implemented.
 
-In the following in incomplete list of code used in the different chapters of the lecture.
+## Versions
+
+The lecture is held regularly with a varying selection of topics. The repository evolves and improves.
+If you like to have the version associated with a specific year you can switch to the corresponding
+git branch. The main branch should be up to date with the latest version of the lecture.
+
+In the following an incomplete list of code used in the different chapters of the lecture.
+
+---
 
 
 ## Computer Arithmetic
 
 ### Sessions
 
-info.quantlab.numericalmethods.lecture.computerarithmetics
+See the package `info.quantlab.numericalmethods.lecture.computerarithmetics`
 
-- IntegerArithmeticExperiment
-- FloatingPointArithmeticExperiment
-- SummationExperiment
+- `IntegerArithmeticExperiment` - Elementary things related to integer arithmetic: Integer is an equivalence class.
+- `FloatingPointNumbersExperiment` - Elementary things related to floating point numbers: Understanding their representation.
+- `FloatingPointArithmeticExperiment` - Elementary things related to rounding.
+- `QuadraticEquationExperiment` - An example for loss of significance: solving a quadratic equation.
+- `SummationExperiment` - An example for loss of significance: summation.
 
 ### Assignments
 
@@ -28,6 +38,9 @@ https://github.com/qntlb/numerical-methods-quadraticequation-exercise
 #### Summation (Kahan summation)
 
 https://github.com/qntlb/numerical-methods-summation-exercise
+
+---
+
 
 ## Monte-Carlo Simulation
 
@@ -48,6 +61,9 @@ An example plotting 2D samples from 1D sequence:
 ```
 info.quantlab.numericalmethods.lecture.randomnumbers.plots.RandomVectorPlot
 ```
+
+
+---
 
 ## Monte-Carlo Integration
 
