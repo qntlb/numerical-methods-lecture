@@ -8,7 +8,6 @@ import java.util.function.DoubleUnaryOperator;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarloIntegrator1D;
 import net.finmath.plots.Plots;
-import net.finmath.randomnumbers.MersenneTwister;
 
 public class MonteCarloIntegrator1DSeedExperiment {
 
@@ -26,7 +25,7 @@ public class MonteCarloIntegrator1DSeedExperiment {
 		 * Test some special seeds
 		 */
 		for(int seed : new int[] { 3141, 1313, 1, 1632 }) {
-			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, new MersenneTwister(seed));
+			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, seed);
 			testIntegrator(integratorMonteCarlo, true);
 		}
 
@@ -39,7 +38,7 @@ public class MonteCarloIntegrator1DSeedExperiment {
 		Random randomSeed = new Random(3141);
 		for(int i=0; i< 10000; i++) {
 			int seed = randomSeed.nextInt();
-			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, new MersenneTwister(seed));
+			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, seed);
 			double error = testIntegrator(integratorMonteCarlo, false);
 			errors.add(error);
 		}

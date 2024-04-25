@@ -2,21 +2,30 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.DoubleUnaryOperator;
+import java.util.function.Supplier;
+
+import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
 
 public class MonteCarloIntegrator1D implements Integrator1D {
 
 	private final int numberOfEvaluationPoints;
-	private final DoubleSupplier uniformRandomNumberGenerator;
+	private final int seed;
 
-	public MonteCarloIntegrator1D(int numberOfEvaluationPoints, DoubleSupplier uniformRandomNumberGenerator) {
+	/**
+	 * 
+	 * @param numberOfEvaluationPoints The number of sample points to be used.
+	 * @param seed The seed for the random number generator.
+	 */
+	public MonteCarloIntegrator1D(int numberOfEvaluationPoints, int seed) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
-		this.uniformRandomNumberGenerator = uniformRandomNumberGenerator;
+		this.seed = seed;
 	}
 
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
+		DoubleSupplier uniformRandomNumberGenerator = new MersenneTwister(3141);
 		double domainSize = upperBound-lowerBound;
 
 		double sum = 0.0;

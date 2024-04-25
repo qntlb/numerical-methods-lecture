@@ -32,10 +32,9 @@ public class MonteCarloIntegrator1DTest {
 		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
 		int numberOfEvaluationPoints = 100000;
-		long seed = 3141;
+		int seed = 3141;
 
-		DoubleSupplier randomNumberGenerator = new MersenneTwister(seed);
-		Integrator1D integrator = new MonteCarloIntegrator1DWithStreams(randomNumberGenerator, numberOfEvaluationPoints);
+		Integrator1D integrator = new MonteCarloIntegrator1DWithStreams(numberOfEvaluationPoints, seed);
 
 		double integralValueNumeric = integrator.integrate(integrand, lowerBound, upperBound);
 		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);

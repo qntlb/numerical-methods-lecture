@@ -7,7 +7,6 @@ import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarl
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarloIntegrator1DWithStreams;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.SimpsonsIntegrator1D;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.SimpsonsIntegrator1DWithStreams;
-import net.finmath.randomnumbers.MersenneTwister;
 
 public class Integrator1DExperiment {
 
@@ -27,10 +26,10 @@ public class Integrator1DExperiment {
 		Integrator1D integratorSimpsonsWithStreams = new SimpsonsIntegrator1DWithStreams(numberOfEvaluationPoints);
 		testIntegrator(integratorSimpsonsWithStreams);
 
-		Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, new MersenneTwister(3141));
+		Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, 3141);
 		testIntegrator(integratorMonteCarlo);
 
-		Integrator1D integratorMonteCarloWithStreams = new MonteCarloIntegrator1DWithStreams(new MersenneTwister(3141), numberOfEvaluationPoints);
+		Integrator1D integratorMonteCarloWithStreams = new MonteCarloIntegrator1DWithStreams(numberOfEvaluationPoints, 3141);
 		testIntegrator(integratorMonteCarloWithStreams);
 	}
 

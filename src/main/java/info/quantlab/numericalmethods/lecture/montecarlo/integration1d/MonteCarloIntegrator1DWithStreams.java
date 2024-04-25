@@ -8,25 +8,32 @@ import net.finmath.randomnumbers.MersenneTwister;
 
 public class MonteCarloIntegrator1DWithStreams implements Integrator1D {
 
-	private final DoubleSupplier randomNumberGenerator;
 	private final int numberOfEvaluationPoints;
+	private final int seed;
 
-	public MonteCarloIntegrator1DWithStreams(DoubleSupplier randomNumberGenerator, int numberOfEvaluationPoints) {
+	/**
+	 * 
+	 * @param numberOfEvaluationPoints The number of sample points to be used.
+	 * @param seed The seed for the random number generator.
+	 */
+	public MonteCarloIntegrator1DWithStreams(int numberOfEvaluationPoints, int seed) {
 		super();
-		this.randomNumberGenerator = randomNumberGenerator;
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
+		this.seed = seed;
 	}
 
 	public MonteCarloIntegrator1DWithStreams(int numberOfEvaluationPoints) {
-		this(new MersenneTwister(3141), numberOfEvaluationPoints);
+		this(numberOfEvaluationPoints, 3141);
 	}
 
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
-		double domainSize = upperBound-lowerBound;
+		DoubleSupplier uniformRandomNumberGenerator = new MersenneTwister(3141);
 
-		DoubleStream randomNumbers = DoubleStream.generate(randomNumberGenerator).limit(numberOfEvaluationPoints);
+		DoubleStream randomNumbers = DoubleStream.generate(uniformRandomNumberGenerator).limit(numberOfEvaluationPoints);
+
+		double domainSize = upperBound-lowerBound;
 
 		double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+domainSize*x)).sum();
 
