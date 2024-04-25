@@ -12,11 +12,11 @@ public class RandomVectorLCG {
 	// Create a 1-D random number generator x_{k}
 	private Random random = new Random(3141);
 
-	// Our memory for the d-Dimensional sequence indexed as [sampleIndex][componentIndex]
-	// Alternative would be : [componentIndex][sampleIndex]
+	// Our memory for the d-Dimensional sequence indexed as [sampleIndex][componentIndex]. Alternative would be : [componentIndex][sampleIndex]
 	private double[][] randomVectorSequence;
 
 	public RandomVectorLCG(int length, int dimension) {
+		
 		randomVectorSequence = new double[length][dimension];
 
 		for(int i=0; i<length; i++) {
