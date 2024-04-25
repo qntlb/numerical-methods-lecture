@@ -2,7 +2,6 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleSupplier;
 import java.util.function.DoubleUnaryOperator;
-import java.util.function.Supplier;
 
 import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
 

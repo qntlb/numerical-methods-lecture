@@ -1,12 +1,9 @@
 package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
-import java.util.function.DoubleSupplier;
 import java.util.function.DoubleUnaryOperator;
 
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-
-import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
 
 /**
  * Test of the Monte-Carlo integrator.
