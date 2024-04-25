@@ -25,6 +25,7 @@ public class SimpsonsIntegrator1D implements Integrator1D {
 
 		double integral = 0.0;
 		for(int i=1; i<numberOfDoubleSizeIntervals; i++) {
+			// Even points with a weight of 2, odd points (inner points) with a weight of 4
 			integral += 2 * integrand.applyAsDouble(lowerBound + (2*i+0) * integralStep);
 			integral += 4 * integrand.applyAsDouble(lowerBound + (2*i+1) * integralStep);
 		}
