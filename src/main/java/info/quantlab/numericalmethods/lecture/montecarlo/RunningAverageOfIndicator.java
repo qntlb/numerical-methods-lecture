@@ -16,11 +16,11 @@ public class RunningAverageOfIndicator {
 		List<Double> averageValues1 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 3105 /* seed */);
 		List<Double> averageValues2 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 1 /* seed */);
 
-		DoubleUnaryOperator averageFunction1	= x -> averageValues1.get((int)x);
-		DoubleUnaryOperator averageFunction2	= x -> averageValues2.get((int)x);
+		DoubleUnaryOperator averageFunction1	= x -> averageValues1.get((int)(x-1));
+		DoubleUnaryOperator averageFunction2	= x -> averageValues2.get((int)(x-1));
 		DoubleUnaryOperator limitValueFunction	= x -> 1.0/6.0;
 
-		Plot2D plot = new Plot2D(0.0, numberOfPoints-1, numberOfPoints, new DoubleUnaryOperator[] {
+		Plot2D plot = new Plot2D(1.0, numberOfPoints, numberOfPoints, new DoubleUnaryOperator[] {
 				averageFunction1,
 				averageFunction2,
 				limitValueFunction
