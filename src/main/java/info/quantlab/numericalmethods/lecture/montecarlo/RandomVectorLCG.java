@@ -5,8 +5,6 @@ import java.util.Random;
 /**
  * Creates a sequence of vectors with uniform on [0,1) distributed components.
  *
- * The main method plots some points of a 2 dimensional vector.
- *
  * @author Christian Fries
  */
 public class RandomVectorLCG {
@@ -28,7 +26,6 @@ public class RandomVectorLCG {
 			}
 		}
 	}
-
 
 	double[][] getSequence() {
 		return randomVectorSequence;
