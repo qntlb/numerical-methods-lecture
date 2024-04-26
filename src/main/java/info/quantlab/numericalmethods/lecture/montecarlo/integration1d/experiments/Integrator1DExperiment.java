@@ -42,10 +42,12 @@ public class Integrator1DExperiment {
 		double upperBound = 5.0;
 
 		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound) - integralAnalytic.applyAsDouble(lowerBound);
-		double integralValueSimpsons = integrator.integrate(integrand, lowerBound, upperBound);
 
-		double error = integralValueSimpsons - integralValueAnalytic;
-		System.out.println(String.format("%-35s  %20.16f  \u00b1 %5.3e", integrator.getClass().getSimpleName(), integralValueSimpsons, error));
+		double integralValueItegrator = integrator.integrate(integrand, lowerBound, upperBound);
+
+		double error = integralValueItegrator - integralValueAnalytic;
+
+		System.out.println(String.format("%-35s  %20.16f  \u00b1 %5.3e", integrator.getClass().getSimpleName(), integralValueItegrator, error));
 	}
 
 }
