@@ -25,7 +25,7 @@ public class MonteCarloIntegrator1D implements Integrator1D {
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
 		// Create random number sequence generator (we use MersenneTwister)
-		DoubleSupplier uniformRandomNumberGenerator = new MersenneTwister(3141);
+		DoubleSupplier uniformRandomNumberGenerator = new MersenneTwister(seed);
 		double domainSize = upperBound-lowerBound;
 
 		double sum = 0.0;
