@@ -5,13 +5,13 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 /**
- * This is a Riemann sum with left points approximation of the integral.
+ * This is a Riemann sum with center points approximation of the integral.
  */
-public class QuasiMonteCarloIntegrator1D implements Integrator1D {
+public class RiemannMidPointIntegrator1D implements Integrator1D {
 
 	private final int numberOfEvaluationPoints;
 
-	public QuasiMonteCarloIntegrator1D(int numberOfEvaluationPoints) {
+	public RiemannMidPointIntegrator1D(int numberOfEvaluationPoints) {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
 	}
@@ -24,8 +24,8 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 		double sum = 0.0;
 		for(int i=0; i<numberOfEvaluationPoints; i++) {
 
-			// left-points of equi-partitioning of [0,1]
-			double uniformSample = (2.0*i+0.0)/(2.0*numberOfEvaluationPoints);
+			// center-points of equi-partitioning of [0,1]
+			double uniformSample = (2.0*i+1.0)/(2.0*numberOfEvaluationPoints);
 
 			double argument = lowerBound + uniformSample * domainSize;
 			double value = integrand.applyAsDouble(argument);

@@ -2,6 +2,9 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
 
+/**
+ * Implementation of Integrator1D using the Simpson's rule.
+ */
 public class SimpsonsIntegrator1D implements Integrator1D {
 
 	private final int numberOfEvaluationPoints;
