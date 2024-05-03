@@ -69,18 +69,19 @@ public class DiscrepancyExperiment {
 
 	private static double getDiscrepancy(List<Double> samples) {
 
+		// Sort the list of sample points
 		List<Double> samplesSorted = samples.stream().sorted().toList();
 
 		double discrepance = 0.0;
 
 		int count = 0;
-		for(double sample : samplesSorted) {
+		for(double sample : samplesSorted) {							// For a sample point x_i ...  
 
-			double low = sample - (double)count/samples.size();
+			double low = sample - (double)count/samples.size();			// ... evaluate lambda([0,x)) - i/n = x - i/n ...
 			count++;
-			double high = (double)count/samples.size() - sample;
+			double high = (double)count/samples.size() - sample;		// ... and (i+i)/n - lambda([0,x]) = i+1/n - x ...
 
-			discrepance = Math.max(discrepance, Math.max(low, high));
+			discrepance = Math.max(discrepance, Math.max(low, high));	// ... and take the maximum over all these values.
 		}
 
 		return discrepance;
