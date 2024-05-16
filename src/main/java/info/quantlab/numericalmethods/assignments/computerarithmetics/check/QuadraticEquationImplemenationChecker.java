@@ -40,6 +40,8 @@ public class QuadraticEquationImplemenationChecker {
 						{100, -20.01 },
 						{0, 10.0  },
 						{0, -10.0 },
+						{-4, 0.0 },
+						{0.0, 0.0 },
 				};
 				for(double[] testCase : testCases) {
 					succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* p */);
