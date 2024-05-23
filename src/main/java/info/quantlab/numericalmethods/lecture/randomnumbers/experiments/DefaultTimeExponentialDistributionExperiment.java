@@ -55,8 +55,9 @@ public class DefaultTimeExponentialDistributionExperiment {
 		double averageTime = sumOfTimes /= numberOfSamples;
 		
 		System.out.println();
-		System.out.println("E(\u03c4) = " + averageTime);
-		System.out.println("P(\u03c4 > T) = " + survivalProbability);
+		System.out.println("      E(\u03c4) = " + averageTime);
+		System.out.println("       1/\u03bb = " + 1.0/lambda);
+		System.out.println("  P(\u03c4 > T) = " + survivalProbability + " (with T = " + maturity + ")");
 		System.out.println("exp(- \u03bb T) = " + Math.exp(-lambda * maturity));
 		System.out.println("_".repeat(79) + "\n");
 		
