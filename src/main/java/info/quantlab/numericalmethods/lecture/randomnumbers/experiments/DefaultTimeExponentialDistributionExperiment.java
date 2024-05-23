@@ -37,28 +37,26 @@ public class DefaultTimeExponentialDistributionExperiment {
 
 		DefaultTimeExponentialDistribution defaultTime = new DefaultTimeExponentialDistribution(uniformSequence, lambda);
 
-		double maturity = 5.0;
+		double maturity = 5.0;		// T (in P(𝜏 > T) - survival probability)
 		
 		List<Double> times = new ArrayList<>();
 		double sumOfTimes = 0;
-		double defaultCounter = 0;
+		long suvivalCounter = 0;
 		for(int i=0; i<numberOfSamples; i++) {
 			double time = defaultTime.getNext();
 
 			times.add(time);
 
-			if(i < 10) System.out.println(i + " :\t" + time);
-			
-			if(time > maturity) defaultCounter++;
-			
+			if(i < 10) System.out.println(i + " :\t" + time);			
+			if(time > maturity) suvivalCounter++;
 			sumOfTimes += time;
 		}
-		defaultCounter /= numberOfSamples;
+		double survivalProbability = (double)suvivalCounter / numberOfSamples;
 		double averageTime = sumOfTimes /= numberOfSamples;
 		
 		System.out.println();
 		System.out.println("E(\u03c4) = " + averageTime);
-		System.out.println("P(\u03c4 > T) = " + defaultCounter);
+		System.out.println("P(\u03c4 > T) = " + survivalProbability);
 		System.out.println("exp(- \u03bb T) = " + Math.exp(-lambda * maturity));
 		System.out.println("_".repeat(79) + "\n");
 		
