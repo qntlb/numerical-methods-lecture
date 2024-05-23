@@ -4,6 +4,7 @@ import java.util.function.DoubleUnaryOperator;
 
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.Integrator1D;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarloIntegrator1D;
+import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarloIntegrator1DFromRandomGenerator1D;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.MonteCarloIntegrator1DWithStreams;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.QuasiMonteCarloIntegrator1D;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.QuasiMonteCarloIntegrator1DWithStreams;
@@ -11,6 +12,7 @@ import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.RiemannMi
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.RiemannMidPointIntegrator1DWithStreams;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.SimpsonsIntegrator1D;
 import info.quantlab.numericalmethods.lecture.montecarlo.integration1d.SimpsonsIntegrator1DWithStreams;
+import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence;
 
 public class Integrator1DExperiment {
 
@@ -60,6 +62,11 @@ public class Integrator1DExperiment {
 
 		Integrator1D integratorRiemannMidPointsWithStreams = new RiemannMidPointIntegrator1DWithStreams(numberOfEvaluationPoints);
 		testIntegrator(integratorRiemannMidPointsWithStreams);
+		
+		System.out.println();
+
+		Integrator1D monteCarloIntegratorWithVanDerCorputSeq = new MonteCarloIntegrator1DFromRandomGenerator1D(numberOfEvaluationPoints, () -> new VanDerCorputSequence(2));
+		testIntegrator(monteCarloIntegratorWithVanDerCorputSeq);		
 	}
 
 	private static void testIntegrator(Integrator1D integrator) {
