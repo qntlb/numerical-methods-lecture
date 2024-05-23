@@ -25,11 +25,12 @@ public class RandomNumberGenerator2DExperiment {
 
 	public static void main(String[] args) throws Exception {
 		RandomNumberGenerator generatorPseudo = new RandomNumberGeneratorFrom1D(new MersenneTwister(3141), 2);
-		RandomNumberGenerator generatorQuasi1 = new RandomNumberGeneratorFrom1D(new VanDerCorputSequence(2), 2);
-		RandomNumberGenerator generatorQuasi2 = new HaltonSequence(new int[] { 2, 3 });
-
 		plotSamplePoints(generatorPseudo);
+
+		RandomNumberGenerator generatorQuasi1 = new RandomNumberGeneratorFrom1D(new VanDerCorputSequence(2), 2);
 		plotSamplePoints(generatorQuasi1);
+
+		RandomNumberGenerator generatorQuasi2 = new HaltonSequence(new int[] { 2, 3 });
 		plotSamplePoints(generatorQuasi2);
 	}
 
