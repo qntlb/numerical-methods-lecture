@@ -24,7 +24,7 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 		double sum = 0.0;
 		for(int i=0; i<numberOfEvaluationPoints; i++) {
 
-			// left-points of equi-partitioning of [0,1]
+			// left-points of equi-partitioning of [0,1] - x_i = i /n
 			double uniformSample = (2.0*i+0.0)/(2.0*numberOfEvaluationPoints);
 
 			double argument = lowerBound + uniformSample * domainSize;
