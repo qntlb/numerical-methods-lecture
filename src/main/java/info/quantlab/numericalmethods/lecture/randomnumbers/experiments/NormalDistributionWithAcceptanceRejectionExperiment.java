@@ -53,13 +53,13 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 				double u = mersenne.nextDouble();
 				double v = mersenne.nextDouble();
 
-				x = -Math.log(1-v);
+				x = -Math.log(1-v);		// exponentially distributed
 
 				isRejected = u >= Math.exp(-0.5 * (x-1)*(x-1));
 			}
 
 			double s = mersenne.nextDouble() >= 0.5 ? 1.0 : -1.0;
-			double normal = x * s;
+			double normal = s * x;
 
 			valuesNormal.add(normal);
 		}
@@ -68,7 +68,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		double timeSec = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Time AR from MersenneTwister 3D...: " + timeSec + " sec.");
+		System.out.println("Time AR from MersenneTwister 3D.....: " + timeSec + " sec.");
 
 		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from MersenneTwister 3D").show();
@@ -99,7 +99,9 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 				isRejected = u >= Math.exp(-0.5 * (x-1)*(x-1));
 
-				normal = x * Math.signum(2*v-1);
+				double s = Math.signum(2*v-1);
+
+				normal = s * x;
 			}
 
 			valuesNormal.add(normal);
@@ -109,7 +111,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		double timeSec = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Time AR from MersenneTwister 2D...: " + timeSec + " sec.");
+		System.out.println("Time AR from MersenneTwister 2D.....: " + timeSec + " sec.");
 
 		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from MersenneTwister 2D").show();
@@ -139,7 +141,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		double timeSec = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Time ICDF from MersenneTwister 1D.: " + timeSec + " sec.");
+		System.out.println("Time ICDF from MersenneTwister 1D...: " + timeSec + " sec.");
 
 		Plots.createDensity(valuesNormal, 100, 4.0).
 		setTitle("Normal via ICDF from MersenneTwister").show();
@@ -156,7 +158,7 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		HaltonSequence haltonSequence = new HaltonSequence(new int[] { 2, 3, 5 });
 
-		int j = 0;
+		int j = 0;				// Counting accepted AND rejected numbers.
 		List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<numberOfSamples; i++) {
 
@@ -187,16 +189,18 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 		double timeSec = (timeEnd-timeStart) / 1000.0;
 
 		double acceptanceRate = (double)numberOfSamples/j;
-		System.out.println("Time AR from Halton-Sequence 3D...: " + timeSec + " sec. Acceptance rate: " + acceptanceRate);
+		System.out.println("Time AR from Halton-Sequence 3D.....: " + timeSec + " sec. Acceptance rate: " + acceptanceRate);
 
 		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from Halton-Sequence 3D").show();
 	}
+
 	private static void testARWithHalton2D() {
 
 		long timeStart = System.currentTimeMillis();
 
-		int j = 0;
+		HaltonSequence haltonSequence = new HaltonSequence(new int[] { 2, 3 });
+
 		List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<numberOfSamples; i++) {
 
@@ -204,14 +208,17 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 			boolean isRejected = true;
 
 			while(isRejected) {
-				double u = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j, 2);
-				double v = info.quantlab.numericalmethods.lecture.randomnumbers.HaltonSequence.getHaltonNumberForGivenBase(j++, 3);
+				double[] randomVector = haltonSequence.getNext();
+				double u = randomVector[0];
+				double v = randomVector[1];
 
 				double x = -Math.log(1-Math.abs(2*v-1));
 
 				isRejected = u >= Math.exp(-0.5 * (x-1)*(x-1));
 
-				normal = x * Math.signum(2*v-1);
+				double s = Math.signum(2*v-1);
+
+				normal = s * x;
 			}
 
 			valuesNormal.add(normal);
@@ -221,11 +228,12 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		double timeSec = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Time AR from Halton-Sequence 2D...: " + timeSec + " sec.");
+		System.out.println("Time AR from Halton-Sequence 2D.....: " + timeSec + " sec.");
 
 		Plots.createDensity(valuesNormal, 100, 4.0)
 		.setTitle("Normal via AR from Halton-Seq. 2D").show();
 	}
+
 	private static void testICDFWithHalton() {
 
 		long timeStart = System.currentTimeMillis();
@@ -244,10 +252,9 @@ public class NormalDistributionWithAcceptanceRejectionExperiment {
 
 		double timeSec = (timeEnd-timeStart) / 1000.0;
 
-		System.out.println("Time ICDF from Halton-Sequence 1D.: " + timeSec + " sec.");
+		System.out.println("Time ICDF from Halton-Sequence 1D...: " + timeSec + " sec.");
 
 		Plots.createDensity(valuesNormal, 300, 4.0)
 		.setTitle("Normal via ICDF from Halton-Sequence").show();
-
 	}
 }
