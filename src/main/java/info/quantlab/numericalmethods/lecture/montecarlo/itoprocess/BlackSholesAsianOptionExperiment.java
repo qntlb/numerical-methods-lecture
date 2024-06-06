@@ -12,7 +12,7 @@ public class BlackSholesAsianOptionExperiment {
 	private final double volatility = 0.30;
 
 	// Product parameters
-	private final double[] timesForAveraging = new double[] { 5.0 };
+	private final double[] timesForAveraging = new double[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
 	private final double optionMaturity = 5.0;
 	private final double optionStrike = 150;
 	
