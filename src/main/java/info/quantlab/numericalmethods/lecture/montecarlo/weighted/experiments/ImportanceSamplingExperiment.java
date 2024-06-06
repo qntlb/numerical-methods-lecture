@@ -46,10 +46,10 @@ public class ImportanceSamplingExperiment {
 		for(int i=0; i<=100; i++) {
 			
 			double shift = i/100.0 * 3.0;
-			double valueForShift = getValueWithImportanceSamplingShift(shift);
+			double monteCarloErrorForShift = getMCErrorForValueWithImportanceSamplingShift(shift);
 			
 			shifts.add(shift);
-			values.add(valueForShift);
+			values.add(monteCarloErrorForShift);
 		}
 		
 		Plots.createScatter(shifts, values, 0.0, 3.0, 3)
@@ -59,7 +59,7 @@ public class ImportanceSamplingExperiment {
 		.show();
 	}
 
-	private double getValueWithImportanceSamplingShift(double shift) {
+	private double getMCErrorForValueWithImportanceSamplingShift(double shift) {
 		final RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(seed);
 
 		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialStockValue, riskFreeRate, volatility, optionMaturity, optionStrike);
