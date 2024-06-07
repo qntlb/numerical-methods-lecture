@@ -8,10 +8,10 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration;
 public interface IntegrationDomain {
 
 	/**
-	 * Applied the transformation \( f : [0,1]^{n} \mapsto R^{n} \) for a parameter in the unit cube.
+	 * Applies the transformation \( g : [0,1]^{n} \mapsto R^{n} \) for a parameter in the unit cube.
 	 *
 	 * @param parametersOnUnitCube A parameter value x in \( [0,1]^{n} \).
-	 * @return The value f(x).
+	 * @return The value g(x).
 	 */
 	double[] fromUnitCube(double[] parametersOnUnitCube);
 
@@ -23,18 +23,18 @@ public interface IntegrationDomain {
 	int getDimension();
 
 	/**
-	 * For this transformation f : [0,1]^{n} \mapsto R^{n} this methods returns the value
+	 * For this transformation g : [0,1]^{n} \mapsto R^{n} this methods returns the value
 	 * \[
-	 *   det( df/dx (x) )
+	 *   det( dg/dx (x) )
 	 * \]
 	 *
-	 * This is required to transform the integral of a function h to the unit cube. It is
+	 * This is required to transform the integral of a function f to the unit cube. It is
 	 * \[
-	 *   \int_A h(z) dz = \int_[0,1]^{n} h(f(x)) det(df/dx) dx
+	 *   \int_A f(z) dz = \int_[0,1]^{n} f(g(x)) det(dg/dx) dx
 	 * \]
 	 *
-	 * @param parametersOnUnitCurve
-	 * @return The determinant of df/dx - the scaleing of applied to an infinitesimal volume.
+	 * @param parametersOnUnitCurve the argument x in \( [0,1]^{n} \)
+	 * @return The determinant of dg/dx - the scaling applied to an infinitesimal volume.
 	 */
 	double getDeterminantOfDifferential(double[] parametersOnUnitCurve);
 
