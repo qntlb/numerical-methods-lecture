@@ -26,7 +26,7 @@ public class ImportanceSamplingExperiment {
 	private final double optionStrike = 150;
 	
 	// Monte-Carlo parameters
-	private final long seed = 3141;
+	private final long seed = 1616;
 	private final int numberOfSamples = 10000;
 	
 	public static void main(String[] args) {
@@ -41,7 +41,7 @@ public class ImportanceSamplingExperiment {
 	private void plot() {
 
 		List<Double> shifts = new ArrayList<>();
-		List<Double> values = new ArrayList<>();
+		List<Double> errors = new ArrayList<>();
 		
 		for(int i=0; i<=100; i++) {
 			
@@ -49,10 +49,10 @@ public class ImportanceSamplingExperiment {
 			double monteCarloErrorForShift = getMCErrorForValueWithImportanceSamplingShift(shift);
 			
 			shifts.add(shift);
-			values.add(monteCarloErrorForShift);
+			errors.add(monteCarloErrorForShift);
 		}
 		
-		Plots.createScatter(shifts, values, 0.0, 3.0, 3)
+		Plots.createScatter(shifts, errors, 0.0, 3.0, 3)
 		.setTitle(String.format("Monte-Carlo Approximation Error (seed=%d)", seed))
 		.setXAxisLabel("Shift size (importance sampling)")
 		.setYAxisLabel("Error")
@@ -69,12 +69,15 @@ public class ImportanceSamplingExperiment {
 		for(int i=0; i<numberOfSamples; i++) {
 			double uniform = randomNumberGenerator.nextDouble();
 			double standardNormal = NormalDistribution.inverseCumulativeDistribution(uniform);
-			
-			double z = standardNormal + shift;
-			double underlying = initialStockValue * Math.exp(riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity + volatility * Math.sqrt(optionMaturity) * z);
+
+			double x = standardNormal;
+			double y = x + shift;
+
+			double underlying = initialStockValue * Math.exp(riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity + volatility * Math.sqrt(optionMaturity) * y);
 			double payoffDiscounted = Math.max(underlying - optionStrike,  0) * Math.exp(-riskFreeRate * optionMaturity);
 
-			double weight = Math.exp(-z*z/2 + (z-shift)*(z-shift)/2);
+			double weight = Math.exp(-y*y/2 + (y-shift)*(y-shift)/2);
+			
 			double value = payoffDiscounted * weight;
 			
 			sum += value;
