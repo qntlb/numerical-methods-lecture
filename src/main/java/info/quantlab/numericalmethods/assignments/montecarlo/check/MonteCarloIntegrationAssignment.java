@@ -15,6 +15,13 @@ public interface MonteCarloIntegrationAssignment {
 	MonteCarloIntegratorFactory getMonteCarloIntegratorFactory();
 
 	/**
+	 * The solution of the third part of exercise, implementing a IntegratorFactory providing a SimpsonsIntegrator
+	 *
+	 * @return A class implementing IntegratorFactory
+	 */
+	IntegratorFactory getSimpsonsIntegratorFactory();
+
+	/**
 	 * The solution of the second part of exercise.
 	 *
 	 * Calculating the integral f(x,y) dx dy for a general binary operator
@@ -29,11 +36,4 @@ public interface MonteCarloIntegrationAssignment {
 	 * @return The value of the integral f(x,y) dx dy.
 	 */
 	double getIntegral(DoubleBinaryOperator function, double lowerBoundX, double upperBoundX, double lowerBoundY, double upperBoundY);
-
-	/**
-	 * The solution of the third part of exercise, implementing a IntegratorFactory providing a SimpsonsIntegrator
-	 *
-	 * @return A class implementing IntegratorFactory
-	 */
-	IntegratorFactory getSimpsonsIntegratorFactory();
 }
