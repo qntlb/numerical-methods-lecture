@@ -7,6 +7,12 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration;
  */
 public interface Integrand {
 
+	/**
+	 * A function z ↦ f(z).
+	 * 
+	 * @param arguments The argument z.
+	 * @return The value f(z).
+	 */
 	double value(double[] arguments);
 
 }
