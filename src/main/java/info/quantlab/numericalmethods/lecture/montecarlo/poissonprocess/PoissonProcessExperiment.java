@@ -31,6 +31,7 @@ public class PoissonProcessExperiment {
 		RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(3141);
 		/*
 		 * Part 1: Generate array (paths) containing the list of jump times<maturity.
+		 * List of List: Inner list: the jump times. Outer list: the samples (paths).
 		 */
 		List<List<Double>> jumpTimesPaths = new ArrayList<>();
 		for(int pathIndex = 0; pathIndex<numberOfPaths; pathIndex++) {
