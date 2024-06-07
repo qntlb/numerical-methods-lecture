@@ -9,11 +9,11 @@ package info.quantlab.numericalmethods.lecture.montecarlo.integration;
 public interface Integrator {
 
 	/**
-	 * Calculate the integral \( \int_A f(x) dx \).
+	 * Calculate the integral \( \int_A f(z) dz \).
 	 *
 	 * @param integrand The integrand f.
-	 * @param integrationDomain The integration domain A.
-	 * @return The integral \( \int_A f(x) dx \).
+	 * @param integrationDomain The integration domain A (the transformation z = g(x)) from a unit cube to A).
+	 * @return The integral \( \int_A f(z) dz \).
 	 */
 	double integrate(Integrand integrand, IntegrationDomain integrationDomain);
 
