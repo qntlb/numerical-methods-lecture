@@ -46,7 +46,11 @@ public class MonteCarloBlackScholesEuropeanOptionValuation {
 		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
 
 		DoubleToRandomVariableFunction processPaths = t -> blackScholesMonteCarloModel.getAssetValue(t, 0);
-		(new PlotProcess2D(timeDiscretization, processPaths, 100)).show();
+		(new PlotProcess2D(timeDiscretization, processPaths, 100))
+		.setTitle("Path of a Black Scholes Model")
+		.setXAxisLabel("Time t")
+		.setYAxisLabel("Stock Value S(t)")
+		.show();
 
 		AssetMonteCarloProduct option = new EuropeanOption(maturity, strike);
 
