@@ -1,8 +1,6 @@
 package info.quantlab.numericalmethods.lecture.montecarlo.integration1d;
 
 import java.util.function.DoubleUnaryOperator;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
 
 /**
  * This is a Riemann sum with center points approximation of the integral.
