@@ -42,9 +42,9 @@ public class MonteCarloControlVariateExperiment {
 		double riskFreeRate	= 0.05;
 		double volatility	= 0.20;
 
-		double maturity	= 5.0;
-		double strike1	= 1.0;
-		double strike2	= 1.6;
+		double maturity	= 5.0;		// T
+		double strike1	= 1.0;		// K1
+		double strike2	= 1.6;		// K2
 
 		double initialTime		= 0.0;
 		int numberOfTimeSteps	= 1;
@@ -53,8 +53,16 @@ public class MonteCarloControlVariateExperiment {
 		int numberOfPaths = 10000000; // 10 mio
 		int seed = 3141;
 
+		/*
+		 * Model
+		 */
+
 		// Model: Black Scholes
 		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
+
+		/*
+		 * Monte-Carlo / Numerical Scheme
+		 */
 
 		// Brownian Motion
 		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
@@ -66,13 +74,17 @@ public class MonteCarloControlVariateExperiment {
 		// Monte-Carlo Valuation Model
 		AssetModelMonteCarloSimulationModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
 
+		/*
+		 * Product valuation using blackScholesMonteCarloModel
+		 */
+		
 		// Valuation of plain and exotic payoff
-		RandomVariable underlying = blackScholesMonteCarloModel.getAssetValue(maturity, 0);		// S(T)
-		RandomVariable numeraireAtPayment = blackScholesMonteCarloModel.getNumeraire(maturity);	// N(T)
-		RandomVariable numeraireAtEval	= blackScholesMonteCarloModel.getNumeraire(initialTime);		// N(t)
+		RandomVariable underlying = blackScholesMonteCarloModel.getAssetValue(maturity, 0);			// S(T)
+		RandomVariable numeraireAtPayment = blackScholesMonteCarloModel.getNumeraire(maturity);		// N(T)
+		RandomVariable numeraireAtEval	= blackScholesMonteCarloModel.getNumeraire(initialTime);	// N(t)
 
 		// Plain option payoff V(T) = max(S(T)-K1, 0)
-		RandomVariable payoffPlain = underlying.sub(strike1).floor(0.0);						// V(T) for plain option
+		RandomVariable payoffPlain = underlying.sub(strike1).floor(0.0);							// V(T) for plain option
 
 		// Exotic option payoff V(T) = S(T)-K2 > 0 ? max(S(T)-K1, 0) : (max(S(T)-K1, 0)^2 / (K2-K1)
 		RandomVariable payoffExotic = underlying.sub(strike2).choose(payoffPlain, payoffPlain.squared().div(strike2-strike1));		// V(T) for exotic option
@@ -86,14 +98,25 @@ public class MonteCarloControlVariateExperiment {
 		// Analytic Value
 		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike1);
 
-		// Controlled value - numericaly calculate the optimal c  c = Cov(X,Y)/Var(X)
+		// Z(1) = X - 1 ( Y - E(Y) )
+		RandomVariable valueControledWithC1 = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(1));		// Z(1)
+
+		// Controlled value - numerically calculate the optimal c  c = Cov(X,Y)/Var(Y)
 		double c = valuePlain.covariance(valueExotic).div(valuePlain.variance()).doubleValue();
-		RandomVariable valueControled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));			// Z
+
+		// Z(c) = X - c ( Y - E(Y) )
+		RandomVariable valueControlled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));			// Z(c)
+
 
 		System.out.println("Plain product analytic valuation........: " + valueAnalytic + "\t\u00B1 0.0");
 		System.out.println("Plain product Monte-Carlo valuation.....: " + valuePlain.getAverage() + " \t\u00B1 " + valuePlain.getStandardError());
+		System.out.println();
 		System.out.println("Exotic product Monte-Carlo valuation....: " + valueExotic.getAverage() + " \t\u00B1 " + valueExotic.getStandardError());
+		System.out.println();
+		System.out.println("\tc = " + 1);
+		System.out.println("Exotic product controlled MC valuation..: " + valueControledWithC1.getAverage() + "\t\u00B1 " + valueControledWithC1.getStandardError());
+		System.out.println();
 		System.out.println("\tc = " + c);
-		System.out.println("Exotic product controlled MC valuation..: " + valueControled.getAverage() + "\t\u00B1 " + valueControled.getStandardError());
+		System.out.println("Exotic product controlled MC valuation..: " + valueControlled.getAverage() + "\t\u00B1 " + valueControlled.getStandardError());
 	}
 }
