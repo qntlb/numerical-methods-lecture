@@ -16,7 +16,7 @@ public class BrownianBridgeExperiment {
 
 	public static void main(String[] args) throws IOException {
 
-		plotBrownianBridgePaths(100);
+		plotBrownianBridgePaths(2);
 
 	}
 
@@ -24,17 +24,22 @@ public class BrownianBridgeExperiment {
 	 * Show a Brownian Bridge.
 	 */
 	private static void plotBrownianBridgePaths(int bridgeNumberOfTimeSteps) {
+		
+		// First the Brownian motion (inside of which we will bridge)
 		int numberOfTimeSteps = 2;
 		double deltaT = 1.0;
 		int numberOfPaths = 10;
 
-		// W(0), W(1), W(2)
+		// Two steps W(t_0=0), W(t_1), W(t_2)
 		TimeDiscretization td = new TimeDiscretizationFromArray(0.0, numberOfTimeSteps, deltaT);
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(td, 1, numberOfPaths, 3231);
 
+		// Start value W(t_1) and end value W(t_2)
 		RandomVariable valuesStart = brownianMotion.getBrownianIncrement(0, 0); // W(1) = Delta W(0)
 		RandomVariable valuesEnd = valuesStart.add(brownianMotion.getBrownianIncrement(1, 0)); // W(2) = W(1) + Delta W(1)
 
+		
+		// Now: the Brownian bridge
 		double bridgeDeltaT = 1.0/bridgeNumberOfTimeSteps;
 		TimeDiscretization bridgeTimeDiscretization = new TimeDiscretizationFromArray(1.0, bridgeNumberOfTimeSteps, bridgeDeltaT);
 
@@ -46,6 +51,7 @@ public class BrownianBridgeExperiment {
 			processDiscrete[i+1] = processDiscrete[i].add(brownianBridge.getBrownianIncrement(i, 0));
 		}
 
+		// Plot the bridge
 		DoubleToRandomVariableFunction process = time -> processDiscrete[bridgeTimeDiscretization.getTimeIndex(time)];
 
 		// Plot a Scatter of the two Brownian incements.
