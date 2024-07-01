@@ -2,6 +2,7 @@ package info.quantlab.numericalmethods.lecture.montecarlo.itoprocess;
 
 import info.quantlab.numericalmethods.lecture.randomnumbers.MersenneTwister;
 import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerator1D;
+import info.quantlab.numericalmethods.lecture.randomnumbers.VanDerCorputSequence;
 import net.finmath.functions.NormalDistribution;
 
 public class BlackSholesAsianOptionExperiment {
@@ -23,17 +24,23 @@ public class BlackSholesAsianOptionExperiment {
 	public static void main(String[] args) {
 
 		BlackSholesAsianOptionExperiment blackSholesAsianOptionExperiment = (new BlackSholesAsianOptionExperiment());
-		
-		double value = blackSholesAsianOptionExperiment.getValueOfAsianOption();
-		
-		System.out.println("Value of Asian Option....: " + value);
-		
+		blackSholesAsianOptionExperiment.run();
 	}
 
-	private double getValueOfAsianOption() {
+	private void run() {
+		
+		final RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(seed);
+		double value = getValueOfAsianOption(randomNumberGenerator);		
+		System.out.println("Value of Asian Option....: " + value);
+
+		final RandomNumberGenerator1D randomNumberGeneratorVdC = new VanDerCorputSequence(2);
+		double valueVdC = getValueOfAsianOption(randomNumberGeneratorVdC);		
+		System.out.println("Value of Asian Option (with v.d.C. seq)....: " + valueVdC);
+	}
+
+	private double getValueOfAsianOption(RandomNumberGenerator1D randomNumberGenerator) {
 
 		double sum = 0.0;
-		final RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(seed);
 
 		for(int i=0; i<numberOfSamples; i++) {
 
