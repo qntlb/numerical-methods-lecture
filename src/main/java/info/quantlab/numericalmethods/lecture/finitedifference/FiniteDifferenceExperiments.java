@@ -29,9 +29,15 @@ public class FiniteDifferenceExperiments {
 
 		System.out.println();
 
+		printForwardFiniteDifferenceApproximationOfExp(x, Double.MIN_NORMAL /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-16 /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-15 /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-12 /* shift */);
+		printForwardFiniteDifferenceApproximationOfExp(x, 1E-10 /* shift */);
+		printForwardFiniteDifferenceApproximationOfExp(x, 1E-8 /* shift */);
+
+		System.out.println();
+
 		printForwardFiniteDifferenceApproximationOfExp(x, 0.49 * Math.pow(2, -52) /* shift h */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 0.51*Math.pow(2, -52) /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1.00*Math.pow(2, -52) /* shift */);
@@ -50,15 +56,18 @@ public class FiniteDifferenceExperiments {
 	}
 
 	private static void printForwardFiniteDifferenceApproximationOfExp(double x, double shift) {
-
+		
 		double valueUpShift = Math.exp(x + shift);
 		double value = Math.exp(x);
 
-		double finiteDifferenceApproximation = (valueUpShift-value)/shift;
+		double derivativeFiniteDifferenceApproximation = (valueUpShift-value)/shift;
 
-		double error = finiteDifferenceApproximation - Math.exp(x);
+		double derivativeAnalytic = Math.exp(x);
 
-		System.out.println("h = " + String.format("%2.3e", shift) + "  \t  finite difference approx \u0394f / \u0394h = " + String.format("%5.3f", finiteDifferenceApproximation) + "\t error: " + error);
+		double error = derivativeFiniteDifferenceApproximation - derivativeAnalytic;
+
+		System.out.println("h = " + String.format("%-10.3e", shift) + "  \t  finite difference approx \u2202f/\u2202x \u2248 \u0394f/\u0394h = " + String.format("%5.3f", derivativeFiniteDifferenceApproximation) + "\t error: " + error);
+		
 	}
 
 	private static void plotForwardFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) throws IOException {
@@ -69,11 +78,11 @@ public class FiniteDifferenceExperiments {
 
 			double valueUpShift = Math.exp(x + shift);
 			double value = Math.exp(x);
-			double finiteDifferenceApproximation = (valueUpShift-value)/shift;
+			double derivativeFiniteDifferenceApproximation = (valueUpShift-value)/shift;
 
 			double derivativeAnalytic = Math.exp(x);
 
-			double error = finiteDifferenceApproximation - derivativeAnalytic;
+			double error = derivativeFiniteDifferenceApproximation - derivativeAnalytic;
 
 			return error;
 		};
