@@ -32,6 +32,7 @@ public class FiniteDifferenceExperiments {
 		printForwardFiniteDifferenceApproximationOfExp(x, Double.MIN_NORMAL /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-16 /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-15 /* shift */);
+		printForwardFiniteDifferenceApproximationOfExp(x, 1E-14 /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-12 /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-10 /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1E-8 /* shift */);
@@ -44,7 +45,6 @@ public class FiniteDifferenceExperiments {
 		printForwardFiniteDifferenceApproximationOfExp(x, 1.50*Math.pow(2, -52) /* shift */);
 
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
-
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -10, -6);
 
@@ -56,14 +56,17 @@ public class FiniteDifferenceExperiments {
 	}
 
 	private static void printForwardFiniteDifferenceApproximationOfExp(double x, double shift) {
-		
+
+		// Finite difference approximation
 		double valueUpShift = Math.exp(x + shift);
 		double value = Math.exp(x);
 
 		double derivativeFiniteDifferenceApproximation = (valueUpShift-value)/shift;
 
+		// Analytic solution (known in this case)
 		double derivativeAnalytic = Math.exp(x);
 
+		// Absolute error
 		double error = derivativeFiniteDifferenceApproximation - derivativeAnalytic;
 
 		System.out.println("h = " + String.format("%-10.3e", shift) + "  \t  finite difference approx \u2202f/\u2202x \u2248 \u0394f/\u0394h = " + String.format("%5.3f", derivativeFiniteDifferenceApproximation) + "\t error: " + error);
@@ -74,14 +77,19 @@ public class FiniteDifferenceExperiments {
 
 		DoubleUnaryOperator finiteDifferenceApproxError = scale -> {
 
+			// Shift as a function of the scale
 			double shift = Math.pow(10, scale);
 
+			// Finite difference approximation
 			double valueUpShift = Math.exp(x + shift);
 			double value = Math.exp(x);
+
 			double derivativeFiniteDifferenceApproximation = (valueUpShift-value)/shift;
 
+			// Analytic solution (known in this case)
 			double derivativeAnalytic = Math.exp(x);
 
+			// Absolute error
 			double error = derivativeFiniteDifferenceApproximation - derivativeAnalytic;
 
 			return error;
