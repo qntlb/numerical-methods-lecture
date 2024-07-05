@@ -5,11 +5,13 @@ import java.util.function.DoubleUnaryOperator;
 import net.finmath.functions.AnalyticFormulas;
 import net.finmath.montecarlo.BrownianMotion;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
+import net.finmath.montecarlo.MonteCarloProduct;
 import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.BachelierModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.HestonModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.HestonModel.Scheme;
+import net.finmath.montecarlo.assetderivativevaluation.products.AssetMonteCarloProduct;
 import net.finmath.montecarlo.assetderivativevaluation.products.EuropeanOption;
 import net.finmath.montecarlo.model.ProcessModel;
 import net.finmath.montecarlo.process.EulerSchemeFromProcessModel;
@@ -80,14 +82,15 @@ public class UnderlyingDensityExperiment {
 		// K -> V(K;T0) / N(T0)
 		DoubleUnaryOperator value = strike -> {
 			try {
-				return (new EuropeanOption(maturity, strike)).getValue(initialTime, model).div(model.getNumeraire(initialTime)).getAverage();
+				AssetMonteCarloProduct product = new EuropeanOption(maturity, strike);
+				return product.getValue(initialTime, model).div(model.getNumeraire(initialTime)).getAverage();
 			}
 			catch(Exception e) {
 				return Double.NaN;
 			}
 		};
 
-		// Density
+		// Density (via Central Finite Difference)
 		DoubleUnaryOperator density = strike -> ((value.applyAsDouble(strike+shift) - 2 * value.applyAsDouble(strike) + value.applyAsDouble(strike-shift)) / (shift * shift));
 
 		return density;
