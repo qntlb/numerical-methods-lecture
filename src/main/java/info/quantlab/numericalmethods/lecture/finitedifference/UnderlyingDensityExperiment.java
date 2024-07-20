@@ -58,9 +58,9 @@ public class UnderlyingDensityExperiment {
 		plotDensityForModel(new HestonModel(initialValue, riskFreeRate, volatility, theta, kappa, xi, rho, Scheme.FULL_TRUNCATION));
 
 		/*
-		 * Plotting the density for an implied voatility curve
+		 * Plotting the density for an implied volatility curve
 		 */
-		double amplitude = 1.0;
+		double amplitude = 1.0;		// a value of 2.0 creates no-arbitrage violations
 		double width = 1.0;
 		(new Plot2D(-1.0, 5.0, impliedBlackScholesVolatiltiyModel(amplitude, width))).setTitle("Implied volatility (\u03c3(K) = " + volatility + " * ( 1 + " + amplitude + " * cos((K-F)/(" + width + "/\\u03c0)").setXAxisLabel("K").setYAxisLabel("density").setYRange(0.0, (2+amplitude)*volatility).show();
 		(new Plot2D(-1.0, 5.0, densityFromImpliedVol(impliedBlackScholesVolatiltiyModel(amplitude, width)))).setTitle("Density from implied volatility (\u03c3(K) = " + volatility + " * ( 1 + " + amplitude + " * cos(" + width + "/\u03c0 * (K-F))").setXAxisLabel("S").setYAxisLabel("density").show();
