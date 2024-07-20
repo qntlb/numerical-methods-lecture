@@ -42,16 +42,23 @@ public class FiniteDifferenceExperiments {
 		printForwardFiniteDifferenceApproximationOfExp(x, 0.49 * Math.pow(2, -52) /* shift h */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 0.51*Math.pow(2, -52) /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1.00*Math.pow(2, -52) /* shift */);
+		printForwardFiniteDifferenceApproximationOfExp(x, 1.49*Math.pow(2, -52) /* shift */);
 		printForwardFiniteDifferenceApproximationOfExp(x, 1.50*Math.pow(2, -52) /* shift */);
 
+		// Forward Finite Difference for First Order Derivative of exp
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
 		plotForwardFiniteDifferenceApproximationErrorOfExp(x, -10, -6);
 
-		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
-		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
-		plotCenteredFiniteDifferenceApproximationErrorOfExp(x, -7, -4);
+		// Central Finite Difference for First Order Derivative of exp
+		plotCentralFiniteDifferenceApproximationErrorOfExp(x, -16.5, -14);
+		plotCentralFiniteDifferenceApproximationErrorOfExp(x, -20, -1);
+		plotCentralFiniteDifferenceApproximationErrorOfExp(x, -7, -4);
 
+		// Finite Difference for Second Order Derivative of cos
+		plotSecondOrderFiniteDifferenceApproximationErrorOfCos(x, -9, 1);
+
+		// Finite Difference for Third Order Derivative of exp
 		plotThirdOrderFiniteDifferenceApproximationErrorOfExp(x, -4.5, -1);
 	}
 
@@ -107,7 +114,7 @@ public class FiniteDifferenceExperiments {
 //		.saveAsPNG(new File("images/exp-x-forward-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").png"), 800, 500)
 	}
 
-	private static void plotCenteredFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) {
+	private static void plotCentralFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) {
 
 		DoubleUnaryOperator finiteDifferenceApproxError = scale -> {
 
@@ -128,12 +135,47 @@ public class FiniteDifferenceExperiments {
 				new Named<>("Finite Difference Appoximation", finiteDifferenceApproxError),
 				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
 		plot.setYAxisNumberFormat(new DecimalFormat("0.0"))
-		.setTitle("(Centered Finite Difference) Derivative of exp(x) at x = " + x)
+		.setTitle("(Central Finite Difference) Derivative of exp(x) at x = " + x)
 		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
 		.setYAxisLabel("error")
 		.setYAxisNumberFormat(new DecimalFormat("0.0E00"))
 //		.saveAsPNG(new File("images/exp-x-centered-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").png"), 800, 500)
 		.show();
+	}
+
+	private static void plotSecondOrderFiniteDifferenceApproximationErrorOfCos(double x, double scaleMin, double scaleMax) throws IOException {
+
+		DoubleUnaryOperator finiteDifferenceApproxError = scale -> {
+
+			// Shift as a function of the scale
+			double shift = Math.pow(10, scale);
+
+			// Finite difference approximation of second derivative
+			double valueUpShift = Math.cos(x + shift);
+			double value = Math.cos(x);
+			double valueDnShift = Math.cos(x - shift);
+
+			double derivativeFiniteDifferenceApproximation = (valueUpShift-2*value+valueDnShift)/shift/shift;
+
+			// Analytic solution (known in this case)
+			double derivativeAnalytic = -Math.cos(x);
+
+			// Absolute error
+			double error = derivativeFiniteDifferenceApproximation - derivativeAnalytic;
+
+			return error;
+		};
+
+		Plot2D plot = new Plot2D(scaleMin, scaleMax, 1024, List.of(
+				new Named<>("Finite Difference Appoximation", finiteDifferenceApproxError),
+				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
+		plot.setTitle("Second Order (Finite Difference) Derivative of cos(x) at x = " + x)
+		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
+		.setYAxisLabel("error")
+		.setYAxisNumberFormat(new DecimalFormat("0.0E00"))
+		.show();
+		plot.saveAsPDF(new File("images/exp-x-forward-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").pdf"), 800, 500);
+//		.saveAsPNG(new File("images/exp-x-forward-fd-("+(int)(scaleMin*10)+","+(int)(scaleMax*10)+").png"), 800, 500)
 	}
 
 	private static void plotThirdOrderFiniteDifferenceApproximationErrorOfExp(double x, double scaleMin, double scaleMax) {
@@ -159,7 +201,7 @@ public class FiniteDifferenceExperiments {
 				new Named<>("Finite Difference Appoximation", finiteDifferenceApproxError),
 				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
 		plot.setYAxisNumberFormat(new DecimalFormat("0.0"))
-		.setTitle("(Centered Finite Difference) 3rd Order Derivative of exp(x) at x = " + x)
+		.setTitle("(Central Finite Difference) 3rd Order Derivative of exp(x) at x = " + x)
 		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
 		.setYAxisLabel("error")
 		.setYAxisNumberFormat(new DecimalFormat("0.0E00"))
