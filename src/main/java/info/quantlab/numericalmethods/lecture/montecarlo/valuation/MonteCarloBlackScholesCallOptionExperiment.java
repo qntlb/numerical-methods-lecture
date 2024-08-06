@@ -109,20 +109,20 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		MersenneTwister mersenne = new MersenneTwister(seed);
 
 		double sum = 0.0;
-		for(int sampleIndex=0; sampleIndex<numberOfSamples; sampleIndex++) {
+		for(int sampleIndex=0; sampleIndex<numberOfSamples; sampleIndex++) {	// Loop over all 𝜔
 			double uniform = mersenne.nextDouble();
 			double normal = NormalDistribution.inverseCumulativeDistribution(uniform);
-			// S(T)
+			// S(T,𝜔)
 			double underlying = initialValue * Math.exp(
 					riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity
 					+ volatility * Math.sqrt(optionMaturity) * normal);
-			// V(T)
+			// V(T,𝜔)
 			double payoff = Math.max(underlying-optionStrike, 0.0);
 
-			// sum += V(T) * N(t)/N(T)
+			// sum += V(T,𝜔) * N(t)/N(T)
 			sum += payoff * Math.exp(-riskFreeRate * optionMaturity);
 		}
-		double value = sum / numberOfSamples;
+		double value = sum / numberOfSamples;			// Monte-Carlo approx of E(V(T)*N(t)/N(T))
 		return value;
 	}
 
@@ -132,13 +132,13 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 	private double getMonteCarloValueUsingStreams() {
 
 		/*
-		 * Model
+		 * Model Z -> S(T)
 		 */
 		DoubleUnaryOperator model = z -> initialValue * Math.exp(riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity
 				+ volatility * Math.sqrt(optionMaturity) * z);
 
 		/*
-		 * Product
+		 * Product S(T) -> V(T) * N(0)/N(T)
 		 */
 		DoubleUnaryOperator payoffDiscounted = s -> Math.max(s - optionStrike, 0)
 				* Math.exp(-riskFreeRate * optionMaturity);
@@ -148,6 +148,7 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 		 */
 		MersenneTwister mersenne = new MersenneTwister(seed);
 		DoubleStream uniform = DoubleStream.generate(mersenne).limit(numberOfSamples);
+		
 		DoubleStream normalStream = uniform.map(NormalDistribution::inverseCumulativeDistribution);
 
 		DoubleStream underlying = normalStream.map(model);
@@ -179,8 +180,8 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 		// Model
 		double drift = riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity;
-		RandomVariable diffusion = deltaW.mult(volatility);
-		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);		// S(T)
+		RandomVariable diffusion = deltaW.mult(volatility);					// sigma W(T)
+		RandomVariable underlying = diffusion.add(drift).exp().mult(initialValue);		// S(T) = S(0) * exp( mu Delta T + sigma Delta W(T))
 		
 		// Product // V(T) * N(t) / N(T)
 		RandomVariable payoffDiscounted = underlying.sub(optionStrike).floor(0.0).mult(Math.exp(-riskFreeRate * (optionMaturity-initialTime)));
@@ -202,9 +203,9 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 
 		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, (int)numberOfSamples, (int)seed);
 
-		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
-
-		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
+		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);		// X
+		
+		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);				// S
 
 		AssetMonteCarloProduct option = new EuropeanOption(optionMaturity, optionStrike);
 
