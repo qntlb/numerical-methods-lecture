@@ -5,12 +5,16 @@
  */
 package info.quantlab.numericalmethods.assignments.montecarlo.check;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Function;
 
 import net.finmath.exception.CalculationException;
 import net.finmath.montecarlo.BrownianMotionFromMersenneRandomNumbers;
 import net.finmath.montecarlo.IndependentIncrements;
+import net.finmath.montecarlo.RandomVariableFromDoubleArray;
 import net.finmath.montecarlo.assetderivativevaluation.AssetModelMonteCarloSimulationModel;
 import net.finmath.montecarlo.assetderivativevaluation.MonteCarloAssetModel;
 import net.finmath.montecarlo.assetderivativevaluation.models.BlackScholesModel;
@@ -54,9 +58,6 @@ public class AsianOptionWithBSControlVariateChecker {
 	private static final double		deltaT				= 0.5;
 
 	private static final int		seed				= 31415;
-
-	private static double accuracy = 1E-11;
-	private static Random random = new Random(3141);
 
 	/**
 	 * Perform the test of different sub-tasks (whatToCheck) on solution.
@@ -127,11 +128,11 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		RandomVariable value1 = getValueForTestCase(solution, 0);
-		success &= Math.abs(value1.getAverage()- 0.3725) <= 0.02;
+		double value1 = getValueForTestCase(solution, 0).get("value");
+		success &= Math.abs(value1 - 0.3725) <= 0.02;
 
-		RandomVariable value2 = getValueForTestCase(solution, 1);
-		success &= Math.abs(value2.getAverage()- 0.1244) <= 0.02;
+		double value2 = getValueForTestCase(solution, 1).get("value");
+		success &= Math.abs(value2- 0.1244) <= 0.02;
 
 		return success;
 	}
@@ -151,12 +152,12 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		RandomVariable value1 = getValueForTestCase(solution, 0);
-		success &= Math.abs(value1.getStandardError()) <= 0.0009;
-		
-		RandomVariable value2 = getValueForTestCase(solution, 1);
-		success &= Math.abs(value2.getStandardError()) <= 0.0009;
-		
+		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		success &= error1 <= 0.0009;
+
+		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		success &= error2 <= 0.0009;
+
 		return success;
 	}
 
@@ -169,12 +170,12 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		RandomVariable value1 = getValueForTestCase(solution, 0);
-		success &= Math.abs(value1.getStandardError()) <= 0.0004;
-		
-		RandomVariable value2 = getValueForTestCase(solution, 1);
-		success &= Math.abs(value2.getStandardError()) <= 0.0004;
-		
+		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		success &= error1 <= 0.0004;
+
+		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		success &= error2 <= 0.0004;
+
 		return success;
 	}
 
@@ -187,12 +188,12 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		RandomVariable value1 = getValueForTestCase(solution, 0);
-		success &= Math.abs(value1.getStandardError()) <= 0.0001;
-		
-		RandomVariable value2 = getValueForTestCase(solution, 1);
-		success &= Math.abs(value2.getStandardError()) <= 0.0001;
-		
+		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		success &= error1 <= 0.0001;
+
+		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		success &= error2 <= 0.0001;
+
 		return success;
 	}
 
@@ -205,16 +206,16 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		RandomVariable value1 = getValueForTestCase(solution, 0);
-		success &= Math.abs(value1.getStandardError()) <= 0.00006;
-		
-		RandomVariable value2 = getValueForTestCase(solution, 1);
-		success &= Math.abs(value2.getStandardError()) <= 0.00006;
-		
+		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		success &= error1 <= 0.00006;
+
+		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		success &= error2 <= 0.00006;
+
 		return success;
 	}
 
-	private static RandomVariable getValueForTestCase(AsianOptionWithBSControlVariateAssignment solution, int testCase) {
+	private static Map<String, Double> getValueForTestCase(AsianOptionWithBSControlVariateAssignment solution, int testCase) {
 		double	maturity = 10.0;
 		double	strike = 1.05;
 		TimeDiscretization timesForAveraging = new TimeDiscretizationFromArray(5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
@@ -225,37 +226,41 @@ public class AsianOptionWithBSControlVariateChecker {
 		 */
 		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging, callOrPutSign);
 
-		/*
-		 * Create model
-		 */
-		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel();
+		List<Double> valuesAsianAsList = new ArrayList<>();
+		Random seeds = new Random(seed);
+		for(int seed : seeds.ints().limit(20).toArray()) { 
+			/*
+			 * Create model
+			 */
+			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(seed);
 
-		/*
-		 * Value AsianOptionWithBSControlVariate
-		 */
+			/*
+			 * Value AsianOptionWithBSControlVariate
+			 */
 
-		RandomVariable valueAsian = null;
-		try {
-			valueAsian = product.getValue(0.0, monteCarloBlackScholesModel);
-		} catch (CalculationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			try {
+				RandomVariable valueAsian = product.getValue(0.0, monteCarloBlackScholesModel);
+				valuesAsianAsList.add(valueAsian.getAverage());
+			} catch (CalculationException e) {
+				throw new RuntimeException(e);
+			}
 		}
 
+		RandomVariable valuesAsian = new RandomVariableFromDoubleArray(0.0, valuesAsianAsList.stream().mapToDouble(x -> x.doubleValue()).toArray());
+		
 		/*
 		 * Print results
 		 */
-
 		Function<RandomVariable, String> printAvgAndErr = x ->
-		String.format("%10.7f \u00B1 %10.7f (\u03c3=%-9.7f)", x.getAverage(), x.getStandardError(), x.getStandardDeviation());
+		String.format("%10.7f (\u03c3=%-9.7f)", x.getAverage(), x.getStandardDeviation());
 
 		String callPut = callOrPutSign > 0 ? "call" : "put.";
-		System.out.println("value Asian " + callPut + "............: " + printAvgAndErr.apply(valueAsian));
+		System.out.println("value Asian " + callPut + "............: " + printAvgAndErr.apply(valuesAsian));
 
-		return valueAsian;
+		return Map.of("value", valuesAsian.getAverage(), "standardDeviation", valuesAsian.getStandardDeviation());
 	}
 
-	private static AssetModelMonteCarloSimulationModel createModel() {
+	private static AssetModelMonteCarloSimulationModel createModel(int seed) {
 		// Create a model
 		final AbstractProcessModel model = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
