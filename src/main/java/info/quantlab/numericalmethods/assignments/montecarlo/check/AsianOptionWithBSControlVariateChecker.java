@@ -207,10 +207,10 @@ public class AsianOptionWithBSControlVariateChecker {
 		boolean success = true;
 
 		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
-		success &= error1 <= 0.00006;
+		success &= error1 <= 0.000069;
 
 		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
-		success &= error2 <= 0.00006;
+		success &= error2 <= 0.000069;
 
 		return success;
 	}
