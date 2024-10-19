@@ -34,11 +34,11 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 		int numberOfPaths = 5000;
 		int seed = 3141;
 
-		double maturity1 = 1.0;
-		double strike1 = 120.0;
+		double maturity1 = 1.0;	// T1
+		double strike1 = 120.0;	// K1
 
-		double maturity2 = 2.0;
-		double strike2 = 140.0;
+		double maturity2 = 2.0;	// T2
+		double strike2 = 140.0;	// K2
 
 		BlackScholesModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 		BrownianMotion bm = new BrownianMotionFromMersenneRandomNumbers(new TimeDiscretizationFromArray(initialTime, (int)Math.round(timeHorizon/dt), dt), 1, numberOfPaths, seed);
@@ -97,7 +97,7 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 				stockInT1, valueRelativeOption1InT1, new GraphStyle(new Rectangle(-3,-3,5,5), null, Color.GREEN));
 
 		Plotable2D bermudanPathwiseValueAdmissiblePlot = PlotablePoints2D.of("Bermudan pathwise value",
-				stockInT1, bermudanPathwiseValueAdmissible, new GraphStyle(new Rectangle(-1,-1,2,2), null, new Color(0.0f, 0.66f, 0.0f)));
+				stockInT1, bermudanPathwiseValueAdmissible, new GraphStyle(new Rectangle(-1,-1,2,2), null, Color.CYAN));
 		
 		Plot plotBermudanExercise = new Plot2D(
 				List.of(
@@ -115,7 +115,7 @@ public class BermudanOptionExerciseInMonteCarloBlackScholesPlot {
 //		plotBermudanExercise.saveAsJPG(new File("BermudanT1T2ExericseValueAdmissible.jpg"),1200,675);
 
 		Plotable2D bermudanPathwiseValueForesightPlot = PlotablePoints2D.of("Bermudan pathwise value with foresight",
-				stockInT1, bermudanPathwiseValueForesight, new GraphStyle(new Rectangle(-1,-1,2,2), null, new Color(0.50f, 0.50f, 0.0f)));
+				stockInT1, bermudanPathwiseValueForesight, new GraphStyle(new Rectangle(-1,-1,2,2), null, Color.CYAN));
 
 		Plot plotBermudanExerciseWithForesight = new Plot2D(
 				List.of(
