@@ -46,8 +46,8 @@ public class ModelFactoryImplementation implements ModelFactory {
 	 * @return A model providing the two curves with the given zero rates.
 	 */
 	@Override
-	public AnalyticModel getModel(double[] maturities, double[] zeroRates, String discountCurveName, String forwardCurveName) {
-		return getModelWithShift(maturities, zeroRates, discountCurveName, forwardCurveName, 0, 0.0);
+	public AnalyticModel getModel(double[] maturities, double[] zeroRates, String discountCurveName) {
+		return getModelWithShift(maturities, zeroRates, discountCurveName, 0, 0.0);
 	}
 
 	/**
@@ -62,7 +62,7 @@ public class ModelFactoryImplementation implements ModelFactory {
 	 * @return A model providing the two curves with a zero rate of zeroRate for all but the shifted bucket.
 	 */
 	@Override
-	public AnalyticModel getModelWithShift(double[] maturities, double[] zeroRates, String discountCurveName, String forwardCurveName, int bucket, double shift) {
+	public AnalyticModel getModelWithShift(double[] maturities, double[] zeroRates, String discountCurveName, int bucket, double shift) {
 
 		// Shift bucket in zero rates
 		double[] zeroRatesShifted = Arrays.copyOf(zeroRates, zeroRates.length);
@@ -78,9 +78,7 @@ public class ModelFactoryImplementation implements ModelFactory {
 				null,
 				interpolationMethod, extrapolationMethod, interpolationEntity);
 
-		ForwardCurve forwardCurve = new ForwardCurveFromDiscountCurve(forwardCurveName, discountCurve.getName(), referenceDate, null);
-
-		AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve, forwardCurve });
+		AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve });
 
 		return model;
 	}

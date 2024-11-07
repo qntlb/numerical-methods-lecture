@@ -7,9 +7,9 @@ import net.finmath.marketdata.products.AnalyticProduct;
  * Interface to be implemented by the solution of the assignment.
  */
 public interface InterestRateCurveHedgePortfolio {
+	
+	double getParRate(double maturity, String discountCurveName, AnalyticModel model);
 
-	double getParRate(double maturity, String forwardCurveName, String discountCurveName, AnalyticModel model);
-
-	double[] getReplicationPortfolio(double[] maturities, double[] zeroRates, String discountCurveName, String forwardCurveName, AnalyticProduct swapToHedge);
+	double[] getReplicationPortfolio(double[] maturities, double[] zeroRates, String discountCurveName, AnalyticProduct swapToHedge);
 
 }
