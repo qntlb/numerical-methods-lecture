@@ -40,6 +40,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 	
 	public enum Check {
 		BASIC("basic functionality"),
+		SWAP("valuation of a simple swap on a single discount curve"),
 		PAR_RATE("calculation of par swap rate"),
 		SENSITIVITIES("calculation of swap sensitivities");
 
@@ -73,6 +74,11 @@ public class InterestRateCurveHedgePortfolioChecker {
 			default:
 			{
 				success = checkBasics(solution);
+			}
+			break;
+			case SWAP:
+			{
+				success = checkSwap(solution);
 			}
 			break;
 			case PAR_RATE:
@@ -157,7 +163,6 @@ public class InterestRateCurveHedgePortfolioChecker {
 		double[] zeroRates = IntStream.range(0, 30).mapToDouble(x -> 0.05).toArray();
 
 		String discountCurveName = "EURSTR";
-		String forwardCurveName = "EURSTR forward";
 
 		/**
 		 * Create non-standard swap
@@ -172,6 +177,35 @@ public class InterestRateCurveHedgePortfolioChecker {
 		boolean success = Math.abs(parRate - parRateExpected) < parRateTolerance;
 
 		if(!success) System.out.println("\t\tPar rate devitates from expected value " + parRateExpected + " by more than " + parRateTolerance + ".");
+		return success;
+	}
+
+	private static boolean checkSwap(InterestRateCurveHedgePortfolioAssignment solution) {
+		ModelFactory modelFactory = new ModelFactoryImplementation(InterpolationMethod.LINEAR, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
+		ProductFactory swapFactory = solution.getSwapFactory();
+		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
+
+		// The vector 1.0, 2.0, ..., 30.0
+		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();
+
+		// The vector 0.05, 0.05, ..., 0.05
+		double[] zeroRates = IntStream.range(0, 30).mapToDouble(x -> 0.05).toArray();
+
+		String discountCurveName = "EURSTR";
+
+		/**
+		 * Create non-standard swap
+		 */
+		AnalyticProduct swapToTest = swapFactory.getSwap(periodLength, 8, 0.04, isPayer, discountCurveName);
+
+		AnalyticModel model = modelFactory.getModel(maturities, zeroRates, discountCurveName);
+
+		double valueExpected = 0.06922;
+		double valueTolerance = 0.0001;
+		double value = swapToTest.getValue(0.0, model);
+		boolean success = Math.abs(value - valueExpected) < valueTolerance;
+
+		if(!success) System.out.println("\t\tSwap valuation (" + value + ") devitates from expected value " + valueExpected + " by more than " + valueTolerance + ".");
 		return success;
 	}
 
