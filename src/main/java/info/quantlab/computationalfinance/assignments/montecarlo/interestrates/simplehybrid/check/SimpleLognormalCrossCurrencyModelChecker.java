@@ -49,6 +49,44 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 
 		if(simulationModel == null) System.out.println("\tYour solution did not return a model. Implement getSimpleCrossCurrencyModel");
 
+		/*
+		 * Check model - does not require implementation of product.
+		 */
+		if(testCase.equals("Model")) {
+			RandomVariable forwardDom = simulationModel.getForwardRate(0, periodStart, periodStart, periodEnd);
+			RandomVariable forwardFor = simulationModel.getForwardRate(1, periodStart, periodStart, periodEnd);
+			RandomVariable fxPay = simulationModel.getFXRate(1, periodEnd);
+			RandomVariable fxEval = simulationModel.getFXRate(1, 0.0);
+			RandomVariable numeraireAtPayment = simulationModel.getNumeraire(periodEnd);
+			RandomVariable numeraireAtEval = simulationModel.getNumeraire(0.0);
+
+			double payDomestic = forwardDom.div(numeraireAtPayment).mult(numeraireAtEval).expectation().doubleValue();
+			double payForeign = forwardFor.mult(fxPay).div(numeraireAtPayment).mult(numeraireAtEval).div(fxEval).expectation().doubleValue();
+
+			boolean success = true;
+			if(Math.abs(payDomestic - initialValueDomesticForwardRate*domesticZeroBond) < 0.001) {
+				System.out.println("\tModel domestic rates / numeraire seem ok.");
+			}
+			else {
+				System.out.println("\tModel reports inconsisting foreign rates / fx / numeraire.");
+				success = false;
+			}
+			if(Math.abs(payForeign - initialValueForeignForwardRate*foreignZeroBond) < 0.001) {
+				System.out.println("\tModel foreign rates / fx / numeraire seem ok.");
+			}
+			else {
+				System.out.println("\tModel reports inconsisting domestic rates / numeraire.");
+				success = false;
+			}
+
+			return success;
+		}
+
+
+		/*
+		 * Check product
+		 */
+
 		double fixingTime = periodStart;
 		double strike = 0.035;
 
@@ -57,6 +95,7 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 		boolean isInAdvance;
 		double paymentTime;
 		double valueAnalytic;
+
 		switch(testCase) {
 		case "Caplet Domestic":
 		{
