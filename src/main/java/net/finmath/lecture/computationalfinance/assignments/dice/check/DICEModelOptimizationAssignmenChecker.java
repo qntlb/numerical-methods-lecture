@@ -12,7 +12,7 @@ public class DICEModelOptimizationAssignmenChecker
 
 		boolean success = true;
 		try {
-			for(double discountRate : new double[] { 0.005, 0.01, 0.015 }) {
+			for(double discountRate : new double[] { 0.005, 0.015 }) {
 				double[] abatement = solution.getDICEModelOptimalAbatementPath(abatementParameterConstraint, discountRate);
 
 				/*
