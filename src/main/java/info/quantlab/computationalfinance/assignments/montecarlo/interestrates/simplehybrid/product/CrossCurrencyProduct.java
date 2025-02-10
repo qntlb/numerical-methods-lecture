@@ -9,7 +9,7 @@ public interface CrossCurrencyProduct extends MonteCarloProduct {
 	/**
 	 * The method should return a random variable V such that \( E(V | F_{t}) \) represents the valuation of the
 	 * financial product in evaluation time. For t=0 it is expected that the unconditional expectation E(V) represents
-	 * the value. For an European option we have V = X(T) N(t)/N(T) where X is the payoff in time T.
+	 * the value. For an European option we have V = X(T) N(t)/N(T) where X(T) is the payoff in time T.
 	 *
 	 * @param evaluationTime The evaluation time t.
 	 * @param model The valuation model.
