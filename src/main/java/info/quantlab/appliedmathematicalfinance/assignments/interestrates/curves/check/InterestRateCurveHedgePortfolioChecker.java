@@ -6,7 +6,9 @@
 package info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.check;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Assertions;
@@ -118,20 +120,40 @@ public class InterestRateCurveHedgePortfolioChecker {
 		ProductFactory swapFactory = solution.getSwapFactory();
 		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
 
-		// The vector 1.0, 2.0, ..., 30.0
-		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();
+		/*
+		 * Build a discount (wrapped in a model).
+		 */
+		String discountCurveName = "EURSTR";
 
+		// The vector 1.0, 2.0, ..., 30.0
+		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();		
 		// The vector 0.05, 0.05, ..., 0.05
 		double[] zeroRates = IntStream.range(0, 30).mapToDouble(x -> 0.05).toArray();
 
-		String discountCurveName = "EURSTR";
-		String forwardCurveName = "EURSTR forward";
+		AnalyticModel model = modelFactory.getModel(maturities, zeroRates, discountCurveName);
 
+		/*
+		 * Build a set of hedge swaps - all par-rate swaps
+		 */
+
+		int maturityStepForSwaps = 1;
+		double[] maturitiesForSwap = IntStream.range(1, (int)30/maturityStepForSwaps+1).mapToDouble(x -> (double)maturityStepForSwaps * x).toArray();
+		
+		List<AnalyticProduct> parRateSwaps = new ArrayList<>();
+		double periodLength = 0.5;
+		boolean isPayer = true;
+		for(double maturity : maturitiesForSwap) {
+			double parRate = hedgePortfolio.getParRate(periodLength, maturity, discountCurveName, model);
+			AnalyticProduct swap = swapFactory.getSwap(periodLength, maturity, parRate, isPayer, discountCurveName);
+			parRateSwaps.add(swap);
+		}
+		
+		
 		/**
 		 * Create non-standard swap
 		 */
 		AnalyticProduct swapToTest = swapFactory.getSwap(periodLength, 6.5, 0.05, isPayer, discountCurveName);
-		double[] phi = hedgePortfolio.getReplicationPortfolio(maturities, zeroRates, discountCurveName, swapToTest);
+		double[] phi = hedgePortfolio.getReplicationPortfolio(parRateSwaps, maturities, zeroRates, discountCurveName, swapToTest);
 
 		boolean success = true;
 		for(int i=7; i<phi.length; i++) {
@@ -173,7 +195,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 
 		double parRateExpected = 0.05063;
 		double parRateTolerance = 0.0001;
-		double parRate = hedgePortfolio.getParRate(6.5, discountCurveName, model);
+		double parRate = hedgePortfolio.getParRate(0.5, 6.5, discountCurveName, model);
 		boolean success = Math.abs(parRate - parRateExpected) < parRateTolerance;
 
 		if(!success) System.out.println("\t\tPar rate devitates from expected value " + parRateExpected + " by more than " + parRateTolerance + ".");
@@ -214,24 +236,43 @@ public class InterestRateCurveHedgePortfolioChecker {
 		ProductFactory swapFactory = solution.getSwapFactory();
 		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
 
-		// The vector 1.0, 2.0, ..., 30.0
-		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();
+		/*
+		 * Build a discount (wrapped in a model).
+		 */
+		String discountCurveName = "EURSTR";
 
+		// The vector 1.0, 2.0, ..., 30.0
+		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();		
 		// The vector 0.05, 0.05, ..., 0.05
 		double[] zeroRates = IntStream.range(0, 30).mapToDouble(x -> 0.05).toArray();
 
-		String discountCurveName = "EURSTR";
-		String forwardCurveName = "EURSTR forward";
+		AnalyticModel model = modelFactory.getModel(maturities, zeroRates, discountCurveName);
 
-		/**
+		/*
+		 * Build a set of hedge swaps - all par-rate swaps
+		 */
+
+		int maturityStepForSwaps = 1;
+		double[] maturitiesForSwap = IntStream.range(1, (int)30/maturityStepForSwaps+1).mapToDouble(x -> (double)maturityStepForSwaps * x).toArray();
+		
+		List<AnalyticProduct> parRateSwaps = new ArrayList<>();
+		double periodLength = 0.5;
+		boolean isPayer = true;
+		for(double maturity : maturitiesForSwap) {
+			double parRate = hedgePortfolio.getParRate(periodLength, maturity, discountCurveName, model);
+			AnalyticProduct swap = swapFactory.getSwap(periodLength, maturity, parRate, isPayer, discountCurveName);
+			parRateSwaps.add(swap);
+		}
+		
+		/*
 		 * Create non-standard swap
 		 */
 		AnalyticProduct swapToHedge = swapFactory.getSwap(periodLength, 6.5, 0.05, isPayer, discountCurveName);
 
-		double parRate = hedgePortfolio.getParRate(6.5, discountCurveName, modelFactory.getModel(maturities, zeroRates, discountCurveName));
+		double parRate = hedgePortfolio.getParRate(0.5, 6.5, discountCurveName, modelFactory.getModel(maturities, zeroRates, discountCurveName));
 		Assertions.assertTrue((0 < parRate && parRate < 0.1), "par swap rate pausibility: should be between 0.0 and 0.10 for our model");
 
-		double[] phi = hedgePortfolio.getReplicationPortfolio(maturities, zeroRates, discountCurveName, swapToHedge);
+		double[] phi = hedgePortfolio.getReplicationPortfolio(parRateSwaps, maturities, zeroRates, discountCurveName, swapToHedge);
 		Assertions.assertTrue((maturities.length == phi.length), "length of hedge portfolio matches number of maturities");
 
 		return true;
