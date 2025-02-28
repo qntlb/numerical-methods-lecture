@@ -11,7 +11,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- libs -->
 		<finmath-lib.version>6.0.19</finmath-lib.version>
-		<finmath-plot.version>0.5.0</finmath-plot.version>
+		<finmath-plot.version>0.5.3</finmath-plot.version>
 		<junit.version>5.6.2</junit.version>
 		<!-- maven plugins -->
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
