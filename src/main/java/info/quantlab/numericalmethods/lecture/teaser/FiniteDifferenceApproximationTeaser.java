@@ -21,7 +21,7 @@ public class FiniteDifferenceApproximationTeaser {
 		double derivativeAnalytic = Math.exp(x);
 
 		// Finite difference approximation with a given shift
-		double shift = 1E-15;		// choose a suitable shift size. try 1E-15 to 1E-8
+		double shift = 1E-14;		// choose a suitable shift size. try 1E-15 to 1E-8
 		double derivativeApprox	= (function.apply(x + shift) - function.apply(x)) / shift;
 
 		// The error
