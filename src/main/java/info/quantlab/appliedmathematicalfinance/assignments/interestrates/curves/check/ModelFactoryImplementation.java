@@ -56,7 +56,6 @@ public class ModelFactoryImplementation implements ModelFactory {
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.
-	 * @param forwardCurveName The forward curve name.
 	 * @param bucket The bucket to shift.
 	 * @param shift A shift to be applied to the zero rate.
 	 * @return A model providing the two curves with a zero rate of zeroRate for all but the shifted bucket.
