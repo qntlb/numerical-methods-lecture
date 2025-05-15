@@ -77,6 +77,87 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${maven.javadoc-plugin.version}</version>
+					<configuration>
+						<source>${envSource}</source>
+						<doctitle>${project.name} (${project.version}) documentation</doctitle>
+						<stylesheetfile>stylesheet.css</stylesheetfile>
+						<docfilessubdirs>true</docfilessubdirs>
+						<header>
+				   			<![CDATA[
+							<span class="logo-white">finMath</span><span class="logo-red"> numerical methods lecture</span> documentation
+							<script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+							</script>
+  				   			]]>
+						</header>
+						<footer>
+				   			<![CDATA[
+							<i>Copyright &copy; 2025 finmath.net.</i>
+				   			]]>
+						</footer>
+						<tags>
+							<tag>
+								<name>TODO</name>
+								<placement>a</placement>
+								<head>To dos:</head>
+							</tag>
+							<tag>
+								<name>date</name>
+								<placement>a</placement>
+								<head>Date:</head>
+							</tag>
+						</tags>
+						<links>
+							<!-- links not compatible with JMPA -->
+							<!-- <link>http://commons.apache.org/proper/commons-math/javadocs/api-3.6.1/</link> -->
+							<!-- <link>http://commons.apache.org/proper/commons-lang/javadocs/api-release/</link> -->
+						</links>
+						<detectLinks>false</detectLinks>
+						<additionalOptions>
+							<additionalOption>--allow-script-in-comments</additionalOption>
+						</additionalOptions>
+						<nohelp>true</nohelp>
+						<noindex>true</noindex>
+						<noqualifier>true</noqualifier>
+					</configuration>
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>biz.aQute.bnd</groupId>
+										<artifactId>
+											bnd-maven-plugin
+										</artifactId>
+										<versionRange>
+											[2.4.1,)
+										</versionRange>
+										<goals>
+											<goal>bnd-process</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
 			</plugin>
 		</plugins>
 	</build>
