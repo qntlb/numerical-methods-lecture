@@ -42,7 +42,6 @@ public class ModelFactoryImplementation implements ModelFactory {
 	 * @param maturities The maturities.
 	 * @param zeroRates The zero rates.
 	 * @param discountCurveName The discount curve name.
-	 * @param forwardCurveName The forward curve name.
 	 * @return A model providing the two curves with the given zero rates.
 	 */
 	@Override

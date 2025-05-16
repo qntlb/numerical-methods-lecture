@@ -12,10 +12,11 @@ import java.util.stream.IntStream;
 import net.finmath.randomnumbers.HaltonSequence;
 
 /**
- * Monte-Carlo Integration of x^2 + y^2 < 1 to approximate pi.
+ * Monte-Carlo Integration of \( x^2 + y^2 \lt 1 \) to approximate pi.
  *
- * As the random number generator generates 0 < x,y < 1, we integrate
- * x^2 + y^2 < 1 with 0 < x,y < 1 (quarter of the area of the unit circle) and multiply by 4.
+ * As the random number generator generates \( x,y \in (0,1) \), we integrate
+ * \( x^2 + y^2 \lt 1 \) with \( x,y \in (0,1) \) (quarter of the area of the unit circle)
+ * and multiply by 4.
  *
  * This experiment uses different implementation and compares the efficiency.
  *
