@@ -42,7 +42,7 @@ Implement a robust solution of $x^{2} + p x + q = 0$ for any given p and q, avoi
 
 https://github.com/qntlb/numerical-methods-summation-exercise
 
-Implement an error correcting summation \( \sum_{0}^{n-1} x_{i} \) using Kahan summation.
+Implement an error correcting summation $\sum_{0}^{n-1} x_{i}$ using Kahan summation.
 
 ---
 
@@ -51,7 +51,7 @@ Implement an error correcting summation \( \sum_{0}^{n-1} x_{i} \) using Kahan s
 
 ### Assignments
 
-#### General Integrator in \( d \)-dimensions.
+#### General Integrator in $d$-dimensions.
 
 
 ## Monte-Carlo Simulation
