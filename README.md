@@ -35,7 +35,7 @@ We provide small coding assignments related to the lecture. The task is describe
 
 https://github.com/qntlb/numerical-methods-quadraticequation-exercise
 
-Implement a robust solution of \( x^{2} + p x + q = 0 \) for any given p and q, avoiding loss of significance.
+Implement a robust solution of $x^{2} + p x + q = 0$ for any given p and q, avoiding loss of significance.
 
 
 #### Summation (Kahan summation)
