@@ -127,7 +127,7 @@ info.quantlab.numericalmethods.lecture.montecarlo.integration
 ---
 
 <script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_CHTML">
+  src="https://cdnjs.jsdelivr.net/npm/mathjax@3.0.1/e5/tex-mml-chtml.js">
 </script>
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
