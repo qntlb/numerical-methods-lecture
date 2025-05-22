@@ -30,7 +30,7 @@ public interface IntegrationDomain {
 	 *
 	 * This is required to transform the integral of a function f to the unit cube. It is
 	 * \[
-	 *   \int_A f(z) dz = \int_[0,1]^{n} f(g(x)) det(dg/dx) dx
+	 *   \int_A f(z) dz = \int_{[0,1]^{n}} f(g(x)) det(dg/dx) dx
 	 * \]
 	 *
 	 * @param parametersOnUnitCurve the argument x in \( [0,1]^{n} \)
