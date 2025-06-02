@@ -108,7 +108,7 @@ public class InhomogenousExponentialImplemenationChecker {
 		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
 
 		System.out.println("\t\tUsing times " + Arrays.toString(times));
-		System.out.println("\t\tUsing intensities " + Arrays.toString(times));
+		System.out.println("\t\tUsing intensities " + Arrays.toString(intensities));
 
 		RandomNumberGenerator1D uniforms = new VanDerCorputSequence(2);
 		DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniforms, times, intensities);
@@ -130,8 +130,8 @@ public class InhomogenousExponentialImplemenationChecker {
 		double survivalProb = (double)survivalCounter / numberOfSamples;
 
 		System.out.println();
-		System.out.println("     E(\u03c4) = " + averageTime);
-		System.out.println(" E(\u03c4 > T) = " + survivalProb + " (T = " + maturity + ")");
+		System.out.println("      E(\u03c4) = " + averageTime);
+		System.out.println("  E(\u03c4 > T) = " + survivalProb + " (T = " + maturity + ")");
 		System.out.println("exp(- \u03bb T) = " + Math.exp(-1.0) * Math.exp(-0.5) * Math.exp(-2.0));
 		System.out.println("_".repeat(79));
 
@@ -154,7 +154,7 @@ public class InhomogenousExponentialImplemenationChecker {
 		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
 
 		System.out.println("\t\tUsing times " + Arrays.toString(times));
-		System.out.println("\t\tUsing intensities " + Arrays.toString(times));
+		System.out.println("\t\tUsing intensities " + Arrays.toString(intensities));
 
 		OfDouble iterator = Arrays.stream(inputUniforms).iterator();
 
