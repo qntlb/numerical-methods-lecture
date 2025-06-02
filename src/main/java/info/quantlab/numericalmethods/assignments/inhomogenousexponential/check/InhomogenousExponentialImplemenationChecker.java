@@ -1,10 +1,14 @@
 package info.quantlab.numericalmethods.assignments.inhomogenousexponential.check;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.PrimitiveIterator.OfDouble;
 import java.util.function.DoubleSupplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
+
+import org.junit.jupiter.api.Assertions;
 
 import info.quantlab.numericalmethods.assignments.inhomogenousexponential.InhomogenousExponentialAssignment;
 import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerator1D;
@@ -14,6 +18,7 @@ public class InhomogenousExponentialImplemenationChecker {
 
 	public enum Check {
 		BASIC("basic implementation check"),
+		SAMPLING("sampling survival from 0.0 to 3.0"),
 		ACCURACY("accurate generation of the distribution");
 
 		private final String name;
@@ -48,6 +53,11 @@ public class InhomogenousExponentialImplemenationChecker {
 				success = checkBasicFunctionality(solution);
 			}
 			break;
+			case SAMPLING:
+			{
+				success = checkSampling(solution);
+			}
+			break;
 			case ACCURACY:
 			{
 				success = checkAccuracy(solution);
@@ -80,12 +90,56 @@ public class InhomogenousExponentialImplemenationChecker {
 		try {
 			DoubleSupplier defaultTimeSequence =
 					solution.createRandomNumberGeneratorInhomogenousExponential(uniforms, times, intensities);
-			
+
 			double test = defaultTimeSequence.getAsDouble();
 		}
 		catch(Exception e) {
 			System.out.println("\tCould not instanciate generator (DoubleSupplier): " + e.getMessage());
 			e.printStackTrace();
+			return false;
+		}
+
+		return true;
+	}
+
+	private static boolean checkSampling(InhomogenousExponentialAssignment solution) {
+
+		double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
+		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
+
+		System.out.println("\t\tUsing times " + Arrays.toString(times));
+		System.out.println("\t\tUsing intensities " + Arrays.toString(times));
+
+		RandomNumberGenerator1D uniforms = new VanDerCorputSequence(2);
+		DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniforms, times, intensities);
+
+		int numberOfSamples = 100000;
+		double maturity = 3.0;
+
+		long survivalCounter = 0;
+		double sumOfTimes = 0.0;
+		for(int i=0; i<numberOfSamples; i++) {
+
+			double time = defaultTimeSequence.getAsDouble();
+
+			sumOfTimes += time;
+			if(time > maturity) survivalCounter++;
+		}
+
+		double averageTime = sumOfTimes / numberOfSamples;
+		double survivalProb = (double)survivalCounter / numberOfSamples;
+
+		System.out.println();
+		System.out.println("     E(\u03c4) = " + averageTime);
+		System.out.println(" E(\u03c4 > T) = " + survivalProb + " (T = " + maturity + ")");
+		System.out.println("exp(- \u03bb T) = " + Math.exp(-1.0) * Math.exp(-0.5) * Math.exp(-2.0));
+		System.out.println("_".repeat(79));
+
+		// Assert that we get the same survivalProb for maturity = 3.0;
+		double survialProbAnalytic = Math.exp(-1.0) * Math.exp(-0.5) * Math.exp(-2.0);
+		double deviation = Math.abs(survialProbAnalytic - survivalProb);
+		if(deviation > 1E-4) {
+			System.out.println("\tSurvival probability from 0 to 3.0 appears to be incorrect.");
 			return false;
 		}
 
@@ -99,8 +153,11 @@ public class InhomogenousExponentialImplemenationChecker {
 		double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
 		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
 
+		System.out.println("\t\tUsing times " + Arrays.toString(times));
+		System.out.println("\t\tUsing intensities " + Arrays.toString(times));
+
 		OfDouble iterator = Arrays.stream(inputUniforms).iterator();
-		
+
 		RandomNumberGenerator1D uniformGenerator = () -> iterator.next();
 
 		DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniformGenerator, times, intensities);
@@ -145,7 +202,7 @@ public class InhomogenousExponentialImplemenationChecker {
 			transformedTime += transformedTimeStep;
 			timeStart = timeEnd;
 		}
-		
+
 		return transformedTime;
 	}
 }
