@@ -13,7 +13,7 @@ import net.finmath.functions.NormalDistribution;
 /**
  * Calculate the value of an Asian Option under the Black-Scholes model.
  * 
- * Uses log-euler discretisztion (exact scheme) and Monte-Carlo simulation.
+ * Uses log-euler discretization (exact scheme) and Monte-Carlo simulation.
  * Using pseudo- and quasi-random number generators.
  * Uses wrong and correct construction of sample-vector / sample path (dimension = number of time steps).
  * 
