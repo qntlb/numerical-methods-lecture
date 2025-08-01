@@ -158,7 +158,19 @@ public class AsianOptionWithBSControlVariateChecker {
 		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.0009;
 
+		success &= isStandardDeviationNonZero(error1, error2);
+
 		return success;
+	}
+
+	private static boolean isStandardDeviationNonZero(double error1, double error2) {
+		if(error1 == 0 || error2 == 0) {
+			System.out.println("  It appears as if the variance of your result is zero.");
+			System.out.println("  This may happen if you do not use the original models random numbers.");
+			System.out.println("  As this prevents testing the variance reduction, this test has to fail.");
+			return false;
+		}
+		return true;
 	}
 
 	private static boolean checkControlStrong(AsianOptionWithBSControlVariateAssignment solution) {
@@ -175,6 +187,8 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.0004;
+
+		success &= isStandardDeviationNonZero(error1, error2);
 
 		return success;
 	}
@@ -194,6 +208,8 @@ public class AsianOptionWithBSControlVariateChecker {
 		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.0001;
 
+		success &= isStandardDeviationNonZero(error1, error2);
+
 		return success;
 	}
 
@@ -211,6 +227,8 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.000069;
+
+		success &= isStandardDeviationNonZero(error1, error2);
 
 		return success;
 	}
