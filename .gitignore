@@ -81,3 +81,4 @@ crashlytics-build.properties
 
 # Image folder - used for temp output
 /img/
+/images/
