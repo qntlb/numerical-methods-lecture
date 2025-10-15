@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>info.quantlab</groupId>
 	<artifactId>numerical-methods-lecture</artifactId>
-	<version>0.1.1-SNAPSHOT</version>
+	<version>0.1.2-SNAPSHOT</version>
 	<name>Numerical Methods Lectures</name>
 
 	<properties>
