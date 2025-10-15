@@ -19,6 +19,12 @@ import net.finmath.plots.Plot2D;
  */
 public class FiniteDifferenceExperiments {
 
+	/**
+	 * Calculate d/dx exp(x) at x = 0
+	 * 
+	 * @param args
+	 * @throws IOException
+	 */
 	public static void main(String[] args) throws IOException {
 
 		double x = 0.0;
@@ -103,7 +109,7 @@ public class FiniteDifferenceExperiments {
 		};
 
 		Plot2D plot = new Plot2D(scaleMin, scaleMax, 1024, List.of(
-				new Named<>("Finite Difference Appoximation", finiteDifferenceApproxError),
+				new Named<DoubleUnaryOperator>("Finite Difference Appoximation", finiteDifferenceApproxError),
 				new Named<DoubleUnaryOperator>("Analytic", t -> 0.0)));
 		plot.setTitle("(One Sided Finite Difference) Derivative of exp(x) at x = " + x)
 		.setXAxisLabel("scale = log\u2081\u2080(h)  (h = 10^{scale})")
