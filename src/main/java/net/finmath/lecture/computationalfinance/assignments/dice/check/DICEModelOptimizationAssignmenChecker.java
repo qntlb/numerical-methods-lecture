@@ -1,7 +1,6 @@
 package net.finmath.lecture.computationalfinance.assignments.dice.check;
 
 import net.finmath.lecture.computationalfinance.assignments.dice.DICEModelOptimizationAssignment;
-import net.finmath.lecture.computationalfinance.assignments.dice.DICEModelOptimizationAssignment.AbatementParameterConstraint;
 
 public class DICEModelOptimizationAssignmenChecker
 {

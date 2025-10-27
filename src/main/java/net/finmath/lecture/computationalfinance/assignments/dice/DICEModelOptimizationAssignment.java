@@ -1,8 +1,5 @@
 package net.finmath.lecture.computationalfinance.assignments.dice;
 
-import net.finmath.lecture.computationalfinance.assignments.dice.DICEModelOptimizationAssignment.AbatementParameterConstraint;
-import net.finmath.optimizer.SolverException;
-
 public interface DICEModelOptimizationAssignment {
 
 	public enum AbatementParameterConstraint {

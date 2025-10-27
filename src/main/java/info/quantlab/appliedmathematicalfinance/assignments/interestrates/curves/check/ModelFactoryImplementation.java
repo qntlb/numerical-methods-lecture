@@ -12,8 +12,6 @@ import net.finmath.marketdata.model.curves.CurveInterpolation.InterpolationEntit
 import net.finmath.marketdata.model.curves.CurveInterpolation.InterpolationMethod;
 import net.finmath.marketdata.model.curves.DiscountCurve;
 import net.finmath.marketdata.model.curves.DiscountCurveInterpolation;
-import net.finmath.marketdata.model.curves.ForwardCurve;
-import net.finmath.marketdata.model.curves.ForwardCurveFromDiscountCurve;
 
 public class ModelFactoryImplementation implements ModelFactory {
 

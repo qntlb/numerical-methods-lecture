@@ -1,14 +1,10 @@
 package info.quantlab.numericalmethods.assignments.inhomogenousexponential.check;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.PrimitiveIterator.OfDouble;
 import java.util.function.DoubleSupplier;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
-
-import org.junit.jupiter.api.Assertions;
 
 import info.quantlab.numericalmethods.assignments.inhomogenousexponential.InhomogenousExponentialAssignment;
 import info.quantlab.numericalmethods.lecture.randomnumbers.RandomNumberGenerator1D;
