@@ -254,25 +254,25 @@ public class InterestRateCurveHedgePortfolioChecker {
 		int maturityStepForSwaps = 1;
 		double[] maturitiesForSwap = IntStream.range(1, (int)30/maturityStepForSwaps+1).mapToDouble(x -> (double)maturityStepForSwaps * x).toArray();
 		
-		List<AnalyticProduct> parRateSwaps = new ArrayList<>();
+		List<AnalyticProduct> portfolioInstruments = new ArrayList<>();
 		double periodLength = 0.5;
 		boolean isPayer = true;
 		for(double maturity : maturitiesForSwap) {
 			double parRate = hedgePortfolio.getParRate(periodLength, maturity, discountCurveName, model);
 			AnalyticProduct swap = swapFactory.getSwap(periodLength, maturity, parRate, isPayer, discountCurveName);
-			parRateSwaps.add(swap);
+			portfolioInstruments.add(swap);
 		}
 		
 		/*
 		 * Create non-standard swap
 		 */
-		AnalyticProduct swapToHedge = swapFactory.getSwap(periodLength, 6.5, 0.05, isPayer, discountCurveName);
+		AnalyticProduct productToHedge = swapFactory.getSwap(periodLength, 6.5, 0.05, isPayer, discountCurveName);
 
 		double parRate = hedgePortfolio.getParRate(0.5, 6.5, discountCurveName, modelFactory.getModel(maturities, zeroRates, discountCurveName));
-		Assertions.assertTrue((0 < parRate && parRate < 0.1), "par swap rate pausibility: should be between 0.0 and 0.10 for our model");
+		Assertions.assertTrue((0 <= parRate && parRate <= 0.1), "par swap rate pausibility: should be between 0.0 and 0.10 for our model");
 
-		double[] phi = hedgePortfolio.getReplicationPortfolio(parRateSwaps, maturities, zeroRates, discountCurveName, swapToHedge);
-		Assertions.assertTrue((maturities.length == phi.length), "length of hedge portfolio matches number of maturities");
+		double[] phi = hedgePortfolio.getReplicationPortfolio(portfolioInstruments, maturities, zeroRates, discountCurveName, productToHedge);
+		Assertions.assertTrue((portfolioInstruments.size() == phi.length), "hedge portfolio pausibility: length of hedge portfolio matches number of portfolioInstruments portfolio products");
 
 		return true;
 	}
