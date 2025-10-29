@@ -205,7 +205,6 @@ public class InterestRateCurveHedgePortfolioChecker {
 	private static boolean checkSwap(InterestRateCurveHedgePortfolioAssignment solution) {
 		ModelFactory modelFactory = new ModelFactoryImplementation(InterpolationMethod.LINEAR, ExtrapolationMethod.LINEAR, InterpolationEntity.LOG_OF_VALUE);
 		ProductFactory swapFactory = solution.getSwapFactory();
-		InterestRateCurveHedgePortfolio hedgePortfolio = solution.getInterestRateCurveHedgePortfolio(modelFactory, swapFactory);
 
 		// The vector 1.0, 2.0, ..., 30.0
 		double[] maturities = IntStream.range(0, 30).mapToDouble(x -> 1.0 + x).toArray();
