@@ -21,22 +21,31 @@ public class QuadraticEquationExperiment {
 		 * Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0
 		 */
 
-		System.out.println("Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0.\n");
+		System.out.println("Experiment on loss of significance");
+		System.out.println("- solve a quadratic equation x^2 + p*x + q = 0.\n");
 
 		double p = -10000000.0;
 		double q = 1.0;
 
-		double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
 		System.out.println("..................p = " +p);
 		System.out.println("..................q = " +q);
-		System.out.println("Solution.........x1 = " +x1);
 
+		System.out.println("_".repeat(79)+"\n");
+		System.out.println("Method 1");
+
+		double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
+
+		System.out.println("Solution.........x1 = " +x1);
 		System.out.println("x^2 + px + q (with x1) = " + (x1*x1 + p*x1 +q) );
+
+		System.out.println("_".repeat(79)+"\n");
+		System.out.println("Method 2");
 
 		double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
 
+
 		System.out.println("Solution.........x2 = " +x2);
-		System.out.println("x^2 + px +q (with x1) = " + (x2*x2 + p*x2 +q) );
+		System.out.println("x^2 + px +q (with x2) = " + (x2*x2 + p*x2 +q) );
 
 		System.out.println("_".repeat(79)+"\n");
 	}
