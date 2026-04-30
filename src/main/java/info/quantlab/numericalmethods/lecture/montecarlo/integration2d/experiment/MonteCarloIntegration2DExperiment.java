@@ -12,6 +12,11 @@ public class MonteCarloIntegration2DExperiment {
 
 	public static void main(String[] args) {
 		
+		System.out.println("Monte-Carlo integration of\n"
+				+ "  ∫ cos(x)•cos(y) dx dy,   x from -𝜋/2 to 𝜋/2, y from -𝜋/2 to 𝜋/2"
+				+ "\n"
+				+ "_".repeat(79));
+				
 		double xlower = -Math.PI/2;
 		double xupper = +Math.PI/2;
 		double ylower = -Math.PI/2;
@@ -19,6 +24,7 @@ public class MonteCarloIntegration2DExperiment {
 		
 		BiFunction<Double,Double,Double> integrand = (x,y) -> Math.cos(x)*Math.cos(y);
 		
+		// General code to integrate integrand on the given domain
 		double integral = integrate(integrand, xlower, xupper, ylower, yupper);
 
 		double integralAnalytic = (Math.sin(xupper)-Math.sin(xlower)) * (Math.sin(yupper)-Math.sin(ylower));
