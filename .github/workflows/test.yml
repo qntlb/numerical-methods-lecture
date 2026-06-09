@@ -80,6 +80,24 @@ jobs:
               out.write(f"test_skipped={skipped}\n")
           PY
 
+  checkstyle:
+    name: 🔍 Checkstyle
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: '17'
+          cache: maven
+
+      - name: Run Checkstyle
+        run: mvn -B -DskipTests checkstyle:check
+
   javadoc:
     name: 📚 JavaDoc
     runs-on: ubuntu-latest
