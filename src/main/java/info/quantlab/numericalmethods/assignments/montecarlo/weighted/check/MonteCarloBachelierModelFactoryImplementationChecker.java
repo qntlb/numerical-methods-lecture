@@ -65,7 +65,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 				return false;
 			}
 			else {
-				boolean success = checkStrong(theClass);
+				final boolean success = checkStrong(theClass);
 				if(success) {
 					System.out.println("\t Strong variance reduction test passed.");
 				}
@@ -81,7 +81,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 				return false;
 			}
 			else {
-				boolean success = checkWeak(theClass);
+				final boolean success = checkWeak(theClass);
 				if(success) {
 					System.out.println("\t Weak variance reduction test passed.");
 				}
@@ -91,7 +91,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 				return success;
 			}
 		case "basic":
-			boolean success = checkBasicFunctionality(theClass);
+			final boolean success = checkBasicFunctionality(theClass);
 			if(success) {
 				System.out.println("\t Valuation test passed.");
 			}
@@ -109,7 +109,9 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkBasicFunctionality(Class<?> theClass) {
-		if(true) return true;
+		if(true) {
+			return true;
+		}
 		try {
 			/*
 			 * Create model using the factory "theClass"
@@ -119,14 +121,14 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 			/*
 			 * Create products
 			 */
-			AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
-			AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
+			final AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
+			final AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
 
 			/*
 			 * Value a European call option
 			 */
-			double valueAnalytic = AnalyticFormulas.bachelierOptionValue(initialValue * Math.exp(riskFreeRate * maturity), volatility, maturity, strike, Math.exp(-riskFreeRate * maturity));
-			RandomVariable valueMonteCarlo = europeanOption.getValue(initalTime, monteCarloBlackScholesModel);
+			final double valueAnalytic = AnalyticFormulas.bachelierOptionValue(initialValue * Math.exp(riskFreeRate * maturity), volatility, maturity, strike, Math.exp(-riskFreeRate * maturity));
+			final RandomVariable valueMonteCarlo = europeanOption.getValue(initalTime, monteCarloBlackScholesModel);
 
 			System.out.println("\nValuation (European Call Option):\n");
 			System.out.format("\t%20s: %10.3g\n", "analytic", valueAnalytic);
@@ -135,14 +137,14 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 			/*
 			 * Value a digital option
 			 */
-			double valueDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
-			RandomVariable valueDigitalMonteCarlo = digitalOption.getValue(initalTime, monteCarloBlackScholesModel);
+			final double valueDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
+			final RandomVariable valueDigitalMonteCarlo = digitalOption.getValue(initalTime, monteCarloBlackScholesModel);
 
 			System.out.println("\nValuation (European Digital Option):\n");
 			System.out.format("\t%20s: %10.3g\n", "analytic", valueDigitalAnalytic);
 			System.out.format("\t%20s: %s\n", "monte carlo", printAvgErr.apply(valueDigitalMonteCarlo));
 
-			boolean isValuationOK = (Math.abs(valueMonteCarlo.getAverage()- valueAnalytic) <= 0.005)
+			final boolean isValuationOK = (Math.abs(valueMonteCarlo.getAverage()- valueAnalytic) <= 0.005)
 					&&
 					(Math.abs(valueDigitalMonteCarlo.getAverage()- valueDigitalAnalytic) <= 0.005);
 
@@ -165,7 +167,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 
 			return isValuationOK;
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\nTest failed with exception:");
 			e.printStackTrace();
 			return false;
@@ -179,7 +181,9 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkWeak(Class<?> theClass) {
-		if(true) return true;
+		if(true) {
+			return true;
+		}
 		try {
 			// Get model
 			final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = createModel(theClass, initialValue);
@@ -187,15 +191,15 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 			/*
 			 * Create products
 			 */
-			double strike = initialValue*1.5*Math.exp(riskFreeRate*maturity);
-			AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
-			AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
+			final double strike = initialValue*1.5*Math.exp(riskFreeRate*maturity);
+			final AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
+			final AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
 
 			/*
 			 * Value a European call option
 			 */
-			double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
-			RandomVariable valueMonteCarlo = europeanOption.getValue(initalTime, monteCarloBlackScholesModel);
+			final double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
+			final RandomVariable valueMonteCarlo = europeanOption.getValue(initalTime, monteCarloBlackScholesModel);
 
 			System.out.println("\nValuation (European Call Option):\n");
 			System.out.format("\t%20s: %10.3g\n", "analytic", valueAnalytic);
@@ -206,9 +210,9 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 			 */
 			double minStandardError = Double.MAX_VALUE;
 			for(int relativeShiftPercentage = -10; relativeShiftPercentage<=50; relativeShiftPercentage++) {
-				double initialValueShifted = initialValue*(1.0 + relativeShiftPercentage/100.0);
+				final double initialValueShifted = initialValue*(1.0 + relativeShiftPercentage/100.0);
 
-				RandomVariable valueMonteCarloWithWeight = europeanOption.
+				final RandomVariable valueMonteCarloWithWeight = europeanOption.
 						getValue(initalTime,
 								createModel(theClass, initialValueShifted).
 								getCloneWithModifiedData(
@@ -221,7 +225,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 
 			System.out.format("\t%20s: %s\n", "weighted monte carlo", "min = " + minStandardError);
 
-			boolean isVarianceReductionForValuationOK = minStandardError < valueMonteCarlo.getStandardError();
+			final boolean isVarianceReductionForValuationOK = minStandardError < valueMonteCarlo.getStandardError();
 
 			if(isVarianceReductionForValuationOK) {
 				System.out.println("\n"
@@ -240,7 +244,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 
 			return isVarianceReductionForValuationOK;
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\nTest failed with exception:");
 			e.printStackTrace();
 			return false;
@@ -248,7 +252,9 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 	}
 
 	private static boolean checkStrong(Class<?> theClass) {
-		if(true) return true;
+		if(true) {
+			return true;
+		}
 		try {
 			/*
 			 * Create model using the factory "theClass"
@@ -258,14 +264,14 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 			/*
 			 * Create products
 			 */
-			AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
-			AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
+			final AbstractAssetMonteCarloProduct europeanOption = new EuropeanOption(maturity, strike);
+			final AbstractAssetMonteCarloProduct digitalOption = new DigitalOption(maturity, strike);
 
 			/*
 			 * Calculate delta of a European call option
 			 */
-			double deltaEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-			RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
+			final double deltaEuropeanAnalytic = AnalyticFormulas.blackScholesOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			final RandomVariable deltaEuropeanMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, europeanOption, 1E-5);
 
 			System.out.println("\nDelta (European Call Option):\n");
 			System.out.format("\t%20s: %10.3g\n", "analytic", deltaEuropeanAnalytic);
@@ -274,9 +280,9 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 			/*
 			 * Calculate delta of a digital option
 			 */
-			double deltaDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
-			RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
-			RandomVariable deltaDigitalLikelihood = new DigitalOptionDeltaLikelihood(maturity, strike).getValue(initalTime, monteCarloBlackScholesModel);
+			final double deltaDigitalAnalytic = AnalyticFormulas.blackScholesDigitalOptionDelta(initialValue, riskFreeRate, volatility, maturity, strike);
+			final RandomVariable deltaDigitalMonteCarlo = getDeltaByFiniteDifference(monteCarloBlackScholesModel, digitalOption, 1E-5);
+			final RandomVariable deltaDigitalLikelihood = new DigitalOptionDeltaLikelihood(maturity, strike).getValue(initalTime, monteCarloBlackScholesModel);
 
 			System.out.println("\nDelta (European Digital Option):\n");
 			System.out.format("\t%20s: %10.3g\n", "analytic", deltaDigitalAnalytic);
@@ -285,7 +291,7 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 
 			return	(Math.abs(deltaDigitalMonteCarlo.getStandardError()-deltaDigitalLikelihood.getStandardError()) <= 0.01);
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\nTest failed with exception:");
 			e.printStackTrace();
 			return false;
@@ -295,25 +301,25 @@ public class MonteCarloBachelierModelFactoryImplementationChecker {
 
 	private static RandomVariable getDeltaByFiniteDifference(AssetModelMonteCarloSimulationModel model, AbstractAssetMonteCarloProduct product, double shiftRelative) {
 		try {
-			double shift = initialValue*shiftRelative;
+			final double shift = initialValue*shiftRelative;
 
-			AssetModelMonteCarloSimulationModel modelUpShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue+shift));
-			RandomVariable valueUpShift = product.getValue(initalTime, modelUpShift);
+			final AssetModelMonteCarloSimulationModel modelUpShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue+shift));
+			final RandomVariable valueUpShift = product.getValue(initalTime, modelUpShift);
 
-			AssetModelMonteCarloSimulationModel modelDnShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue-shift));
-			RandomVariable valueDnShift = product.getValue(initalTime, modelDnShift);
+			final AssetModelMonteCarloSimulationModel modelDnShift = model.getCloneWithModifiedData(Map.of("initialValue", initialValue-shift));
+			final RandomVariable valueDnShift = product.getValue(initalTime, modelDnShift);
 
 			return valueUpShift.sub(valueDnShift).div(2*shiftRelative);
-		} catch (CalculationException e) {
+		} catch (final CalculationException e) {
 			return new Scalar(Double.NaN);
 		}
 	}
 
 	private static AssetModelMonteCarloSimulationModel createModel(Class<?> theClass, double initialValue) {
 
-		MonteCarloBachelierModelFactory modelFactory = ObjectConstructor.<MonteCarloBachelierModelFactory>create(theClass, MonteCarloBachelierModelFactory.class);
+		final MonteCarloBachelierModelFactory modelFactory = ObjectConstructor.<MonteCarloBachelierModelFactory>create(theClass, MonteCarloBachelierModelFactory.class);
 
-		AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = modelFactory.getModel(initialValue, riskFreeRate, volatility, new TimeDiscretizationFromArray(initalTime, numberOfTimeSteps, deltaT), numberOfPaths, seed);
+		final AssetModelMonteCarloSimulationModel monteCarloBlackScholesModel = modelFactory.getModel(initialValue, riskFreeRate, volatility, new TimeDiscretizationFromArray(initalTime, numberOfTimeSteps, deltaT), numberOfPaths, seed);
 
 		return monteCarloBlackScholesModel;
 	}

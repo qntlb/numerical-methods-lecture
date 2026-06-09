@@ -12,7 +12,7 @@ import java.util.Arrays;
  * Experiments related to summation.
  *
  * See also {@link FloatingPointArithmeticExperiment}.
- * 
+ *
  * @author Christian Fries
  */
 public class SummationExperiment {
@@ -20,7 +20,7 @@ public class SummationExperiment {
 	public static void main(String[] args) {
 
 		experimentWithSameValues();
-		
+
 		experimentWithOneAndEpsilon();
 
 	}
@@ -32,20 +32,20 @@ public class SummationExperiment {
 
 		System.out.println("Experiment on loss of significance - summation: average of same values.\n");
 
-		double value = 0.1;
-		int numberOfValues = 10000000; // Change this to 10 or to 10000000 (10 million).
-		
+		final double value = 0.1;
+		final int numberOfValues = 10000000; // Change this to 10 or to 10000000 (10 million).
+
 		// Initialize the array we like to sum (no needed, but mimics the general case)
-		double[] realizations = new double[numberOfValues];
+		final double[] realizations = new double[numberOfValues];
 		Arrays.fill(realizations, value);
 
-		double sumOfValuesClassical = getSumOfValuesClassical(realizations);
-		double averageClassical = sumOfValuesClassical / numberOfValues;
+		final double sumOfValuesClassical = getSumOfValuesClassical(realizations);
+		final double averageClassical = sumOfValuesClassical / numberOfValues;
 
 		System.out.println("Classical summation average = " + averageClassical);
 
-		double sumOfValueKahan = getSumOfValuesKahan(realizations);
-		double averageKahan = sumOfValueKahan / numberOfValues;
+		final double sumOfValueKahan = getSumOfValuesKahan(realizations);
+		final double averageKahan = sumOfValueKahan / numberOfValues;
 		System.out.println("Kahan     summation average = " + averageKahan);
 
 		System.out.println("_".repeat(79)+"\n");
@@ -60,17 +60,17 @@ public class SummationExperiment {
 		System.out.println("Experiment on loss of significance - summation: one large, many small.\n");
 
 		// Array we like to sum: all epsilon, expect the first entry is 1.0
-		double value = 0.5*Math.ulp(1.0);
-		int numberOfValues = 10000000; // Change this to 10 or to 10000000 (10 million).
-		double[] realizations = new double[numberOfValues];
+		final double value = 0.5*Math.ulp(1.0);
+		final int numberOfValues = 10000000; // Change this to 10 or to 10000000 (10 million).
+		final double[] realizations = new double[numberOfValues];
 		Arrays.fill(realizations, value);
 		realizations[0] = 1.0;
 
-		double sumOfValuesClassical = getSumOfValuesClassical(realizations);
+		final double sumOfValuesClassical = getSumOfValuesClassical(realizations);
 
 		System.out.println("Classical summation = " + sumOfValuesClassical);
 
-		double sumOfValueKahan = getSumOfValuesKahan(realizations);
+		final double sumOfValueKahan = getSumOfValuesKahan(realizations);
 		System.out.println("Kahan     summation = " + sumOfValueKahan);
 
 		System.out.println("_".repeat(79)+"\n");
@@ -79,7 +79,7 @@ public class SummationExperiment {
 	private static double getSumOfValuesClassical(double[] realizations) {
 		double sum = 0.0;
 		for(int i=0; i<realizations.length; i++) {
-			double value = realizations[i];
+			final double value = realizations[i];
 			sum = sum + value;
 		}
 		return sum;
@@ -89,9 +89,9 @@ public class SummationExperiment {
 		double sum = 0.0;
 		double error = 0.0;
 		for(int i=0; i<realizations.length; i++) {
-			double value = realizations[i];
-			double newValue = value - error;
-			double newSum = sum + newValue;
+			final double value = realizations[i];
+			final double newValue = value - error;
+			final double newSum = sum + newValue;
 			error = (newSum - sum) - newValue;
 			sum = newSum;
 		}

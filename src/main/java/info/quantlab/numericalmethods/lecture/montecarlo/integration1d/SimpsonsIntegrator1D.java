@@ -13,18 +13,20 @@ public class SimpsonsIntegrator1D implements Integrator1D {
 		super();
 		this.numberOfEvaluationPoints = numberOfEvaluationPoints;
 
-		if(numberOfEvaluationPoints%2 != 1) throw new IllegalArgumentException("numberOfEvaluationPoints needs to be odd");
+		if(numberOfEvaluationPoints%2 != 1) {
+			throw new IllegalArgumentException("numberOfEvaluationPoints needs to be odd");
+		}
 	}
 
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
-		int numberOfIntervals = numberOfEvaluationPoints-1;
+		final int numberOfIntervals = numberOfEvaluationPoints-1;
 
-		int numberOfDoubleSizeIntervals = numberOfIntervals / 2;
+		final int numberOfDoubleSizeIntervals = numberOfIntervals / 2;
 
-		double domain = upperBound-lowerBound;
-		double integralStep = domain/numberOfIntervals;		// h
+		final double domain = upperBound-lowerBound;
+		final double integralStep = domain/numberOfIntervals;		// h
 
 		double integral = 0.0;
 		for(int i=1; i<numberOfDoubleSizeIntervals; i++) {

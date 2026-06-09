@@ -38,74 +38,74 @@ public class MonteCarloControlVariateExperiment {
 
 	public static void main(String[] args) throws CalculationException {
 
-		double initialValue	= 1.0;
-		double riskFreeRate	= 0.05;
-		double volatility	= 0.20;
+		final double initialValue	= 1.0;
+		final double riskFreeRate	= 0.05;
+		final double volatility	= 0.20;
 
-		double maturity	= 5.0;		// T
-		double strike1	= 1.0;		// K1
-		double strike2	= 1.6;		// K2
+		final double maturity	= 5.0;		// T
+		final double strike1	= 1.0;		// K1
+		final double strike2	= 1.6;		// K2
 
-		double initialTime		= 0.0;
-		int numberOfTimeSteps	= 1;
-		double deltaT			= (maturity-initialTime)/numberOfTimeSteps;
+		final double initialTime		= 0.0;
+		final int numberOfTimeSteps	= 1;
+		final double deltaT			= (maturity-initialTime)/numberOfTimeSteps;
 
-		int numberOfPaths = 10000000; // 10 mio
-		int seed = 3141;
+		final int numberOfPaths = 10000000; // 10 mio
+		final int seed = 3141;
 
 		/*
 		 * Model
 		 */
 
 		// Model: Black Scholes
-		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
+		final ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
 		/*
 		 * Monte-Carlo / Numerical Scheme
 		 */
 
 		// Brownian Motion
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
-		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, numberOfPaths, seed);
+		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
+		final BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, numberOfPaths, seed);
 
 		// Numerical Scheme
-		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
+		final MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
 
 		// Monte-Carlo Valuation Model
-		AssetModelMonteCarloSimulationModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
+		final AssetModelMonteCarloSimulationModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
 
 		/*
 		 * Product valuation using blackScholesMonteCarloModel
 		 */
-		
+
 		// Valuation of plain and exotic payoff
-		RandomVariable underlying = blackScholesMonteCarloModel.getAssetValue(maturity, 0);			// S(T)
-		RandomVariable numeraireAtPayment = blackScholesMonteCarloModel.getNumeraire(maturity);		// N(T)
-		RandomVariable numeraireAtEval	= blackScholesMonteCarloModel.getNumeraire(initialTime);	// N(t)
+		final RandomVariable underlying = blackScholesMonteCarloModel.getAssetValue(maturity, 0);			// S(T)
+		final RandomVariable numeraireAtPayment = blackScholesMonteCarloModel.getNumeraire(maturity);		// N(T)
+		final RandomVariable numeraireAtEval	= blackScholesMonteCarloModel.getNumeraire(initialTime);	// N(t)
 
 		// Plain option payoff V(T) = max(S(T)-K1, 0)
-		RandomVariable payoffPlain = underlying.sub(strike1).floor(0.0);							// V(T) for plain option
+		final RandomVariable payoffPlain = underlying.sub(strike1).floor(0.0);							// V(T) for plain option
 
 		// Exotic option payoff V(T) = S(T)-K2 > 0 ? max(S(T)-K1, 0) : (max(S(T)-K1, 0)^2 / (K2-K1)
-		RandomVariable payoffExotic = underlying.sub(strike2).choose(payoffPlain, payoffPlain.squared().div(strike2-strike1));		// V(T) for exotic option
+		final RandomVariable payoffExotic = underlying.sub(strike2).choose(payoffPlain, payoffPlain.squared().div(strike2-strike1));		// V(T) for exotic option
 
 		// Value of the Exotic Option (without control)
-		RandomVariable valueExotic = payoffExotic.div(numeraireAtPayment).mult(numeraireAtEval);// X
+		final RandomVariable valueExotic = payoffExotic.div(numeraireAtPayment).mult(numeraireAtEval);// X
 
 		// Value of the Plain Option
-		RandomVariable valuePlain = payoffPlain.div(numeraireAtPayment).mult(numeraireAtEval);	// Y
+		final RandomVariable valuePlain = payoffPlain.div(numeraireAtPayment).mult(numeraireAtEval);	// Y
 
 		// Analytic Value
-		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike1);
+		final double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike1);
 
 		// Z(1) = X - 1 ( Y - E(Y) )
-		RandomVariable valueControledWithC1 = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(1));		// Z(1)
+		final RandomVariable valueControledWithC1 = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(1));		// Z(1)
 
 		// Controlled value - numerically calculate the optimal c  c = Cov(X,Y)/Var(Y)
-		double c = valuePlain.covariance(valueExotic).div(valuePlain.variance()).doubleValue();
+		final double c = valuePlain.covariance(valueExotic).div(valuePlain.variance()).doubleValue();
 
 		// Z(c) = X - c ( Y - E(Y) )
-		RandomVariable valueControlled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));			// Z(c)
+		final RandomVariable valueControlled = valueExotic.sub(valuePlain.sub(valueAnalytic).mult(c));			// Z(c)
 
 
 		System.out.println("Plain product analytic valuation........: " + valueAnalytic + "\t\u00B1 0.0");

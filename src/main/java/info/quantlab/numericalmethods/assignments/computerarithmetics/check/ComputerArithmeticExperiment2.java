@@ -21,9 +21,9 @@ public class ComputerArithmeticExperiment2 {
 		 * Explore Integer
 		 */
 
-		int i = Integer.MAX_VALUE;
+		final int i = Integer.MAX_VALUE;
 
-		int iPlusOne = i+1;
+		final int iPlusOne = i+1;
 
 		System.out.println("i     = " + i);
 		System.out.println("i+1   = " + iPlusOne);
@@ -65,7 +65,7 @@ public class ComputerArithmeticExperiment2 {
 		 */
 		System.out.println("Test 1: Find the machine precision.");
 
-		double epsilon = getMachinePrecision();
+		final double epsilon = getMachinePrecision();
 
 		System.out.println("Machine precision: epsilon = " + epsilon);
 
@@ -91,7 +91,7 @@ public class ComputerArithmeticExperiment2 {
 		 */
 		System.out.println("Test 2: Check behavior of Double.MAX_VALUE");
 
-		double x = Double.MAX_VALUE;
+		final double x = Double.MAX_VALUE;
 		System.out.println("Double.MAX_VALUE                       = " + x);
 		System.out.println("Double.MAX_VALUE + 1                   = " + (x+1));
 		System.out.println("Double.MAX_VALUE + Double.MAX_VALUE    = " + (x+x-x));
@@ -133,16 +133,16 @@ public class ComputerArithmeticExperiment2 {
 		 */
 		System.out.println("Test 4: Loss of significance in the solution of a quadratic equation.");
 
-		double p = 100000000.0;
-		double q = 1.0;
+		final double p = 100000000.0;
+		final double q = 1.0;
 
-		double x1 = getSmallestSolutionOfQuadraticEquation1(p,q);
+		final double x1 = getSmallestSolutionOfQuadraticEquation1(p,q);
 
 		System.out.println("Method 1:");
 		System.out.println("x = " + x1);
 		System.out.println("Test: x^2-2px+q = " + (x1*x1 - 2*p*x1 +q)  );
 
-		double x2 = getSmallestSolutionOfQuadraticEquation2(p,q);
+		final double x2 = getSmallestSolutionOfQuadraticEquation2(p,q);
 
 		System.out.println("Method 2:");
 		System.out.println("x = " + x2);
@@ -156,19 +156,19 @@ public class ComputerArithmeticExperiment2 {
 		 */
 		System.out.println("Test 5: Compare classical summation and Kahan summation.");
 
-		double value = 0.1;
-		int numberOfSumations = 10000000;
+		final double value = 0.1;
+		final int numberOfSumations = 10000000;
 
-		double sumClassical = getSumOfNumberClassical(value, numberOfSumations);
-		double averageClassical = sumClassical / numberOfSumations;
+		final double sumClassical = getSumOfNumberClassical(value, numberOfSumations);
+		final double averageClassical = sumClassical / numberOfSumations;
 
 		System.out.println("Average (classic) = " + averageClassical);
 		System.out.println("Error (classic)   = " + (averageClassical-value)/value);
 
 
 
-		double sumKahan = getSumOfNumberKahan(value, numberOfSumations);
-		double averageKahan = sumKahan / numberOfSumations;
+		final double sumKahan = getSumOfNumberKahan(value, numberOfSumations);
+		final double averageKahan = sumKahan / numberOfSumations;
 
 		System.out.println("Average (Kahan)   = " + averageKahan);
 		System.out.println("Error (classic)   = " + (averageKahan-value)/value);
@@ -194,8 +194,8 @@ public class ComputerArithmeticExperiment2 {
 		double sum = 0.0;
 		double error = 0.0;
 		for(int i=0; i < numberOfSumations; i++) {
-			double valueCorrected = value - error;
-			double newSum = sum + valueCorrected;
+			final double valueCorrected = value - error;
+			final double newSum = sum + valueCorrected;
 			error = (newSum - sum) - valueCorrected;
 			sum = newSum;
 		}

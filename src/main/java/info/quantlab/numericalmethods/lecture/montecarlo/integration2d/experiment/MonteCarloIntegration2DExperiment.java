@@ -11,25 +11,25 @@ public class MonteCarloIntegration2DExperiment {
 	private static final int numberOfSamples = 1000000;
 
 	public static void main(String[] args) {
-		
+
 		System.out.println("Monte-Carlo integration of\n"
 				+ "  ∫ cos(x)•cos(y) dx dy,   x from -𝜋/2 to 𝜋/2, y from -𝜋/2 to 𝜋/2"
 				+ "\n"
 				+ "_".repeat(79));
-				
-		double xlower = -Math.PI/2;
-		double xupper = +Math.PI/2;
-		double ylower = -Math.PI/2;
-		double yupper = +Math.PI/2;
-		
-		BiFunction<Double,Double,Double> integrand = (x,y) -> Math.cos(x)*Math.cos(y);
-		
-		// General code to integrate integrand on the given domain
-		double integral = integrate(integrand, xlower, xupper, ylower, yupper);
 
-		double integralAnalytic = (Math.sin(xupper)-Math.sin(xlower)) * (Math.sin(yupper)-Math.sin(ylower));
-		double error = integral - integralAnalytic;
-		
+		final double xlower = -Math.PI/2;
+		final double xupper = +Math.PI/2;
+		final double ylower = -Math.PI/2;
+		final double yupper = +Math.PI/2;
+
+		final BiFunction<Double,Double,Double> integrand = (x,y) -> Math.cos(x)*Math.cos(y);
+
+		// General code to integrate integrand on the given domain
+		final double integral = integrate(integrand, xlower, xupper, ylower, yupper);
+
+		final double integralAnalytic = (Math.sin(xupper)-Math.sin(xlower)) * (Math.sin(yupper)-Math.sin(ylower));
+		final double error = integral - integralAnalytic;
+
 		System.out.println("Monte-Carlo Integral....: " + integral);
 		System.out.println("Analytic Integral.......: " + integralAnalytic);
 		System.out.println("Deviation...............: " + String.format("%5.2e", error));
@@ -38,15 +38,15 @@ public class MonteCarloIntegration2DExperiment {
 
 	}
 
-	private static double integrate(BiFunction<Double,Double,Double> integrand, double xlower, double xupper, double ylower,
-			double yupper) {
-		
+	private static double integrate(BiFunction<Double,Double,Double> integrand,
+			double xlower, double xupper, double ylower, double yupper) {
+
 		double sum = 0.0;
 		for(int i=0; i<numberOfSamples; i++) {
 
-			double x = Math.random() * (xupper-xlower) + xlower;
-			double y = Math.random() * (yupper-ylower) + ylower;
-			
+			final double x = Math.random() * (xupper-xlower) + xlower;
+			final double y = Math.random() * (yupper-ylower) + ylower;
+
 			sum += integrand.apply(x, y);
 		}
 		return sum/numberOfSamples * (xupper-xlower) * (yupper-ylower);

@@ -40,7 +40,9 @@ public interface DoubleVector {
 	 * @return If size() is not zero, returns sum()/size(), otherwise Double.NAN.
 	 */
 	default double average() {
-		if(size() == 0) return Double.NaN;
+		if(size() == 0) {
+			return Double.NaN;
+		}
 
 		return sum() / size();
 	}

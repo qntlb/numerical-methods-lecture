@@ -22,7 +22,7 @@ public class ObjectConstructor<T> {
 		try {
 			vectorConstructor = theClass.getConstructor();
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("Your class does not have a constructor that takes no argument.");
 			throw new IllegalArgumentException("Your class does not have a constructor that takes no argument.");
 		}
@@ -48,7 +48,7 @@ public class ObjectConstructor<T> {
 		try {
 			vectorConstructor = theClass.getConstructor(argument.getClass());
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("Your class does not have a constructor that takes an argument of type " + argument.getClass().getCanonicalName());
 			throw new IllegalArgumentException("Your class does not have a constructor that takes an argument of type " + argument.getClass().getCanonicalName());
 		}
@@ -74,7 +74,7 @@ public class ObjectConstructor<T> {
 		try {
 			vectorConstructor = theClass.getConstructor(argumentTypes.toArray(new Class<?>[argumentTypes.size()]));
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			throw new IllegalArgumentException("Your class does not have a constructor that takes an argument of type " + Arrays.deepToString(argumentTypes.toArray()));
 		}
 

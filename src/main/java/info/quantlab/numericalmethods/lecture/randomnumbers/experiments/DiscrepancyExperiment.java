@@ -28,7 +28,7 @@ public class DiscrepancyExperiment {
 				DoubleStream.generate(new MersenneTwister(3216)).limit(5).boxed().toList());
 
 		System.out.println();
-		
+
 		analyse("Van der Corput, n=5",
 				DoubleStream.generate(new VanDerCorputSequence(2)).limit(5).boxed().toList());
 
@@ -45,14 +45,14 @@ public class DiscrepancyExperiment {
 
 		analyse("Refined like v.d.C., n=5",
 				List.of(1.0/8, 2.0/8,        2.0/4, 5.0/8, 3.0/4 ));
-		
+
 		System.out.println();
 
 		/*
-		 * Radom sequence with n = 1, 10, 100, 
+		 * Radom sequence with n = 1, 10, 100,
 		 */
-		RandomNumberGenerator1D random = new MersenneTwister(3216);
-		List<Double> randomNumbers = new ArrayList<Double>();
+		final RandomNumberGenerator1D random = new MersenneTwister(3216);
+		final List<Double> randomNumbers = new ArrayList<Double>();
 		for(int n=0; n<=100000; n++) {
 			if(Math.log10(n) == Math.round(Math.log10(n))) {
 				analyse("Random, n = " + n, randomNumbers);
@@ -69,16 +69,16 @@ public class DiscrepancyExperiment {
 	private static double getDiscrepancy(List<Double> samples) {
 
 		// Sort the list of sample points
-		List<Double> samplesSorted = samples.stream().sorted().toList();
+		final List<Double> samplesSorted = samples.stream().sorted().toList();
 
 		double discrepance = 0.0;
 
 		int count = 0;
-		for(double sample : samplesSorted) {							// For a sample point x_i ...  
+		for(final double sample : samplesSorted) {							// For a sample point x_i ...
 
-			double low = sample - (double)count/samples.size();			// ... evaluate lambda([0,x)) - i/n = x - i/n ...
+			final double low = sample - (double)count/samples.size();			// ... evaluate lambda([0,x)) - i/n = x - i/n ...
 			count++;
-			double high = (double)count/samples.size() - sample;		// ... and (i+i)/n - lambda([0,x]) = i+1/n - x ...
+			final double high = (double)count/samples.size() - sample;		// ... and (i+i)/n - lambda([0,x]) = i+1/n - x ...
 
 			discrepance = Math.max(discrepance, Math.max(low, high));	// ... and take the maximum over all these values.
 		}
@@ -88,14 +88,14 @@ public class DiscrepancyExperiment {
 
 	private static void plotDiscrepancyFunction(String label, List<Double> samples) {
 
-		DoubleUnaryOperator lambda = x -> {
+		final DoubleUnaryOperator lambda = x -> {
 
-			double d = x - (double)samples.stream().filter(y -> y < x).count()/samples.size();
+			final double d = x - (double)samples.stream().filter(y -> y < x).count()/samples.size();
 
 			return d;
 		};
 
-		Plot2D plot = new Plot2D(List.of(
+		final Plot2D plot = new Plot2D(List.of(
 				new PlotableFunction2D(0, 1, 100, lambda),
 				new PlotablePoints2D("Samples", samples.stream().map(x -> new Point2D(x,0)).collect(Collectors.toList()), null)
 				));

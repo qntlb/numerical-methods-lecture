@@ -17,7 +17,7 @@ public class MonteCarloIntegrator1DFromRandomGenerator1D implements Integrator1D
 
 	/**
 	 * Create a Monte-Carlo integration with MersenneTwister (random number generator) and the given seed.
-	 * 
+	 *
 	 * @param numberOfEvaluationPoints The number of sample points to be used.
 	 * @param randomGenerator1DFactory Random number generator factory.
 	 */
@@ -29,7 +29,7 @@ public class MonteCarloIntegrator1DFromRandomGenerator1D implements Integrator1D
 
 	/**
 	 * Create a Monte-Carlo integration with MersenneTwister (random number generator) and the given seed.
-	 * 
+	 *
 	 * @param numberOfEvaluationPoints The number of sample points to be used.
 	 * @param seed The seed for the random number generator.
 	 */
@@ -43,16 +43,16 @@ public class MonteCarloIntegrator1DFromRandomGenerator1D implements Integrator1D
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
 		// Create random number sequence with given generator
-		DoubleSupplier uniformRandomNumberGenerator = randomGenerator1DFactory.get();
-		double domainSize = upperBound-lowerBound;
+		final DoubleSupplier uniformRandomNumberGenerator = randomGenerator1DFactory.get();
+		final double domainSize = upperBound-lowerBound;
 
 		double sum = 0.0;
 		for(int i=0; i<numberOfEvaluationPoints; i++) {
 
-			double randomNumber = uniformRandomNumberGenerator.getAsDouble();
+			final double randomNumber = uniformRandomNumberGenerator.getAsDouble();
 
-			double argument = lowerBound + randomNumber * domainSize;
-			double value = integrand.applyAsDouble(argument);
+			final double argument = lowerBound + randomNumber * domainSize;
+			final double value = integrand.applyAsDouble(argument);
 
 			sum += value;
 		}

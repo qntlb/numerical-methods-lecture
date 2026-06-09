@@ -8,7 +8,7 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics;
 /**
  * A simple class illustrating some aspects related to floating point arithmetic.
  * Here: "loss of significance" for the solution of a quadratic equation.
- * 
+ *
  * See also {@link FloatingPointArithmeticExperiment}.
  *
  * @author Christian Fries
@@ -24,8 +24,8 @@ public class QuadraticEquationExperiment {
 		System.out.println("Experiment on loss of significance");
 		System.out.println("- solve a quadratic equation x^2 + p*x + q = 0.\n");
 
-		double p = -10000000.0;
-		double q = 1.0;
+		final double p = -10000000.0;
+		final double q = 1.0;
 
 		System.out.println("..................p = " +p);
 		System.out.println("..................q = " +q);
@@ -33,7 +33,7 @@ public class QuadraticEquationExperiment {
 		System.out.println("_".repeat(79)+"\n");
 		System.out.println("Method 1");
 
-		double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
+		final double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
 
 		System.out.println("Solution.........x1 = " +x1);
 		System.out.println("x^2 + px + q (with x1) = " + (x1*x1 + p*x1 +q) );
@@ -41,7 +41,7 @@ public class QuadraticEquationExperiment {
 		System.out.println("_".repeat(79)+"\n");
 		System.out.println("Method 2");
 
-		double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
+		final double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
 
 
 		System.out.println("Solution.........x2 = " +x2);

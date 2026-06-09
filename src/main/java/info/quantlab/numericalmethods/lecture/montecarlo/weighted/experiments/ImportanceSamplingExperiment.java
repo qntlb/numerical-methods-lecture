@@ -22,17 +22,17 @@ public class ImportanceSamplingExperiment {
 	private final double volatility = 0.30;
 
 	// Product parameters
-	private final double optionMaturity = 5.0;	
+	private final double optionMaturity = 5.0;
 	private final double optionStrike = 150;
-	
+
 	// Monte-Carlo parameters
 	private final long seed = 1616;
 	private final int numberOfSamples = 10000;
-	
+
 	public static void main(String[] args) {
-		
+
 		(new ImportanceSamplingExperiment()).plot();
-		
+
 	}
 
 	/**
@@ -40,18 +40,18 @@ public class ImportanceSamplingExperiment {
 	 */
 	private void plot() {
 
-		List<Double> shifts = new ArrayList<>();
-		List<Double> errors = new ArrayList<>();
-		
+		final List<Double> shifts = new ArrayList<>();
+		final List<Double> errors = new ArrayList<>();
+
 		for(int i=0; i<=100; i++) {
-			
-			double shift = i/100.0 * 3.0;
-			double monteCarloErrorForShift = getMCErrorForValueWithImportanceSamplingShift(shift);
-			
+
+			final double shift = i/100.0 * 3.0;
+			final double monteCarloErrorForShift = getMCErrorForValueWithImportanceSamplingShift(shift);
+
 			shifts.add(shift);
 			errors.add(monteCarloErrorForShift);
 		}
-		
+
 		Plots.createScatter(shifts, errors, 0.0, 3.0, 3)
 		.setTitle(String.format("Monte-Carlo Approximation Error (seed=%d)", seed))
 		.setXAxisLabel("Shift size (importance sampling)")
@@ -62,33 +62,33 @@ public class ImportanceSamplingExperiment {
 	private double getMCErrorForValueWithImportanceSamplingShift(double shift) {
 		final RandomNumberGenerator1D randomNumberGenerator = new MersenneTwister(seed);
 
-		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialStockValue, riskFreeRate, volatility, optionMaturity, optionStrike);
+		final double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialStockValue, riskFreeRate, volatility, optionMaturity, optionStrike);
 
 		double sum = 0.0;
 		double sumError = 0.0;
 		for(int i=0; i<numberOfSamples; i++) {
-			double uniform = randomNumberGenerator.nextDouble();
-			double standardNormal = NormalDistribution.inverseCumulativeDistribution(uniform);
+			final double uniform = randomNumberGenerator.nextDouble();
+			final double standardNormal = NormalDistribution.inverseCumulativeDistribution(uniform);
 
-			double x = standardNormal;
-			double y = x + shift;
+			final double x = standardNormal;
+			final double y = x + shift;
 
-			double underlying = initialStockValue * Math.exp(riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity + volatility * Math.sqrt(optionMaturity) * y);
-			double payoffDiscounted = Math.max(underlying - optionStrike,  0) * Math.exp(-riskFreeRate * optionMaturity);
+			final double underlying = initialStockValue * Math.exp(riskFreeRate * optionMaturity - 0.5 * volatility * volatility * optionMaturity + volatility * Math.sqrt(optionMaturity) * y);
+			final double payoffDiscounted = Math.max(underlying - optionStrike,  0) * Math.exp(-riskFreeRate * optionMaturity);
 
-			double weight = Math.exp(-y*y/2 + (y-shift)*(y-shift)/2);
-			
-			double value = payoffDiscounted * weight;
-			
+			final double weight = Math.exp(-y*y/2 + (y-shift)*(y-shift)/2);
+
+			final double value = payoffDiscounted * weight;
+
 			sum += value;
 			sumError += Math.pow(value-valueAnalytic, 2);
 		}
 
-		double valueMonteCarlo = sum / numberOfSamples;
-		double error = Math.sqrt(sumError / numberOfSamples);
+		final double valueMonteCarlo = sum / numberOfSamples;
+		final double error = Math.sqrt(sumError / numberOfSamples);
 
 		System.out.println(String.format("%10.2f \t %10.2f \t %10.2f \t %10.2f", shift, valueMonteCarlo, valueAnalytic, error));
-		
+
 		return error;
 	}
 }

@@ -13,7 +13,7 @@ public class RandomVectorQuasiWrong {
 
 	// Our memory for the d-Dimensional sequence indexed as [sampleIndex][componentIndex]
 	// Alternative would be : [componentIndex][sampleIndex]
-	private double[][] randomVectorSequence;
+	private final double[][] randomVectorSequence;
 
 	public RandomVectorQuasiWrong(int length, int dimension) {
 
@@ -22,7 +22,7 @@ public class RandomVectorQuasiWrong {
 		for(int i=0; i<length; i++) {
 			for(int j=0; j<dimension; j++) {
 				// Populate the vector y_{i,j} = x_{i*d+j}
-				int index = i*dimension+j;
+				final int index = i*dimension+j;
 				randomVectorSequence[i][j] = VanDerCorputSequence.getVanDerCorputNumber(index, 2);
 			}
 		}
@@ -42,7 +42,7 @@ public class RandomVectorQuasiWrong {
 	}
 
 	double[] getSequenceForComponent(int componentIndex) {
-		double[] componentSequence = new double[randomVectorSequence.length];
+		final double[] componentSequence = new double[randomVectorSequence.length];
 		for(int i=0; i<randomVectorSequence.length; i++) {
 			componentSequence[i] = randomVectorSequence[i][componentIndex];
 		}

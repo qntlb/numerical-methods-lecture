@@ -17,16 +17,16 @@ public class RiemannMidPointIntegrator1D implements Integrator1D {
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
-		double domainSize = upperBound-lowerBound;
+		final double domainSize = upperBound-lowerBound;
 
 		double sum = 0.0;
 		for(int i=0; i<numberOfEvaluationPoints; i++) {
 
 			// center-points of equi-partitioning of [0,1]
-			double uniformSample = (2.0*i+1.0)/(2.0*numberOfEvaluationPoints);
+			final double uniformSample = (2.0*i+1.0)/(2.0*numberOfEvaluationPoints);
 
-			double argument = lowerBound + uniformSample * domainSize;
-			double value = integrand.applyAsDouble(argument);
+			final double argument = lowerBound + uniformSample * domainSize;
+			final double value = integrand.applyAsDouble(argument);
 
 			sum += value;
 		}

@@ -51,12 +51,12 @@ public class NormalICDFExperiments {
 	}
 
 	private static void plotDensityUniformAndNormalViaICDF(RandomNumberGenerator1D randomNumberGenerator, DoubleUnaryOperator icdf) throws Exception {
-		List<Double> valuesUniform = new ArrayList<>();
-		List<Double> valuesNormal = new ArrayList<>();
+		final List<Double> valuesUniform = new ArrayList<>();
+		final List<Double> valuesNormal = new ArrayList<>();
 		for(int i = 0; i<100000; i++) {
-			double uniform = randomNumberGenerator.nextDouble();
+			final double uniform = randomNumberGenerator.nextDouble();
 
-			double normal = icdf.applyAsDouble(uniform);
+			final double normal = icdf.applyAsDouble(uniform);
 
 			valuesUniform.add(uniform);
 			valuesNormal.add(normal);
@@ -70,9 +70,9 @@ public class NormalICDFExperiments {
 	}
 
 	private static void plotDensityUniformAndNormalViaICDFJavaRandom() throws Exception {
-		Random random = new Random(3636);
+		final Random random = new Random(3636);
 
-		RandomNumberGenerator1D randomNumberGenerator1D = new RandomNumberGenerator1D() {
+		final RandomNumberGenerator1D randomNumberGenerator1D = new RandomNumberGenerator1D() {
 			@Override
 			public double nextDouble() {
 				return random.nextDouble();
@@ -96,10 +96,10 @@ public class NormalICDFExperiments {
 	}
 
 	private static void plotDensityUniformAndNormalViaICDFSobol() throws Exception {
-		SobolSequence1D sobol = new SobolSequence1D();
+		final SobolSequence1D sobol = new SobolSequence1D();
 		sobol.nextDouble();	// remove first number in sequence being u=0.
 
-		RandomNumberGenerator1D randomNumberGenerator1D = new RandomNumberGenerator1D() {
+		final RandomNumberGenerator1D randomNumberGenerator1D = new RandomNumberGenerator1D() {
 			@Override
 			public double nextDouble() {
 				return sobol.nextDouble();
@@ -111,7 +111,7 @@ public class NormalICDFExperiments {
 			}
 		};
 
-		org.apache.commons.math3.distribution.NormalDistribution normalDistribution =
+		final org.apache.commons.math3.distribution.NormalDistribution normalDistribution =
 				new org.apache.commons.math3.distribution.NormalDistribution();
 
 		plotDensityUniformAndNormalViaICDF(randomNumberGenerator1D, x -> normalDistribution.inverseCumulativeProbability(x));
@@ -146,10 +146,10 @@ public class NormalICDFExperiments {
 		/*
 		 * Testing Apache Common Math implementation
 		 */
-		org.apache.commons.math3.distribution.NormalDistribution normal = new org.apache.commons.math3.distribution.NormalDistribution();
+		final org.apache.commons.math3.distribution.NormalDistribution normal = new org.apache.commons.math3.distribution.NormalDistribution();
 
-		DoubleUnaryOperator icdfApacheCommonsMath = u -> normal.inverseCumulativeProbability(u);
-		DoubleUnaryOperator cdfApacheCommonsMath = x -> normal.cumulativeProbability(x);
+		final DoubleUnaryOperator icdfApacheCommonsMath = u -> normal.inverseCumulativeProbability(u);
+		final DoubleUnaryOperator cdfApacheCommonsMath = x -> normal.cumulativeProbability(x);
 
 		System.out.println("Testing Apache Common Math implementation: u = " + uniform);
 		System.out.println("_".repeat(80));
@@ -178,19 +178,19 @@ public class NormalICDFExperiments {
 
 		System.out.println("        u = " + uniform);
 
-		double x = icdf.applyAsDouble(uniform);
+		final double x = icdf.applyAsDouble(uniform);
 
 		System.out.println("     x(u) = " + x);
 
-		double p = cdf.applyAsDouble(x);
+		final double p = cdf.applyAsDouble(x);
 
 		System.out.println("  u(x(u)) = " + p);
 
-		double expPlusX = Math.exp(x);
+		final double expPlusX = Math.exp(x);
 
 		System.out.println("   exp(x) = " + expPlusX);
 
-		double expMinusX = Math.exp(-x);
+		final double expMinusX = Math.exp(-x);
 
 		System.out.println("  exp(-x) = " + expMinusX);
 	}

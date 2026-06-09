@@ -102,7 +102,7 @@ public class AsianOptionWithBSControlVariateChecker {
 			break;
 			}
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tTest '" + whatToCheck.getName() + "' failed with exception: " + e.getMessage());
 			System.out.println("\nHere is a stack trace:");
 			e.printStackTrace(System.out);
@@ -128,10 +128,10 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		double value1 = getValueForTestCase(solution, 0).get("value");
+		final double value1 = getValueForTestCase(solution, 0).get("value");
 		success &= Math.abs(value1 - 0.3725) <= 0.02;
 
-		double value2 = getValueForTestCase(solution, 1).get("value");
+		final double value2 = getValueForTestCase(solution, 1).get("value");
 		success &= Math.abs(value2- 0.1244) <= 0.02;
 
 		return success;
@@ -152,10 +152,10 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		final double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
 		success &= error1 <= 0.0009;
 
-		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		final double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.0009;
 
 		success &= isStandardDeviationNonZero(error1, error2);
@@ -182,10 +182,10 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		final double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
 		success &= error1 <= 0.0004;
 
-		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		final double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.0004;
 
 		success &= isStandardDeviationNonZero(error1, error2);
@@ -202,10 +202,10 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		final double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
 		success &= error1 <= 0.0001;
 
-		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		final double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.0001;
 
 		success &= isStandardDeviationNonZero(error1, error2);
@@ -222,10 +222,10 @@ public class AsianOptionWithBSControlVariateChecker {
 
 		boolean success = true;
 
-		double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
+		final double error1 = getValueForTestCase(solution, 0).get("standardDeviation");
 		success &= error1 <= 0.000069;
 
-		double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
+		final double error2 = getValueForTestCase(solution, 1).get("standardDeviation");
 		success &= error2 <= 0.000069;
 
 		success &= isStandardDeviationNonZero(error1, error2);
@@ -234,19 +234,19 @@ public class AsianOptionWithBSControlVariateChecker {
 	}
 
 	private static Map<String, Double> getValueForTestCase(AsianOptionWithBSControlVariateAssignment solution, int testCase) {
-		double	maturity = 10.0;
-		double	strike = 1.05;
-		TimeDiscretization timesForAveraging = new TimeDiscretizationFromArray(5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
-		double callOrPutSign = testCase == 0 ? 1.0 : -1.0;
+		final double	maturity = 10.0;
+		final double	strike = 1.05;
+		final TimeDiscretization timesForAveraging = new TimeDiscretizationFromArray(5.0, 6.0, 7.0, 8.0, 9.0, 10.0);
+		final double callOrPutSign = testCase == 0 ? 1.0 : -1.0;
 
 		/*
 		 * Construct object
 		 */
-		AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging, callOrPutSign);
+		final AssetMonteCarloProduct product = createProduct(solution, maturity, strike, timesForAveraging, callOrPutSign);
 
-		List<Double> valuesAsianAsList = new ArrayList<>();
-		Random seeds = new Random(seed);
-		for(int seed : seeds.ints().limit(20).toArray()) { 
+		final List<Double> valuesAsianAsList = new ArrayList<>();
+		final Random seeds = new Random(seed);
+		for(final int seed : seeds.ints().limit(20).toArray()) {
 			/*
 			 * Create model
 			 */
@@ -257,22 +257,22 @@ public class AsianOptionWithBSControlVariateChecker {
 			 */
 
 			try {
-				RandomVariable valueAsian = product.getValue(0.0, monteCarloBlackScholesModel);
+				final RandomVariable valueAsian = product.getValue(0.0, monteCarloBlackScholesModel);
 				valuesAsianAsList.add(valueAsian.getAverage());
-			} catch (CalculationException e) {
+			} catch (final CalculationException e) {
 				throw new RuntimeException(e);
 			}
 		}
 
-		RandomVariable valuesAsian = new RandomVariableFromDoubleArray(0.0, valuesAsianAsList.stream().mapToDouble(x -> x.doubleValue()).toArray());
-		
+		final RandomVariable valuesAsian = new RandomVariableFromDoubleArray(0.0, valuesAsianAsList.stream().mapToDouble(x -> x.doubleValue()).toArray());
+
 		/*
 		 * Print results
 		 */
-		Function<RandomVariable, String> printAvgAndErr = x ->
+		final Function<RandomVariable, String> printAvgAndErr = x ->
 		String.format("%10.7f (\u03c3=%-9.7f)", x.getAverage(), x.getStandardDeviation());
 
-		String callPut = callOrPutSign > 0 ? "call" : "put.";
+		final String callPut = callOrPutSign > 0 ? "call" : "put.";
 		System.out.println("value Asian " + callPut + "............: " + printAvgAndErr.apply(valuesAsian));
 
 		return Map.of("value", valuesAsian.getAverage(), "standardDeviation", valuesAsian.getStandardDeviation());
@@ -303,7 +303,7 @@ public class AsianOptionWithBSControlVariateChecker {
 		/*
 		 * Try (double, double, TimeDiscretization)
 		 */
-		AssetMonteCarloProduct product = solution.getAsianOption(maturity, strike, timesForAveraging, callOrPutSign);
+		final AssetMonteCarloProduct product = solution.getAsianOption(maturity, strike, timesForAveraging, callOrPutSign);
 
 		return product;
 	}

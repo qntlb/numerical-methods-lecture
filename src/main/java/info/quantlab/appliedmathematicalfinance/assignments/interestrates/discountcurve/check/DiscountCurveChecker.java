@@ -11,7 +11,7 @@ import info.quantlab.appliedmathematicalfinance.assignments.interestrates.discou
 public class DiscountCurveChecker {
 
 	public enum Check {
-		
+
 		BASIC("basic functionality"),
 		LINEAR_INTERPOLATION("linear interpolation of discount factors"),
 		LOG_LINEAR_INTERPOLATION("log-linear interpolation of discount factors");
@@ -60,12 +60,12 @@ public class DiscountCurveChecker {
 			break;
 			}
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tTest '" + whatToCheck.getName() + "' failed with exception: " + e.getMessage());
 			System.out.println("\nHere is a stack trace:");
 			e.printStackTrace(System.out);
 		}
-		catch(Error e) {
+		catch(final Error e) {
 			System.out.println("\tTest '" + whatToCheck.getName() + "' failed with error: " + e.getMessage());
 		}
 
@@ -81,58 +81,64 @@ public class DiscountCurveChecker {
 	}
 
 	private static boolean checkBasics(DiscountCurveAssignment solution) {
-		
+
 		// Get the discount curve factory
-		DiscountCurveFactory discountCurveFactory = solution.getDiscountCurveFactory();
+		final DiscountCurveFactory discountCurveFactory = solution.getDiscountCurveFactory();
 
 		// Create a simple discount curve
-		DiscountCurve discountCurve = discountCurveFactory.createDiscountCurve(new double[] { 0.0, 1.0, 2.0, 3.0, 5.0 }, new double[] { 1.0, 0.9, 0.8, 0.7, 0.5 }, "linear");
-		
-		double df = discountCurve.getDiscountFactor(1.0);
-		
-		double dfTarget = 0.9;
+		final DiscountCurve discountCurve = discountCurveFactory.createDiscountCurve(new double[] { 0.0, 1.0, 2.0, 3.0, 5.0 }, new double[] { 1.0, 0.9, 0.8, 0.7, 0.5 }, "linear");
 
-		boolean success = Math.abs(df-dfTarget) < 1E-12;
-		
-		if(!success) System.out.println("\tExpected discount factor at 1.0 to be " + dfTarget + " but got " + df);
+		final double df = discountCurve.getDiscountFactor(1.0);
+
+		final double dfTarget = 0.9;
+
+		final boolean success = Math.abs(df-dfTarget) < 1E-12;
+
+		if(!success) {
+			System.out.println("\tExpected discount factor at 1.0 to be " + dfTarget + " but got " + df);
+		}
 
 		return success;
 	}
 
 	private static boolean checkLinear(DiscountCurveAssignment solution) {
-		
+
 		// Get the discount curve factory
-		DiscountCurveFactory discountCurveFactory = solution.getDiscountCurveFactory();
+		final DiscountCurveFactory discountCurveFactory = solution.getDiscountCurveFactory();
 
 		// Create a simple discount curve
-		DiscountCurve discountCurve = discountCurveFactory.createDiscountCurve(new double[] { 0.0, 1.0, 2.0, 3.0, 5.0 }, new double[] { 1.0, 0.9, 0.8, 0.7, 0.5 }, "linear");
-		
-		double df = discountCurve.getDiscountFactor(1.5);
+		final DiscountCurve discountCurve = discountCurveFactory.createDiscountCurve(new double[] { 0.0, 1.0, 2.0, 3.0, 5.0 }, new double[] { 1.0, 0.9, 0.8, 0.7, 0.5 }, "linear");
 
-		double dfTarget = 0.85;
+		final double df = discountCurve.getDiscountFactor(1.5);
 
-		boolean success = Math.abs(df-dfTarget) < 1E-12;
+		final double dfTarget = 0.85;
 
-		if(!success) System.out.println("\tExpected discount factor at 1.5 to be " + dfTarget + " but got " + df);
+		final boolean success = Math.abs(df-dfTarget) < 1E-12;
+
+		if(!success) {
+			System.out.println("\tExpected discount factor at 1.5 to be " + dfTarget + " but got " + df);
+		}
 
 		return success;
 	}
 
 	private static boolean checkLoglinear(DiscountCurveAssignment solution) {
-		
+
 		// Get the discount curve factory
-		DiscountCurveFactory discountCurveFactory = solution.getDiscountCurveFactory();
+		final DiscountCurveFactory discountCurveFactory = solution.getDiscountCurveFactory();
 
 		// Create a simple discount curve
-		DiscountCurve discountCurve = discountCurveFactory.createDiscountCurve(new double[] { 0.0, 1.0, 2.0, 3.0, 5.0 }, new double[] { 1.0, 0.9, 0.8, 0.7, 0.5 }, "log_linear");
-		
-		double df = discountCurve.getDiscountFactor(1.5);
+		final DiscountCurve discountCurve = discountCurveFactory.createDiscountCurve(new double[] { 0.0, 1.0, 2.0, 3.0, 5.0 }, new double[] { 1.0, 0.9, 0.8, 0.7, 0.5 }, "log_linear");
 
-		double dfTarget = Math.exp((Math.log(0.9)+Math.log(0.8))/2.0);
+		final double df = discountCurve.getDiscountFactor(1.5);
 
-		boolean success = Math.abs(df-dfTarget) < 1E-12;
+		final double dfTarget = Math.exp((Math.log(0.9)+Math.log(0.8))/2.0);
 
-		if(!success) System.out.println("\tExpected discount factor at 1.5 to be " + dfTarget + " but got " + df);
+		final boolean success = Math.abs(df-dfTarget) < 1E-12;
+
+		if(!success) {
+			System.out.println("\tExpected discount factor at 1.5 to be " + dfTarget + " but got " + df);
+		}
 
 		return success;
 	}

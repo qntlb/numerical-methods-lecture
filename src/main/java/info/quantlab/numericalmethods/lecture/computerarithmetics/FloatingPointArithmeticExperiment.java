@@ -7,7 +7,7 @@ package info.quantlab.numericalmethods.lecture.computerarithmetics;
 
 /**
  * A simple class illustrating some aspects related to floating point numbers.
- * 
+ *
  * See also {@link QuadraticEquationExperiment}.
  * See also {@link SummationExperiment}.
  *
@@ -31,7 +31,7 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("eps ....... = " + eps);
 		System.out.println("0.5 ulp(1). = " + 0.5 * Math.ulp(1.0));
 		System.out.println("2^(-p)/2... = " + Math.pow(2, -52-1));	// For double mantissa has q = 52 bits
-		
+
 		System.out.println();
 
 		System.out.println("1+eps ..... = " + (1+eps));
@@ -59,23 +59,23 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println();
 
-		double tiny = Math.ulp(0.0);
+		final double tiny = Math.ulp(0.0);
 		System.out.println("tiny............ = " + tiny);
 		System.out.println("tiny/2.......... = " + tiny/2);
 		System.out.println("tiny/2*2........ = " + (tiny/2)*2);
 		System.out.println("tiny*2/2........ = " + (tiny*2)/2);
-		
+
 		System.out.println("_".repeat(79)+"\n");
-		
+
 		/*
 		 * Rounding to Infinity - Experiments with Double.MAX_VALUE
 		 */
 
 		System.out.println("Small experiments with Double.MAX_VALUE (largest positive floating point number (before infinity).\n");
 
-		double maxDouble	= Double.MAX_VALUE;
-		double bigStep		= 0.49 * Math.pow(2, 1023-52);		// Largest scale (1 + c / 2^52) * 2^1023, i.e. steps are 1/2^52 * 2^1023
-		double bigerStep	= 0.50 * Math.pow(2, 1023-52);
+		final double maxDouble	= Double.MAX_VALUE;
+		final double bigStep		= 0.49 * Math.pow(2, 1023-52);		// Largest scale (1 + c / 2^52) * 2^1023, i.e. steps are 1/2^52 * 2^1023
+		final double bigerStep	= 0.50 * Math.pow(2, 1023-52);
 
 		System.out.println("maxDouble            = " + maxDouble);
 		System.out.println("maxDouble+1000       = " + (maxDouble+1000));
@@ -94,8 +94,8 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("Small experiments with special values like Infinity and NaN.\n");
 
-		double zero = 0.0;
-		double oneOverZero = 1.0/zero;
+		final double zero = 0.0;
+		final double oneOverZero = 1.0/zero;
 
 		System.out.println("1/0         = " + oneOverZero);
 
@@ -117,12 +117,12 @@ public class FloatingPointArithmeticExperiment {
 		System.out.println("1/(+0)      = " + (1.0/plusZero));
 		System.out.println("1/(-0)      = " + (1.0/minusZero));
 
-		double plusInfinity = 1.0/plusZero;
-		double minusInfinity = 1.0/minusZero;
+		final double plusInfinity = 1.0/plusZero;
+		final double minusInfinity = 1.0/minusZero;
 
 		System.out.println("+Infinity  +  -Infinity = " + (plusInfinity+minusInfinity));
 
-		double nan = Double.NaN;
+		final double nan = Double.NaN;
 
 		System.out.println("NaN         = " + nan);
 
@@ -140,17 +140,17 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("Experiment on loss of significance - solve a quadratic equation x^2 + p*x + q = 0.\n");
 
-		double p = -10000000.0;
-		double q = 1.0;
+		final double p = -10000000.0;
+		final double q = 1.0;
 
-		double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
+		final double x1 = getSmallestRootOfQuadraticEquationVersion1(p,q);
 		System.out.println("..................p = " +p);
 		System.out.println("..................q = " +q);
 		System.out.println("Solution.........x1 = " +x1);
 
 		System.out.println("x^2 + px + q (with x1) = " + (x1*x1 + p*x1 +q) );
 
-		double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
+		final double x2 = getSmallestRootOfQuadraticEquationVersion2(p,q);
 
 		System.out.println("Solution.........x2 = " +x2);
 		System.out.println("x^2 + px +q (with x1) = " + (x2*x2 + p*x2 +q) );
@@ -163,16 +163,16 @@ public class FloatingPointArithmeticExperiment {
 
 		System.out.println("Experiment on loss of significance - summation.\n");
 
-		double value = 0.1;
-		int numberOfValues = 100;		// change this to 10000000;
+		final double value = 0.1;
+		final int numberOfValues = 100;		// change this to 10000000;
 
-		double sumOfValuesClassical = getSumOfValuesClassical(value, numberOfValues);
-		double averageClassical = sumOfValuesClassical / numberOfValues;
+		final double sumOfValuesClassical = getSumOfValuesClassical(value, numberOfValues);
+		final double averageClassical = sumOfValuesClassical / numberOfValues;
 
 		System.out.println("Classical summation average = " + averageClassical);
 
-		double sumOfValueKahan = getSumOfValuesKahan(value, numberOfValues);
-		double averageKahan = sumOfValueKahan / numberOfValues;
+		final double sumOfValueKahan = getSumOfValuesKahan(value, numberOfValues);
+		final double averageKahan = sumOfValueKahan / numberOfValues;
 		System.out.println("Kahan     summation average = " + averageKahan);
 
 		System.out.println("_".repeat(79)+"\n");
@@ -205,8 +205,8 @@ public class FloatingPointArithmeticExperiment {
 		double sum = 0.0;
 		double error = 0.0;
 		for(int i=0; i<numberOfValues; i++) {
-			double newValue = value - error;
-			double newSum = sum + newValue;
+			final double newValue = value - error;
+			final double newSum = sum + newValue;
 			error = (newSum - sum) - newValue;
 			sum = newSum;
 		}

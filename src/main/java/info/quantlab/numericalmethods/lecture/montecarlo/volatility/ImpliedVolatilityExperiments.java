@@ -35,24 +35,24 @@ public class ImpliedVolatilityExperiments {
 
 	public void plotImpliedVols() throws IOException {
 
-		double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
-		DoubleUnaryOperator values = strike -> {
-			double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
+		final double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
+		final DoubleUnaryOperator values = strike -> {
+			final double value = AnalyticFormulas.bachelierOptionValue(forward, volatility, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity));
 			return value;
 		};
 
-		DoubleUnaryOperator volatilitySmile = strike -> {
-			double value = values.applyAsDouble(strike);
-			double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(forward, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);
+		final DoubleUnaryOperator volatilitySmile = strike -> {
+			final double value = values.applyAsDouble(strike);
+			final double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(forward, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);
 			return impliedVolatility;
 		};
 
 		new Plot2D(1/4.0, 4.0, volatilitySmile)
-			.setTitle("Implied Black-Scholes Volatility of Bachelier Values")
-			.setXAxisLabel("Strike")
-			.setYAxisLabel("Implied Volatility")
-			.setYRange(0.0, 0.6)
-			.saveAsPDF(new File("images/ImpliedVolBS.pdf"), 960, 600)
-			.show();
+		.setTitle("Implied Black-Scholes Volatility of Bachelier Values")
+		.setXAxisLabel("Strike")
+		.setYAxisLabel("Implied Volatility")
+		.setYRange(0.0, 0.6)
+		.saveAsPDF(new File("images/ImpliedVolBS.pdf"), 960, 600)
+		.show();
 	}
 }

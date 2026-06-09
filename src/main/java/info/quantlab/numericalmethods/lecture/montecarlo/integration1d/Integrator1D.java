@@ -4,7 +4,7 @@ import java.util.function.DoubleUnaryOperator;
 
 /**
  * Interface to be implemented by classes providing a 1-D integrator.
- * 
+ *
  * @author Christian Fries
  */
 public interface Integrator1D {

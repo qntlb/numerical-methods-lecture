@@ -11,18 +11,18 @@ public class RunningAverageOfIndicator {
 
 	public static void main(String[] args) throws Exception {
 
-		int numberOfPoints = 100;
+		final int numberOfPoints = 100;
 
-		List<Double> averageValues1 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 3105 /* seed */);
-		List<Double> averageValues2 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 1 /* seed */);
-//		List<Double> averageValues3 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 1632 /* seed */);
+		final List<Double> averageValues1 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 3105 /* seed */);
+		final List<Double> averageValues2 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 1 /* seed */);
+		//		List<Double> averageValues3 = getRunningAveragesOfIndicator(3 /* omega */, numberOfPoints, 1632 /* seed */);
 
-		DoubleUnaryOperator averageFunction1	= x -> averageValues1.get((int)(x-1));
-		DoubleUnaryOperator averageFunction2	= x -> averageValues2.get((int)(x-1));
-		DoubleUnaryOperator limitValueFunction	= x -> 1.0/6.0;
-//		DoubleUnaryOperator averageFunction3	= x -> averageValues3.get((int)(x-1));
+		final DoubleUnaryOperator averageFunction1	= x -> averageValues1.get((int)(x-1));
+		final DoubleUnaryOperator averageFunction2	= x -> averageValues2.get((int)(x-1));
+		final DoubleUnaryOperator limitValueFunction	= x -> 1.0/6.0;
+		//		DoubleUnaryOperator averageFunction3	= x -> averageValues3.get((int)(x-1));
 
-		Plot2D plot = new Plot2D(1.0, numberOfPoints, numberOfPoints, new DoubleUnaryOperator[] {
+		final Plot2D plot = new Plot2D(1.0, numberOfPoints, numberOfPoints, new DoubleUnaryOperator[] {
 				averageFunction1,
 				averageFunction2,
 				limitValueFunction
@@ -37,9 +37,9 @@ public class RunningAverageOfIndicator {
 
 	private static List<Double> getRunningAveragesOfIndicator(int omega, int numberOfSamples, int seed) {
 
-		Random random = new Random(seed);
+		final Random random = new Random(seed);
 
-		List<Double> averages = new ArrayList<>();
+		final List<Double> averages = new ArrayList<>();
 
 		System.out.println("_".repeat(79));
 		System.out.println("i" + "\t" + "x[i]" + "\t" + "indctr" + "\t" + "sum" + "\t" + "avg");
@@ -48,13 +48,13 @@ public class RunningAverageOfIndicator {
 		int sum = 0;
 		for(int i=0; i<numberOfSamples; i++) {
 
-			int drawing = random.nextInt(6)+1;					// integer in { 1,2,3,4,5,6 }
+			final int drawing = random.nextInt(6)+1;					// integer in { 1,2,3,4,5,6 }
 
-			int indicator = (drawing == omega) ? 1 : 0;			// indicator function
+			final int indicator = (drawing == omega) ? 1 : 0;			// indicator function
 
 			sum += indicator;									// sum up
 
-			double average = ((double)sum)/(i+1);				// calculation the average
+			final double average = ((double)sum)/(i+1);				// calculation the average
 
 			averages.add(average);								// append the value to the list
 

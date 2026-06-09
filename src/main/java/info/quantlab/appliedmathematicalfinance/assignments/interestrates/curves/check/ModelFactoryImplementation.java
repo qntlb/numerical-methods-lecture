@@ -61,32 +61,32 @@ public class ModelFactoryImplementation implements ModelFactory {
 	public AnalyticModel getModelWithShift(double[] maturities, double[] zeroRates, String discountCurveName, int bucket, double shift) {
 
 		// Shift bucket in zero rates
-		double[] zeroRatesShifted = Arrays.copyOf(zeroRates, zeroRates.length);
+		final double[] zeroRatesShifted = Arrays.copyOf(zeroRates, zeroRates.length);
 		zeroRatesShifted[bucket] += shift;
 
 		// Get discount factors
-		double[] discountFactors = getDiscountFactorsFromForwardZeroRates(maturities, zeroRatesShifted);
+		final double[] discountFactors = getDiscountFactorsFromForwardZeroRates(maturities, zeroRatesShifted);
 
 		// Create discount curve
-		DiscountCurve discountCurve = DiscountCurveInterpolation.createDiscountCurveFromDiscountFactors(discountCurveName, referenceDate,
+		final DiscountCurve discountCurve = DiscountCurveInterpolation.createDiscountCurveFromDiscountFactors(discountCurveName, referenceDate,
 				maturities,
 				discountFactors,
 				null,
 				interpolationMethod, extrapolationMethod, interpolationEntity);
 
-		AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve });
+		final AnalyticModel model = new AnalyticModelFromCurvesAndVols(new Curve[] { discountCurve });
 
 		return model;
 	}
 
 	private double[] getDiscountFactorsFromForwardZeroRates(double[] maturities, double[] zeroRatesShifted) {
 
-		double[] discountFactors = new double[maturities.length];
+		final double[] discountFactors = new double[maturities.length];
 
 		double discountFactor = 1.0;
 		double maturityPrevious = 0.0;
 		for(int i=0; i<maturities.length; i++) {
-			double maturity = maturities[i];
+			final double maturity = maturities[i];
 			discountFactor *= Math.exp(- zeroRatesShifted[i] * (maturity-maturityPrevious));
 			discountFactors[i] = discountFactor;
 			maturityPrevious = maturity;

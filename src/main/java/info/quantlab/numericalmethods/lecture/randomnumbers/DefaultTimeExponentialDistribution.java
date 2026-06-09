@@ -11,7 +11,7 @@ public class DefaultTimeExponentialDistribution {
 
 	/**
 	 * Create exponential distributed random number sequence.
-	 * 
+	 *
 	 * @param uniformSequence The random number generator for a uniform distributed sequence.
 	 * @param lambda The parameter lambda.
 	 */
@@ -22,10 +22,10 @@ public class DefaultTimeExponentialDistribution {
 	}
 
 	public double getNext() {
-		
-		double uniform = uniformSequence.getAsDouble();
-		
-		double time = - 1.0/lambda * Math.log(1-uniform);
+
+		final double uniform = uniformSequence.getAsDouble();
+
+		final double time = - 1.0/lambda * Math.log(1-uniform);
 		return time;
 	}
 }

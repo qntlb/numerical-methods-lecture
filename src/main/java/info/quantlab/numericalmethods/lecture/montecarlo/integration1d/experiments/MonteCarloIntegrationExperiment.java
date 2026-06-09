@@ -12,13 +12,13 @@ public class MonteCarloIntegrationExperiment {
 
 	public static void main(String[] args) {
 
-		DoubleUnaryOperator function = x -> x*x*x;
+		final DoubleUnaryOperator function = x -> x*x*x;
 
-		double integralAnalytic = 0.25;
+		final double integralAnalytic = 0.25;
 
-		int numberOfSamplePoints = 100000;
+		final int numberOfSamplePoints = 100000;
 
-		MersenneTwister mersenne = new MersenneTwister(3141);
+		final MersenneTwister mersenne = new MersenneTwister(3141);
 
 		System.out.println("Integration Errors:");
 		System.out.println("n" + "\t" + "mersenne" + "\t" + "equidistant" + "\t" + "v.-d.-corput");
@@ -37,16 +37,16 @@ public class MonteCarloIntegrationExperiment {
 			sumVanDerCorput += function.applyAsDouble(VanDerCorputSequence.getVanDerCorputNumber(i, 2));
 
 			// Calculate the integral approximated "so far"
-			int currentNumberOfSamplePoints = (i+1);
+			final int currentNumberOfSamplePoints = (i+1);
 
-			double integralMersenneTwister = sumMersenneTwister / currentNumberOfSamplePoints;
-			double errorMersenneTwister = integralMersenneTwister-integralAnalytic;
+			final double integralMersenneTwister = sumMersenneTwister / currentNumberOfSamplePoints;
+			final double errorMersenneTwister = integralMersenneTwister-integralAnalytic;
 
-			double integralEquidistributed = sumEquidistributed / currentNumberOfSamplePoints;
-			double errorEquidistributed = integralEquidistributed-integralAnalytic;
+			final double integralEquidistributed = sumEquidistributed / currentNumberOfSamplePoints;
+			final double errorEquidistributed = integralEquidistributed-integralAnalytic;
 
-			double integralVanDerCorput = sumVanDerCorput / currentNumberOfSamplePoints;
-			double errorVanDerCorput = integralVanDerCorput-integralAnalytic;
+			final double integralVanDerCorput = sumVanDerCorput / currentNumberOfSamplePoints;
+			final double errorVanDerCorput = integralVanDerCorput-integralAnalytic;
 
 			// Print every 100 points the intermediate result
 			if(currentNumberOfSamplePoints % 100 == 0) {
@@ -60,14 +60,14 @@ public class MonteCarloIntegrationExperiment {
 		/*
 		 * Calculate the final result.
 		 */
-		double integralMersenneTwister = sumMersenneTwister / numberOfSamplePoints;
-		double errorMersenneTwister = integralMersenneTwister-integralAnalytic;
+		final double integralMersenneTwister = sumMersenneTwister / numberOfSamplePoints;
+		final double errorMersenneTwister = integralMersenneTwister-integralAnalytic;
 
-		double integralEquidistributed = sumEquidistributed / numberOfSamplePoints;
-		double errorEquidistributed = integralEquidistributed-integralAnalytic;
+		final double integralEquidistributed = sumEquidistributed / numberOfSamplePoints;
+		final double errorEquidistributed = integralEquidistributed-integralAnalytic;
 
-		double integralVanDerCorput = sumVanDerCorput / numberOfSamplePoints;
-		double errorVanDerCorput = integralVanDerCorput-integralAnalytic;
+		final double integralVanDerCorput = sumVanDerCorput / numberOfSamplePoints;
+		final double errorVanDerCorput = integralVanDerCorput-integralAnalytic;
 
 		System.out.println();
 

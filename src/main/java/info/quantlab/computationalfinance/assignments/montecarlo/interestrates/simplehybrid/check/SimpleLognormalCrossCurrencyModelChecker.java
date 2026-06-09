@@ -39,29 +39,31 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 
 	public static boolean check(SimpleLognormalCrossCurrencyModelAssignment solution, String testCase) {
 
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(evaluationTime, (int)Math.round(periodEnd/dt), dt);
-		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, numberOfPaths, seed);
+		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(evaluationTime, (int)Math.round(periodEnd/dt), dt);
+		final BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, numberOfPaths, seed);
 
-		SimpleCrossCurrencyModel simulationModel = solution.getSimpleCrossCurrencyModel(
+		final SimpleCrossCurrencyModel simulationModel = solution.getSimpleCrossCurrencyModel(
 				initialValueDomesticForwardRate, initialValueForeignForwardRate, initialValueFX,
 				volatilityDomestic, volatilityForeign, volatiltiyFXForward, correlationDomFor,
 				correlationFXDomenstic, correlationFXForeign, periodStart, maturity, domesticZeroBond, foreignZeroBond, brownianMotion);
 
-		if(simulationModel == null) System.out.println("\tYour solution did not return a model. Implement getSimpleCrossCurrencyModel");
+		if(simulationModel == null) {
+			System.out.println("\tYour solution did not return a model. Implement getSimpleCrossCurrencyModel");
+		}
 
 		/*
 		 * Check model - does not require implementation of product.
 		 */
 		if(testCase.equals("Model")) {
-			RandomVariable forwardDom = simulationModel.getForwardRate(0, periodStart, periodStart, periodEnd);
-			RandomVariable forwardFor = simulationModel.getForwardRate(1, periodStart, periodStart, periodEnd);
-			RandomVariable fxPay = simulationModel.getFXRate(1, periodEnd);
-			RandomVariable fxEval = simulationModel.getFXRate(1, 0.0);
-			RandomVariable numeraireAtPayment = simulationModel.getNumeraire(periodEnd);
-			RandomVariable numeraireAtEval = simulationModel.getNumeraire(0.0);
+			final RandomVariable forwardDom = simulationModel.getForwardRate(0, periodStart, periodStart, periodEnd);
+			final RandomVariable forwardFor = simulationModel.getForwardRate(1, periodStart, periodStart, periodEnd);
+			final RandomVariable fxPay = simulationModel.getFXRate(1, periodEnd);
+			final RandomVariable fxEval = simulationModel.getFXRate(1, 0.0);
+			final RandomVariable numeraireAtPayment = simulationModel.getNumeraire(periodEnd);
+			final RandomVariable numeraireAtEval = simulationModel.getNumeraire(0.0);
 
-			double payDomestic = forwardDom.div(numeraireAtPayment).mult(numeraireAtEval).expectation().doubleValue();
-			double payForeign = forwardFor.mult(fxPay).div(numeraireAtPayment).mult(numeraireAtEval).div(fxEval).expectation().doubleValue();
+			final double payDomestic = forwardDom.div(numeraireAtPayment).mult(numeraireAtEval).expectation().doubleValue();
+			final double payForeign = forwardFor.mult(fxPay).div(numeraireAtPayment).mult(numeraireAtEval).div(fxEval).expectation().doubleValue();
 
 			boolean success = true;
 			if(Math.abs(payDomestic - initialValueDomesticForwardRate*domesticZeroBond) < 0.001) {
@@ -87,8 +89,8 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 		 * Check product
 		 */
 
-		double fixingTime = periodStart;
-		double strike = 0.035;
+		final double fixingTime = periodStart;
+		final double strike = 0.035;
 
 		int currency = 0;
 		boolean isQuanto;
@@ -125,7 +127,7 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			isInAdvance = false;
 			paymentTime = isInAdvance ? periodStart : periodEnd;
 
-			double quantoAdjustment = Math.exp(-volatilityForeign*volatiltiyFXForward*correlationFXForeign*periodStart);
+			final double quantoAdjustment = Math.exp(-volatilityForeign*volatiltiyFXForward*correlationFXForeign*periodStart);
 			valueAnalytic = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate*quantoAdjustment, volatilityForeign, periodStart, strike, periodEnd-periodStart, domesticZeroBond);
 		}
 		break;
@@ -136,8 +138,8 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			isInAdvance = true;
 			paymentTime = isInAdvance ? periodStart : periodEnd;
 
-			double valueAnalyticDomestic = AnalyticFormulas.blackModelCapletValue(initialValueDomesticForwardRate, volatilityDomestic, periodStart, strike, periodEnd-periodStart, domesticZeroBond);
-			double inAdvanceAdjustment = Math.exp(+volatilityDomestic*volatilityDomestic*periodStart*(periodEnd-periodStart));
+			final double valueAnalyticDomestic = AnalyticFormulas.blackModelCapletValue(initialValueDomesticForwardRate, volatilityDomestic, periodStart, strike, periodEnd-periodStart, domesticZeroBond);
+			final double inAdvanceAdjustment = Math.exp(+volatilityDomestic*volatilityDomestic*periodStart*(periodEnd-periodStart));
 			valueAnalytic = (
 					valueAnalyticDomestic
 					+
@@ -152,9 +154,9 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			isInAdvance = true;
 			paymentTime = isInAdvance ? periodStart : periodEnd;
 
-			double valueAnalyticForeign = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate, volatilityForeign, periodStart, strike, periodEnd-periodStart, foreignZeroBond);
+			final double valueAnalyticForeign = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate, volatilityForeign, periodStart, strike, periodEnd-periodStart, foreignZeroBond);
 
-			double inAdvanceAdjustment = Math.exp(+volatilityForeign*volatilityForeign*periodStart*(periodEnd-periodStart));
+			final double inAdvanceAdjustment = Math.exp(+volatilityForeign*volatilityForeign*periodStart*(periodEnd-periodStart));
 			valueAnalytic = (
 					valueAnalyticForeign
 					+
@@ -170,9 +172,9 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			isInAdvance = true;
 			paymentTime = isInAdvance ? periodStart : periodEnd;
 
-			double inAdvanceAdjustment = Math.exp(+volatilityForeign*volatilityForeign*periodStart*(periodEnd-periodStart));
-			double quantoAdjustment = Math.exp(-volatilityForeign*volatiltiyFXForward*correlationFXForeign*periodStart);
-			double valueAnalyticForeign = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate*quantoAdjustment, volatilityForeign, periodStart, strike, periodEnd-periodStart, domesticZeroBond);
+			final double inAdvanceAdjustment = Math.exp(+volatilityForeign*volatilityForeign*periodStart*(periodEnd-periodStart));
+			final double quantoAdjustment = Math.exp(-volatilityForeign*volatiltiyFXForward*correlationFXForeign*periodStart);
+			final double valueAnalyticForeign = AnalyticFormulas.blackModelCapletValue(initialValueForeignForwardRate*quantoAdjustment, volatilityForeign, periodStart, strike, periodEnd-periodStart, domesticZeroBond);
 			valueAnalytic = (
 					valueAnalyticForeign
 					+
@@ -184,19 +186,21 @@ public class SimpleLognormalCrossCurrencyModelChecker {
 			throw new IllegalArgumentException("Unknown test case " + testCase);
 		}
 
-		CrossCurrencyProduct product = solution.getGeneralizedCaplet(
+		final CrossCurrencyProduct product = solution.getGeneralizedCaplet(
 				currency, isQuanto, fixingTime, periodStart, periodEnd, paymentTime, strike);
 
-		if(product == null) System.out.println("\tYour solution did not return a product. Implement getGeneralizedCaplet");
+		if(product == null) {
+			System.out.println("\tYour solution did not return a product. Implement getGeneralizedCaplet");
+		}
 
 		double value = Double.NaN;
 		try {
 			if(product != null) {
-				RandomVariable valuation = product.getValue(evaluationTime, simulationModel);
+				final RandomVariable valuation = product.getValue(evaluationTime, simulationModel);
 				value = valuation.getAverage();
 			}
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tThe valuation failed with an exception:");
 			e.printStackTrace();
 		}

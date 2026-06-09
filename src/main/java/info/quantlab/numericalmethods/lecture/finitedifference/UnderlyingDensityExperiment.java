@@ -59,8 +59,8 @@ public class UnderlyingDensityExperiment {
 		/*
 		 * Plotting the density for an implied volatility curve
 		 */
-		double amplitude = 1.0;		// a value of 2.0 creates no-arbitrage violations
-		double width = 1.0;
+		final double amplitude = 1.0;		// a value of 2.0 creates no-arbitrage violations
+		final double width = 1.0;
 		(new Plot2D(-1.0, 5.0, impliedBlackScholesVolatiltiyModel(amplitude, width))).setTitle("Implied volatility (\u03c3(K) = " + volatility + " * ( 1 + " + amplitude + " * cos((K-F)/(" + width + "/\\u03c0)").setXAxisLabel("K").setYAxisLabel("density").setYRange(0.0, (2+amplitude)*volatility).show();
 		(new Plot2D(-1.0, 5.0, densityFromImpliedVol(impliedBlackScholesVolatiltiyModel(amplitude, width)))).setTitle("Density from implied volatility (\u03c3(K) = " + volatility + " * ( 1 + " + amplitude + " * cos(" + width + "/\u03c0 * (K-F))").setXAxisLabel("S").setYAxisLabel("density").show();
 	}
@@ -74,39 +74,39 @@ public class UnderlyingDensityExperiment {
 		 * Note: it would be more efficient to pre-calculate the value vector, then calculate the density vector.
 		 * What we do here requires three times valuations - but it is quite fast as Monte-Carlo simulation is cached.
 		 */
-		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, (maturity-initialTime)/numberOfTimeSteps), 2, numberOfPaths, seed);
-		MonteCarloProcess process = new EulerSchemeFromProcessModel(processModel, brownianMotion);
-		MonteCarloAssetModel model = new MonteCarloAssetModel(process);
+		final BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, (maturity-initialTime)/numberOfTimeSteps), 2, numberOfPaths, seed);
+		final MonteCarloProcess process = new EulerSchemeFromProcessModel(processModel, brownianMotion);
+		final MonteCarloAssetModel model = new MonteCarloAssetModel(process);
 
 		// K -> V(K;T0) / N(T0)
-		DoubleUnaryOperator value = strike -> {
+		final DoubleUnaryOperator value = strike -> {
 			try {
-				AssetMonteCarloProduct product = new EuropeanOption(maturity, strike);
+				final AssetMonteCarloProduct product = new EuropeanOption(maturity, strike);
 				return product.getValue(initialTime, model).div(model.getNumeraire(initialTime)).getAverage();
 			}
-			catch(Exception e) {
+			catch(final Exception e) {
 				return Double.NaN;
 			}
 		};
 
 		// Density (via Central Finite Difference)
-		DoubleUnaryOperator density = strike -> ((value.applyAsDouble(strike+shift) - 2 * value.applyAsDouble(strike) + value.applyAsDouble(strike-shift)) / (shift * shift));
+		final DoubleUnaryOperator density = strike -> ((value.applyAsDouble(strike+shift) - 2 * value.applyAsDouble(strike) + value.applyAsDouble(strike-shift)) / (shift * shift));
 
 		return density;
 	}
 
 	private static DoubleUnaryOperator impliedBlackScholesVolatiltiyModel(double amplitude, double width) {
-		double forward = initialValue*Math.exp(riskFreeRate * maturity);
-		DoubleUnaryOperator volatilityCurve = strike -> volatility * (1 + amplitude * Math.cos((strike-forward)/width/Math.PI));
+		final double forward = initialValue*Math.exp(riskFreeRate * maturity);
+		final DoubleUnaryOperator volatilityCurve = strike -> volatility * (1 + amplitude * Math.cos((strike-forward)/width/Math.PI));
 
 		return volatilityCurve;
 	}
 
 	private static DoubleUnaryOperator densityFromImpliedVol(DoubleUnaryOperator impliedBlackScholesVolatiltiyModel) {
 
-		DoubleUnaryOperator value = strike -> AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, impliedBlackScholesVolatiltiyModel.applyAsDouble(strike), maturity, strike);
+		final DoubleUnaryOperator value = strike -> AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, impliedBlackScholesVolatiltiyModel.applyAsDouble(strike), maturity, strike);
 
-		DoubleUnaryOperator density = strike -> ((value.applyAsDouble(strike+shift) - 2 * value.applyAsDouble(strike) + value.applyAsDouble(strike-shift)) / (shift * shift));
+		final DoubleUnaryOperator density = strike -> ((value.applyAsDouble(strike+shift) - 2 * value.applyAsDouble(strike) + value.applyAsDouble(strike-shift)) / (shift * shift));
 
 		return density;
 	}

@@ -9,7 +9,7 @@ public interface Integrand {
 
 	/**
 	 * A function z ↦ f(z).
-	 * 
+	 *
 	 * @param arguments The argument z.
 	 * @return The value f(z).
 	 */

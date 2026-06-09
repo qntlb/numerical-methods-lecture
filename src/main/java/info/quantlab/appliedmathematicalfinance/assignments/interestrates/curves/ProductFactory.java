@@ -6,9 +6,9 @@ public interface ProductFactory {
 
 	/**
 	 * Create a simple text-book swap that is valued on a single curve.
-	 * 
+	 *
 	 * The two swap legs should have the same frequency (periodLength).
-	 * 
+	 *
 	 * @param periodLength The period length (as a fraction of one year.
 	 * @param maturity The maturity (in years from t=0 (now))
 	 * @param rateFix The fixed swap rate K.

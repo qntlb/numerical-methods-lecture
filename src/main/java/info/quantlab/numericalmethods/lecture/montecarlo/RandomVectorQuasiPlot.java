@@ -17,11 +17,11 @@ public class RandomVectorQuasiPlot {
 
 	public static void main(String[] args) throws Exception {
 
-		int numberOfPoints = 1000;
+		final int numberOfPoints = 1000;
 
-		RandomVectorQuasi sequence = new RandomVectorQuasi(numberOfPoints, 2);
+		final RandomVectorQuasi sequence = new RandomVectorQuasi(numberOfPoints, 2);
 
-		Plot plot = Plots.createScatter(
+		final Plot plot = Plots.createScatter(
 				sequence.getSequenceForComponent(0),
 				sequence.getSequenceForComponent(1),
 				0.0, 1.0, 3);

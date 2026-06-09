@@ -21,7 +21,7 @@ public class RandomNumberGeneratorFrom1D implements RandomNumberGenerator {
 
 	@Override
 	public double[] getNext() {
-		double[] value = new double[dimension];
+		final double[] value = new double[dimension];
 		for(int i=0; i<dimension; i++) {
 			value[i] = randomNumberGenerator.getAsDouble();
 		}

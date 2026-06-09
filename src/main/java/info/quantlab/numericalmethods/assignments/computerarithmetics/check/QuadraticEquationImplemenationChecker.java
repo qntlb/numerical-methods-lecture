@@ -31,7 +31,7 @@ public class QuadraticEquationImplemenationChecker {
 				/*
 				 * Check some extreme cases
 				 */
-				double[][] testCases = {
+				final double[][] testCases = {
 						{1.0,  100000.0},
 						{1.0, -100000.0},
 						{1.0,  10000000.0},
@@ -43,7 +43,7 @@ public class QuadraticEquationImplemenationChecker {
 						{-4, 0.0 },
 						{0.0, 0.0 },
 				};
-				for(double[] testCase : testCases) {
+				for(final double[] testCase : testCases) {
 					succes &= checkWithCoefficients(quadraticEquationFactory, testCase[0] /* q */,  testCase[1] /* p */);
 				}
 
@@ -68,12 +68,12 @@ public class QuadraticEquationImplemenationChecker {
 				 */
 				boolean isNonRealRootNaN;
 				try {
-					QuadraticEquation equationWithoutRoot = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
-					double solution = equationWithoutRoot.getSmallestRoot();
+					final QuadraticEquation equationWithoutRoot = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
+					final double solution = equationWithoutRoot.getSmallestRoot();
 
 					isNonRealRootNaN = Double.isNaN(solution);
 				}
-				catch(Exception e) {
+				catch(final Exception e) {
 					isNonRealRootNaN = false;
 				}
 				if(!isNonRealRootNaN) {
@@ -82,14 +82,14 @@ public class QuadraticEquationImplemenationChecker {
 			}
 
 		}
-		catch(UnsupportedOperationException e) {
+		catch(final UnsupportedOperationException e) {
 			System.out.println("Your assigment does not implement the factory method that should create"
 					+ " an object of type QuadraticEquation.");
 			System.out.println(e.getMessage());
 
 			succes = false;
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("Failed to test your implementation.");
 			System.out.println(e.getMessage());
 
@@ -106,17 +106,17 @@ public class QuadraticEquationImplemenationChecker {
 
 		// (x-1) * (x-2) = x^2 - 3 x + 2 => p = -3, q= 2
 		System.out.println("\t\tTesting q = 2, p = -2.");
-		double x1 = quadraticEquationFactory.createQuadraticEquation(2, -3).getSmallestRoot();
+		final double x1 = quadraticEquationFactory.createQuadraticEquation(2, -3).getSmallestRoot();
 		success &= x1 < 1.5;
 
 		// x * (x+2) = x^2 + 2 x => p = 2, q= 0
 		System.out.println("\t\tTesting q = 0, p = 2.");
-		double x2 = quadraticEquationFactory.createQuadraticEquation(0, 2).getSmallestRoot();
+		final double x2 = quadraticEquationFactory.createQuadraticEquation(0, 2).getSmallestRoot();
 		success &= Math.abs(x2-(-2.0)) < 1E-10;
 
 		// x * (x-2) = x^2 - 2 x => p = -2, q= 0
 		System.out.println("\t\tTesting q = 0, p = -2.");
-		double x3 = quadraticEquationFactory.createQuadraticEquation(0, -2).getSmallestRoot();
+		final double x3 = quadraticEquationFactory.createQuadraticEquation(0, -2).getSmallestRoot();
 		success &= Math.abs(x3-0.0) < 1E-10;
 
 		if(!success) {
@@ -129,15 +129,15 @@ public class QuadraticEquationImplemenationChecker {
 	}
 
 	private static boolean  checkgetCoefficients(QuadraticEquationFactory quadraticEquationFactory, double q, double p) {
-		QuadraticEquation equation = quadraticEquationFactory.createQuadraticEquation(q, p);
+		final QuadraticEquation equation = quadraticEquationFactory.createQuadraticEquation(q, p);
 
 		boolean success = false;
 		try {
-			double[] parameter = equation.getCoefficients();
+			final double[] parameter = equation.getCoefficients();
 
 			success = parameter[0] == 2.0 && parameter[1] == -1.0;
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tTest of method getCoefficients reported an exception, did not expect that: " + e.getMessage());
 		}
 
@@ -158,19 +158,19 @@ public class QuadraticEquationImplemenationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	private static boolean checkHasRealRoot(QuadraticEquationFactory quadraticEquationFactory) {
-		QuadraticEquation equation1 = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
+		final QuadraticEquation equation1 = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
 		if(equation1.hasRealRoot()) {
 			System.out.println("\tTest failed with coefficients " + Arrays.toString(equation1.getCoefficients()) + " failed. hasRealRoot reported true, should be false.");
 			return false;
 		}
 
-		QuadraticEquation equation2 = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
+		final QuadraticEquation equation2 = quadraticEquationFactory.createQuadraticEquation(2.0, -1.0);
 		if(equation2.hasRealRoot()) {
 			System.out.println("\tTest failed with coefficients " + Arrays.toString(equation2.getCoefficients()) + " failed. hasRealRoot reported true, should be false.");
 			return false;
 		}
 
-		QuadraticEquation equation3 = quadraticEquationFactory.createQuadraticEquation(1.0, 2.0);
+		final QuadraticEquation equation3 = quadraticEquationFactory.createQuadraticEquation(1.0, 2.0);
 		if(!equation3.hasRealRoot()) {
 			System.out.println("\tTest failed with coefficients " + Arrays.toString(equation2.getCoefficients()) + " failed. hasRealRoot reported false, should be true.");
 			return false;
@@ -191,9 +191,9 @@ public class QuadraticEquationImplemenationChecker {
 	public static boolean checkWithCoefficients(QuadraticEquationFactory quadraticEquationFactory, double q, double p) {
 		System.out.println("\tTesting with coefficients q = " + q + ", p = " + p);
 
-		QuadraticEquation equation = quadraticEquationFactory.createQuadraticEquation(q, p);
+		final QuadraticEquation equation = quadraticEquationFactory.createQuadraticEquation(q, p);
 
-		double x = equation.getSmallestRoot();
+		final double x = equation.getSmallestRoot();
 		System.out.println("\t\tSolution reported x = " + x);
 
 		if(Double.isNaN(x)) {
@@ -201,10 +201,10 @@ public class QuadraticEquationImplemenationChecker {
 			return false;
 		}
 
-		double error = (x*x + p * x + q) / (1+2*x*x+Math.abs(x*p));
+		final double error = (x*x + p * x + q) / (1+2*x*x+Math.abs(x*p));
 		System.out.println("\t\tThe relative error of the solution is " + error);
 
-		boolean success = Math.abs(error) < accuracy;
+		final boolean success = Math.abs(error) < accuracy;
 		if(!success) {
 			System.out.println("\t\u274cTest failed.");
 		}

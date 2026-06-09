@@ -24,19 +24,19 @@ public class FloatingPointNumbersExperiment {
 		/*
 		 * Double: ULP
 		 */
-		
+
 		System.out.println("Unit in the Last Place (ULP) as reported by Math::ulp:\n");
 
-		double ulp1 = Math.ulp(1.0);
+		final double ulp1 = Math.ulp(1.0);
 		System.out.println("ulp(1).......... = " + ulp1);
 		System.out.println("2^{-52}......... = " + Math.pow(2, -52));
 
-		double ulp0 = Math.ulp(0.0);
+		final double ulp0 = Math.ulp(0.0);
 		System.out.println("ulp(0).......... = " + ulp0);
 		System.out.println("2^{eMin-q}...... = " + Math.pow(2,-1022 - 52));
 
 		System.out.println("_".repeat(79)+"\n");
-		
+
 		/*
 		 * Double: Smallest positive number
 		 */

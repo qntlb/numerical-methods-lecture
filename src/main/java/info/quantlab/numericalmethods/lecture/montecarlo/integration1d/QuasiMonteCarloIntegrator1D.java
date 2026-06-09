@@ -17,16 +17,16 @@ public class QuasiMonteCarloIntegrator1D implements Integrator1D {
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
-		double domainSize = upperBound-lowerBound;
+		final double domainSize = upperBound-lowerBound;
 
 		double sum = 0.0;
 		for(int i=0; i<numberOfEvaluationPoints; i++) {
 
 			// left-points of equi-partitioning of [0,1] - x_i = i /n
-			double uniformSample = (2.0*i+0.0)/(2.0*numberOfEvaluationPoints);
+			final double uniformSample = (2.0*i+0.0)/(2.0*numberOfEvaluationPoints);
 
-			double argument = lowerBound + uniformSample * domainSize;
-			double value = integrand.applyAsDouble(argument);
+			final double argument = lowerBound + uniformSample * domainSize;
+			final double value = integrand.applyAsDouble(argument);
 
 			sum += value;
 		}

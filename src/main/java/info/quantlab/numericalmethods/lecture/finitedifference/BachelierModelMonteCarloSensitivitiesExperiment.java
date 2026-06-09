@@ -36,10 +36,10 @@ public class BachelierModelMonteCarloSensitivitiesExperiment {
 
 	private static void plotLinearFunction() {
 
-		double scalingFactor = 7.0;
-		DoubleUnaryOperator value = initialValue -> getRealizationAtMaturity(initialValue).mult(scalingFactor).expectation().doubleValue();
+		final double scalingFactor = 7.0;
+		final DoubleUnaryOperator value = initialValue -> getRealizationAtMaturity(initialValue).mult(scalingFactor).expectation().doubleValue();
 
-		DoubleUnaryOperator delta = initialValue -> (value.applyAsDouble(initialValue + shift) - value.applyAsDouble(initialValue - shift)) / (2*shift);
+		final DoubleUnaryOperator delta = initialValue -> (value.applyAsDouble(initialValue + shift) - value.applyAsDouble(initialValue - shift)) / (2*shift);
 
 		(new Plot2D(-3.0, 5.0, value)).setTitle("Valuation E( a X ) for X(0) = X_0").setXAxisLabel("initial value X_0").setYAxisLabel("value").show();
 		(new Plot2D(-3.0, 5.0, delta)).setTitle("FD appox. of partial derivative d/X_0 of E( a X ) for X(0) = X_0").setXAxisLabel("initial value X_0").setYAxisLabel("value").show();
@@ -48,10 +48,10 @@ public class BachelierModelMonteCarloSensitivitiesExperiment {
 
 	private static void plotIndicatorFunction() {
 
-		double strike = 1.0;
-		DoubleUnaryOperator value = initialValue -> getRealizationAtMaturity(initialValue).sub(strike).choose(new Scalar(1.0), new Scalar(0.0)).expectation().doubleValue();
+		final double strike = 1.0;
+		final DoubleUnaryOperator value = initialValue -> getRealizationAtMaturity(initialValue).sub(strike).choose(new Scalar(1.0), new Scalar(0.0)).expectation().doubleValue();
 
-		DoubleUnaryOperator delta = initialValue -> (value.applyAsDouble(initialValue + shift) - value.applyAsDouble(initialValue - shift)) / (2*shift);
+		final DoubleUnaryOperator delta = initialValue -> (value.applyAsDouble(initialValue + shift) - value.applyAsDouble(initialValue - shift)) / (2*shift);
 
 		(new Plot2D(-3.0, 5.0, value)).setTitle("Valuation E( 1(X > K) ) for X(0) = X_0").setXAxisLabel("initial value X_0").setYAxisLabel("value").show();
 		(new Plot2D(-3.0, 5.0, delta)).setTitle("FD appox. of partial derivative d/X_0 of E( 1(X > K) ) for X(0) = X_0").setXAxisLabel("initial value X_0").setYAxisLabel("value").show();
@@ -60,12 +60,12 @@ public class BachelierModelMonteCarloSensitivitiesExperiment {
 
 	private static RandomVariable getRealizationAtMaturity(double initialValue) {
 		try {
-			ProcessModel model = new BachelierModel(initialValue, riskFreeRate, volatility);
-			BrownianMotion bm = new BrownianMotionFromMersenneRandomNumbers(new TimeDiscretizationFromArray(initialTime, 1, maturity-initialTime), 1, numberOfPaths, seed);
-			MonteCarloProcess process = new EulerSchemeFromProcessModel(model, bm);
+			final ProcessModel model = new BachelierModel(initialValue, riskFreeRate, volatility);
+			final BrownianMotion bm = new BrownianMotionFromMersenneRandomNumbers(new TimeDiscretizationFromArray(initialTime, 1, maturity-initialTime), 1, numberOfPaths, seed);
+			final MonteCarloProcess process = new EulerSchemeFromProcessModel(model, bm);
 
 			return process.getProcessValue(1, 0);
-		} catch (CalculationException e) {
+		} catch (final CalculationException e) {
 			throw new RuntimeException(e);
 		}
 	}

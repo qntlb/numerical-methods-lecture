@@ -28,7 +28,7 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	public static void main(String[] args) throws InterruptedException, ExecutionException {
 
-		int numberOfSamples = 200000000; // 2 * 10^8
+		final int numberOfSamples = 200000000; // 2 * 10^8
 
 		System.out.println("Monte-Carlo approximation of Pi:                                  error           time");
 		System.out.println("_".repeat(100));
@@ -43,17 +43,20 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	private static void testHaltonWithStreamSeq(int numberOfSamples) {
 
-		long timeStart = System.currentTimeMillis();
-		double piHalton = 4.0 * IntStream.range(0, numberOfSamples).mapToDouble(
+		final long timeStart = System.currentTimeMillis();
+		final double piHalton = 4.0 * IntStream.range(0, numberOfSamples).mapToDouble(
 				i -> {
-					double x = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 2)-0.5);
-					double y = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 3)-0.5);
-					if(x*x+y*y < 1) return 1.0;
-					else 			return 0.0;
+					final double x = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 2)-0.5);
+					final double y = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 3)-0.5);
+					if(x*x+y*y < 1) {
+						return 1.0;
+					} else {
+						return 0.0;
+					}
 				}).sum() / numberOfSamples;
-		long timeEnd = System.currentTimeMillis();
+		final long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+		final double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Halton, sequential using stream..............................: " +
 				String.format("%10.2E", piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
@@ -61,17 +64,20 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	private static void testHaltonWithStreamPar(int numberOfSamples) {
 
-		long timeStart = System.currentTimeMillis();
-		double piHalton = 4.0 * IntStream.range(0, numberOfSamples).parallel().mapToDouble(
+		final long timeStart = System.currentTimeMillis();
+		final double piHalton = 4.0 * IntStream.range(0, numberOfSamples).parallel().mapToDouble(
 				i -> {
-					double x = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 2)-0.5);
-					double y = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 3)-0.5);
-					if(x*x+y*y < 1) return 1.0;
-					else 			return 0.0;
+					final double x = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 2)-0.5);
+					final double y = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 3)-0.5);
+					if(x*x+y*y < 1) {
+						return 1.0;
+					} else {
+						return 0.0;
+					}
 				}).sum() / numberOfSamples;
-		long timeEnd = System.currentTimeMillis();
+		final long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+		final double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Halton, parallel using stream................................: " +
 				String.format("%10.2E", piHalton-piAnalytic) + "\t" + timeInSeconds + " sec.");
@@ -79,19 +85,22 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	private static  void testMersenneWithStreamSeq(int numberOfSamples) {
 
-		org.apache.commons.math3.random.MersenneTwister mersenne = new org.apache.commons.math3.random.MersenneTwister(3141);
+		final org.apache.commons.math3.random.MersenneTwister mersenne = new org.apache.commons.math3.random.MersenneTwister(3141);
 
-		long timeStart = System.currentTimeMillis();
-		double piMersenne = 4.0 * IntStream.range(0, numberOfSamples).mapToDouble(
+		final long timeStart = System.currentTimeMillis();
+		final double piMersenne = 4.0 * IntStream.range(0, numberOfSamples).mapToDouble(
 				i -> {
-					double x = 2.0 * (mersenne.nextDouble()-0.5);
-					double y = 2.0 * (mersenne.nextDouble()-0.5);
-					if(x*x+y*y < 1) return 1.0;
-					else 			return 0.0;
+					final double x = 2.0 * (mersenne.nextDouble()-0.5);
+					final double y = 2.0 * (mersenne.nextDouble()-0.5);
+					if(x*x+y*y < 1) {
+						return 1.0;
+					} else {
+						return 0.0;
+					}
 				}).sum() / numberOfSamples;
-		long timeEnd = System.currentTimeMillis();
+		final long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+		final double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Mersenne, sequential using stream............................: " +
 				String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
@@ -99,21 +108,24 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	private static  void testMersenneWithStreamPar(int numberOfSamples) {
 
-		org.apache.commons.math3.random.MersenneTwister mersenne = new org.apache.commons.math3.random.MersenneTwister(3141);
+		final org.apache.commons.math3.random.MersenneTwister mersenne = new org.apache.commons.math3.random.MersenneTwister(3141);
 
-		long timeStart = System.currentTimeMillis();
-		double piMersenne = 4.0 * IntStream.range(0, numberOfSamples).parallel().mapToDouble(
+		final long timeStart = System.currentTimeMillis();
+		final double piMersenne = 4.0 * IntStream.range(0, numberOfSamples).parallel().mapToDouble(
 				i -> {
 					synchronized (mersenne) {
-						double x = 2.0 * (mersenne.nextDouble()-0.5);
-						double y = 2.0 * (mersenne.nextDouble()-0.5);
-						if(x*x+y*y < 1) return 1.0;
-						else 			return 0.0;
+						final double x = 2.0 * (mersenne.nextDouble()-0.5);
+						final double y = 2.0 * (mersenne.nextDouble()-0.5);
+						if(x*x+y*y < 1) {
+							return 1.0;
+						} else {
+							return 0.0;
+						}
 					}
 				}).sum() / numberOfSamples;
-		long timeEnd = System.currentTimeMillis();
+		final long timeEnd = System.currentTimeMillis();
 
-		double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+		final double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 		System.out.println("Mersenne, parallel using stream, synchonized.................: " +
 				String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
@@ -121,25 +133,25 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	private static void testMersenneWithExecutor(int numberOfSamples) throws InterruptedException, ExecutionException {
 
-		long timeStart = System.currentTimeMillis();
+		final long timeStart = System.currentTimeMillis();
 
-		int numberOfTask = 100;
-		int numberOfSamplesPerTask = numberOfSamples / numberOfTask;
+		final int numberOfTask = 100;
+		final int numberOfSamplesPerTask = numberOfSamples / numberOfTask;
 
-		int numberOfThreads = Runtime.getRuntime().availableProcessors();
-		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+		final int numberOfThreads = Runtime.getRuntime().availableProcessors();
+		final ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 
 		try {
-			Random randomSeed = new Random(3216);
+			final Random randomSeed = new Random(3216);
 
 			/*
 			 * Distribute the tasks.
 			 */
-			List<Future<Double>> results = new ArrayList<>();
+			final List<Future<Double>> results = new ArrayList<>();
 			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
-				long seed = randomSeed.nextLong();
+				final long seed = randomSeed.nextLong();
 
-				Future<Double> value = executor.submit(() -> getApproximationOfPiWithMersenne(seed, numberOfSamplesPerTask));
+				final Future<Double> value = executor.submit(() -> getApproximationOfPiWithMersenne(seed, numberOfSamplesPerTask));
 				results.add(value);
 			}
 
@@ -150,11 +162,11 @@ public class MonteCarloIntegrationParallelExperiment {
 			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
 				sum += results.get(taskIndex).get();
 			}
-			double piMersenne = sum / numberOfTask;
+			final double piMersenne = sum / numberOfTask;
 
-			long timeEnd = System.currentTimeMillis();
+			final long timeEnd = System.currentTimeMillis();
 
-			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+			final double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 			System.out.println("Mersenne, parallel Executor w/ thread local generator........: " +
 					String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
@@ -166,23 +178,23 @@ public class MonteCarloIntegrationParallelExperiment {
 
 	private static void testHaltonWithExecutor(int numberOfSamples) throws InterruptedException, ExecutionException {
 
-		long timeStart = System.currentTimeMillis();
+		final long timeStart = System.currentTimeMillis();
 
-		int numberOfTask = 100;
-		int numberOfSamplesPerTask = numberOfSamples / numberOfTask;
+		final int numberOfTask = 100;
+		final int numberOfSamplesPerTask = numberOfSamples / numberOfTask;
 
-		int numberOfThreads = Runtime.getRuntime().availableProcessors();
-		ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+		final int numberOfThreads = Runtime.getRuntime().availableProcessors();
+		final ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
 
 		try {
 			/*
 			 * Distribute the tasks.
 			 */
-			List<Future<Double>> results = new ArrayList<>();
+			final List<Future<Double>> results = new ArrayList<>();
 			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
-				int startIndex = taskIndex * numberOfSamplesPerTask;
+				final int startIndex = taskIndex * numberOfSamplesPerTask;
 
-				Future<Double> value = executor.submit(() -> getApproximationOfPiWithHalton(startIndex, numberOfSamplesPerTask));
+				final Future<Double> value = executor.submit(() -> getApproximationOfPiWithHalton(startIndex, numberOfSamplesPerTask));
 				results.add(value);
 			}
 
@@ -193,11 +205,11 @@ public class MonteCarloIntegrationParallelExperiment {
 			for(int taskIndex = 0; taskIndex<numberOfTask; taskIndex++) {
 				sum += results.get(taskIndex).get();
 			}
-			double piMersenne = sum / numberOfTask;
+			final double piMersenne = sum / numberOfTask;
 
-			long timeEnd = System.currentTimeMillis();
+			final long timeEnd = System.currentTimeMillis();
 
-			double timeInSeconds = (timeEnd-timeStart) / 1000.0;
+			final double timeInSeconds = (timeEnd-timeStart) / 1000.0;
 
 			System.out.println("Halton, parallel using Executor..............................: " +
 					String.format("%10.2E", piMersenne-piAnalytic) + "\t" + timeInSeconds + " sec.");
@@ -208,14 +220,16 @@ public class MonteCarloIntegrationParallelExperiment {
 	}
 
 	private static double getApproximationOfPiWithMersenne(long seed, int numberOfSamples) {
-		org.apache.commons.math3.random.MersenneTwister mersenne = new org.apache.commons.math3.random.MersenneTwister(seed);
+		final org.apache.commons.math3.random.MersenneTwister mersenne = new org.apache.commons.math3.random.MersenneTwister(seed);
 
 		int numberOfSamplesInUnitCircle = 0;
 
 		for(int i = 0; i<numberOfSamples; i++) {
-			double x = 2.0 * (mersenne.nextDouble()-0.5);
-			double y = 2.0 * (mersenne.nextDouble()-0.5);
-			if(x*x + y*y < 1) numberOfSamplesInUnitCircle++;
+			final double x = 2.0 * (mersenne.nextDouble()-0.5);
+			final double y = 2.0 * (mersenne.nextDouble()-0.5);
+			if(x*x + y*y < 1) {
+				numberOfSamplesInUnitCircle++;
+			}
 		}
 
 		return 4.0 * numberOfSamplesInUnitCircle / numberOfSamples;
@@ -226,9 +240,11 @@ public class MonteCarloIntegrationParallelExperiment {
 		int numberOfSamplesInUnitCircle = 0;
 
 		for(int i = startIndex; i<startIndex+numberOfSamples; i++) {
-			double x = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 2)-0.5);
-			double y = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 3)-0.5);
-			if(x*x + y*y < 1) numberOfSamplesInUnitCircle++;
+			final double x = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 2)-0.5);
+			final double y = 2.0 * (HaltonSequence.getHaltonNumberForGivenBase(i, 3)-0.5);
+			if(x*x + y*y < 1) {
+				numberOfSamplesInUnitCircle++;
+			}
 		}
 
 		return 4.0 * numberOfSamplesInUnitCircle / numberOfSamples;

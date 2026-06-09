@@ -18,14 +18,14 @@ public class MonteCarloIntegrator1DSeedExperiment {
 				"""
 				);
 
-		int numberOfEvaluationPoints = 10000;
+		final int numberOfEvaluationPoints = 10000;
 
 
 		/*
 		 * Test some special seeds
 		 */
-		for(int seed : new int[] { 3141, 1313, 1, 1632 }) {
-			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, seed);
+		for(final int seed : new int[] { 3141, 1313, 1, 1632 }) {
+			final Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, seed);
 			testIntegrator(integratorMonteCarlo, true);
 		}
 
@@ -33,13 +33,13 @@ public class MonteCarloIntegrator1DSeedExperiment {
 		/*
 		 * Test with random seeds (and plot the distribution of errors)
 		 */
-		List<Double> errors = new ArrayList<>();
+		final List<Double> errors = new ArrayList<>();
 
-		Random randomSeed = new Random(3141);
+		final Random randomSeed = new Random(3141);
 		for(int i=0; i< 10000; i++) {
-			int seed = randomSeed.nextInt();
-			Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, seed);
-			double error = testIntegrator(integratorMonteCarlo, false);
+			final int seed = randomSeed.nextInt();
+			final Integrator1D integratorMonteCarlo = new MonteCarloIntegrator1D(numberOfEvaluationPoints, seed);
+			final double error = testIntegrator(integratorMonteCarlo, false);
 			errors.add(error);
 		}
 
@@ -50,18 +50,20 @@ public class MonteCarloIntegrator1DSeedExperiment {
 
 	private static double testIntegrator(Integrator1D integrator, boolean isPrintResult) {
 
-		DoubleUnaryOperator integrand = x -> Math.cos(x);
-		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
+		final DoubleUnaryOperator integrand = x -> Math.cos(x);
+		final DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		double lowerBound = 0.0;
-		double upperBound = 5.0;
+		final double lowerBound = 0.0;
+		final double upperBound = 5.0;
 
-		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound) - integralAnalytic.applyAsDouble(lowerBound);
-		double integralValueSimpsons = integrator.integrate(integrand, lowerBound, upperBound);
+		final double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound) - integralAnalytic.applyAsDouble(lowerBound);
+		final double integralValueSimpsons = integrator.integrate(integrand, lowerBound, upperBound);
 
-		double error = integralValueSimpsons - integralValueAnalytic;
+		final double error = integralValueSimpsons - integralValueAnalytic;
 
-		if(isPrintResult) System.out.println(String.format("%-35s  %20.16f  \u00b1 %5.3e", integrator.getClass().getSimpleName(), integralValueSimpsons, error));
+		if(isPrintResult) {
+			System.out.println(String.format("%-35s  %20.16f  \u00b1 %5.3e", integrator.getClass().getSimpleName(), integralValueSimpsons, error));
+		}
 
 		return error;
 	}

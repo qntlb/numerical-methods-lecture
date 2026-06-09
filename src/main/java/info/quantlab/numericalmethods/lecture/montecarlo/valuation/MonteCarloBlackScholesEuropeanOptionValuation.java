@@ -19,44 +19,44 @@ import net.finmath.time.TimeDiscretizationFromArray;
 public class MonteCarloBlackScholesEuropeanOptionValuation {
 
 	public static void main(String[] args) throws CalculationException {
-		double initialValue = 100.0;
-		double riskFreeRate = 0.05;
-		double volatility = 0.20;
+		final double initialValue = 100.0;
+		final double riskFreeRate = 0.05;
+		final double volatility = 0.20;
 
-		double initialTime = 0.0;
-		int numberOfTimeSteps = 100;
-		double deltaT = 0.05;
+		final double initialTime = 0.0;
+		final int numberOfTimeSteps = 100;
+		final double deltaT = 0.05;
 
-		int numberOfPaths = 2000000;
-		int numberOfFactors = 1;
-		int seed = 3141;
+		final int numberOfPaths = 2000000;
+		final int numberOfFactors = 1;
+		final int seed = 3141;
 
-		double maturity = 5.0;
-		double strike = 105;
+		final double maturity = 5.0;
+		final double strike = 105;
 
 
-		ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
+		final ProcessModel blackScholesModel = new BlackScholesModel(initialValue, riskFreeRate, volatility);
 
-		TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
+		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
 
-		BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, numberOfPaths, seed);
+		final BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, numberOfFactors, numberOfPaths, seed);
 
-		MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
+		final MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
 
-		MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
+		final MonteCarloAssetModel blackScholesMonteCarloModel = new MonteCarloAssetModel(process);
 
-		DoubleToRandomVariableFunction processPaths = t -> blackScholesMonteCarloModel.getAssetValue(t, 0);
+		final DoubleToRandomVariableFunction processPaths = t -> blackScholesMonteCarloModel.getAssetValue(t, 0);
 		(new PlotProcess2D(timeDiscretization, processPaths, 100))
 		.setTitle("Path of a Black Scholes Model")
 		.setXAxisLabel("Time t")
 		.setYAxisLabel("Stock Value S(t)")
 		.show();
 
-		AssetMonteCarloProduct option = new EuropeanOption(maturity, strike);
+		final AssetMonteCarloProduct option = new EuropeanOption(maturity, strike);
 
-		double value = option.getValue(initialTime, blackScholesMonteCarloModel).getAverage();
+		final double value = option.getValue(initialTime, blackScholesMonteCarloModel).getAverage();
 
-		double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
+		final double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike);
 		System.out.println("Monte-Carlo valuation...: " + value);
 		System.out.println("Analytic valuation......: " + valueAnalytic);
 	}

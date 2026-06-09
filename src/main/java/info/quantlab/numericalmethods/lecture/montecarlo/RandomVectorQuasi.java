@@ -13,13 +13,15 @@ public class RandomVectorQuasi {
 
 	// Our memory for the d-Dimensional sequence indexed as [sampleIndex][componentIndex]
 	// Alternative would be : [componentIndex][sampleIndex]
-	private double[][] randomVectorSequence;
+	private final double[][] randomVectorSequence;
 
 	public RandomVectorQuasi(int length, int dimension) {
 
-		if(dimension != 2) throw new IllegalArgumentException("Currently we only support dim. = 2");
+		if(dimension != 2) {
+			throw new IllegalArgumentException("Currently we only support dim. = 2");
+		}
 
-		HaltonSequence sequence = new HaltonSequence(new int[] { 2, 3 } );
+		final HaltonSequence sequence = new HaltonSequence(new int[] { 2, 3 } );
 
 		randomVectorSequence = new double[length][dimension];
 
@@ -42,7 +44,7 @@ public class RandomVectorQuasi {
 	}
 
 	double[] getSequenceForComponent(int componentIndex) {
-		double[] componentSequence = new double[randomVectorSequence.length];
+		final double[] componentSequence = new double[randomVectorSequence.length];
 		for(int i=0; i<randomVectorSequence.length; i++) {
 			componentSequence[i] = randomVectorSequence[i][componentIndex];
 		}

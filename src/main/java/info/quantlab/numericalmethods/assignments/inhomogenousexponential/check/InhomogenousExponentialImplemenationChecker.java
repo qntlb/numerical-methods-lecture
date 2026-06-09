@@ -61,7 +61,7 @@ public class InhomogenousExponentialImplemenationChecker {
 			break;
 			}
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tTest '" + whatToCheck.getName() + "' failed with exception: " + e.getMessage());
 			System.out.println("\nHere is a stack trace:");
 			e.printStackTrace(System.out);
@@ -78,18 +78,18 @@ public class InhomogenousExponentialImplemenationChecker {
 	}
 
 	private static boolean checkBasicFunctionality(InhomogenousExponentialAssignment solution) {
-		double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
-		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
+		final double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
+		final double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
 
-		RandomNumberGenerator1D uniforms = new VanDerCorputSequence(2);
+		final RandomNumberGenerator1D uniforms = new VanDerCorputSequence(2);
 
 		try {
-			DoubleSupplier defaultTimeSequence =
+			final DoubleSupplier defaultTimeSequence =
 					solution.createRandomNumberGeneratorInhomogenousExponential(uniforms, times, intensities);
 
-			double test = defaultTimeSequence.getAsDouble();
+			final double test = defaultTimeSequence.getAsDouble();
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tCould not instanciate generator (DoubleSupplier): " + e.getMessage());
 			e.printStackTrace();
 			return false;
@@ -100,30 +100,32 @@ public class InhomogenousExponentialImplemenationChecker {
 
 	private static boolean checkSampling(InhomogenousExponentialAssignment solution) {
 
-		double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
-		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
+		final double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
+		final double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
 
 		System.out.println("\t\tUsing times " + Arrays.toString(times));
 		System.out.println("\t\tUsing intensities " + Arrays.toString(intensities));
 
-		RandomNumberGenerator1D uniforms = new VanDerCorputSequence(2);
-		DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniforms, times, intensities);
+		final RandomNumberGenerator1D uniforms = new VanDerCorputSequence(2);
+		final DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniforms, times, intensities);
 
-		int numberOfSamples = 100000;
-		double maturity = 3.0;
+		final int numberOfSamples = 100000;
+		final double maturity = 3.0;
 
 		long survivalCounter = 0;
 		double sumOfTimes = 0.0;
 		for(int i=0; i<numberOfSamples; i++) {
 
-			double time = defaultTimeSequence.getAsDouble();
+			final double time = defaultTimeSequence.getAsDouble();
 
 			sumOfTimes += time;
-			if(time > maturity) survivalCounter++;
+			if(time > maturity) {
+				survivalCounter++;
+			}
 		}
 
-		double averageTime = sumOfTimes / numberOfSamples;
-		double survivalProb = (double)survivalCounter / numberOfSamples;
+		final double averageTime = sumOfTimes / numberOfSamples;
+		final double survivalProb = (double)survivalCounter / numberOfSamples;
 
 		System.out.println();
 		System.out.println("      E(\u03c4) = " + averageTime);
@@ -132,8 +134,8 @@ public class InhomogenousExponentialImplemenationChecker {
 		System.out.println("_".repeat(79));
 
 		// Assert that we get the same survivalProb for maturity = 3.0;
-		double survialProbAnalytic = Math.exp(-1.0) * Math.exp(-0.5) * Math.exp(-2.0);
-		double deviation = Math.abs(survialProbAnalytic - survivalProb);
+		final double survialProbAnalytic = Math.exp(-1.0) * Math.exp(-0.5) * Math.exp(-2.0);
+		final double deviation = Math.abs(survialProbAnalytic - survivalProb);
 		if(deviation > 1E-4) {
 			System.out.println("\tSurvival probability from 0 to 3.0 appears to be incorrect.");
 			return false;
@@ -143,28 +145,28 @@ public class InhomogenousExponentialImplemenationChecker {
 	}
 
 	private static boolean checkAccuracy(InhomogenousExponentialAssignment solution) {
-		int numberOfSamples = 10000;
-		double[] inputUniforms = IntStream.range(0, numberOfSamples).mapToDouble(i -> (double)i/numberOfSamples).toArray();
+		final int numberOfSamples = 10000;
+		final double[] inputUniforms = IntStream.range(0, numberOfSamples).mapToDouble(i -> (double)i/numberOfSamples).toArray();
 
-		double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
-		double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
+		final double[] times = new double[] { 1.0, 2.0, 3.0, 5.0 };
+		final double[] intensities = new double[] { 1.0, 0.5, 2.0, 0.2, 0.1 };
 
 		System.out.println("\t\tUsing times " + Arrays.toString(times));
 		System.out.println("\t\tUsing intensities " + Arrays.toString(intensities));
 
-		OfDouble iterator = Arrays.stream(inputUniforms).iterator();
+		final OfDouble iterator = Arrays.stream(inputUniforms).iterator();
 
-		RandomNumberGenerator1D uniformGenerator = () -> iterator.next();
+		final RandomNumberGenerator1D uniformGenerator = () -> iterator.next();
 
-		DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniformGenerator, times, intensities);
+		final DoubleSupplier defaultTimeSequence = solution.createRandomNumberGeneratorInhomogenousExponential(uniformGenerator, times, intensities);
 
-		DoubleStream defaultTimes = DoubleStream.generate(defaultTimeSequence).limit(numberOfSamples);
+		final DoubleStream defaultTimes = DoubleStream.generate(defaultTimeSequence).limit(numberOfSamples);
 
-		DoubleStream defaultTimesTransformed = defaultTimes.map(time -> transformedTime(time, times, intensities));
+		final DoubleStream defaultTimesTransformed = defaultTimes.map(time -> transformedTime(time, times, intensities));
 
-		DoubleStream probabilities = defaultTimesTransformed.map(t -> 1.0-Math.exp(-t));
+		final DoubleStream probabilities = defaultTimesTransformed.map(t -> 1.0-Math.exp(-t));
 
-		double[] probabilitiesArray = probabilities.toArray();
+		final double[] probabilitiesArray = probabilities.toArray();
 
 		for(int i=0; i<inputUniforms.length; i++) {
 			if(Math.abs(inputUniforms[i]-probabilitiesArray[i]) > 1E-14) {
@@ -178,7 +180,7 @@ public class InhomogenousExponentialImplemenationChecker {
 
 	/**
 	 * This is the function \( \Lambda(t) := \int_{0}^{t} \lambda(s) \mathrm{d}s \).
-	 * 
+	 *
 	 * @param time The time t.
 	 * @param times The time discretization t_{i}
 	 * @param intensities The intensity for the interval t_{i-1} to t_{i}, where t_{-1} := -\infinity and t_{n} := +\infinity.
@@ -189,8 +191,8 @@ public class InhomogenousExponentialImplemenationChecker {
 		double transformedTime = 0.0;
 		double timeStart = 0.0;
 		for(int i=0; i<intensities.length; i++) {
-			double timeEnd = i < times.length ? times[i] : Double.POSITIVE_INFINITY;
-			double transformedTimeStep = intensities[i] * (timeEnd - timeStart);
+			final double timeEnd = i < times.length ? times[i] : Double.POSITIVE_INFINITY;
+			final double transformedTimeStep = intensities[i] * (timeEnd - timeStart);
 			if(timeEnd > time) {
 				transformedTime += intensities[i] * (time-timeStart);
 				break;

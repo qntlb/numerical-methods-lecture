@@ -6,7 +6,7 @@ package info.quantlab.appliedmathematicalfinance.assignments.interestrates.curve
 public interface InterestRateCurveHedgePortfolioAssignment {
 
 	ProductFactory getSwapFactory();
-	
+
 	InterestRateCurveHedgePortfolio getInterestRateCurveHedgePortfolio(ModelFactory modelFactory, ProductFactory swapFactory);
 
 }

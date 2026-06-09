@@ -27,9 +27,9 @@ public class IntegerArithmeticExperiment {
 
 		System.out.println("Behaviour of Integer.MAX_VALUE:\n");
 
-		int i = Integer.MAX_VALUE;
+		final int i = Integer.MAX_VALUE;
 
-		int iPlusOne = i+1;
+		final int iPlusOne = i+1;
 
 		System.out.println("i     = " + i);
 		System.out.println("i+1   = " + iPlusOne);
@@ -48,15 +48,15 @@ public class IntegerArithmeticExperiment {
 		System.out.println("The overflow will also lead that some rules for the modulus (%) are violated:\n");
 
 		// The sum of integerBig and intergerSmall will result in an overflow
-		int integerBig = Integer.MAX_VALUE-9;
-		int integerSmall = 20;
-		int modulus = 13;
-		int modOfBig = integerBig % modulus;
-		int modOfSmall = integerSmall % modulus;
+		final int integerBig = Integer.MAX_VALUE-9;
+		final int integerSmall = 20;
+		final int modulus = 13;
+		final int modOfBig = integerBig % modulus;
+		final int modOfSmall = integerSmall % modulus;
 
 
-		int sumOfModulusMod = (modOfBig+modOfSmall) % modulus;
-		int modulusOfSum = (integerBig+integerSmall) % modulus;
+		final int sumOfModulusMod = (modOfBig+modOfSmall) % modulus;
+		final int modulusOfSum = (integerBig+integerSmall) % modulus;
 
 		System.out.println("Large integer a = " + integerBig);
 		System.out.println("Modulus c       = " + modulus);

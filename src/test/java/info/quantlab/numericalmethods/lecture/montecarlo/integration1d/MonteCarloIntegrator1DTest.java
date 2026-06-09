@@ -22,25 +22,25 @@ public class MonteCarloIntegrator1DTest {
 	@Test
 	public void test() {
 
-		double lowerBound = 0.0;
-		double upperBound = 5.0;
-		DoubleUnaryOperator integrand = x -> Math.cos(x);
+		final double lowerBound = 0.0;
+		final double upperBound = 5.0;
+		final DoubleUnaryOperator integrand = x -> Math.cos(x);
 
-		DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
+		final DoubleUnaryOperator integralAnalytic = x -> Math.sin(x);
 
-		int numberOfEvaluationPoints = 100000;
-		int seed = 3141;
+		final int numberOfEvaluationPoints = 100000;
+		final int seed = 3141;
 
-		Integrator1D integrator = new MonteCarloIntegrator1DWithStreams(numberOfEvaluationPoints, seed);
+		final Integrator1D integrator = new MonteCarloIntegrator1DWithStreams(numberOfEvaluationPoints, seed);
 
-		double integralValueNumeric = integrator.integrate(integrand, lowerBound, upperBound);
-		double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);
+		final double integralValueNumeric = integrator.integrate(integrand, lowerBound, upperBound);
+		final double integralValueAnalytic = integralAnalytic.applyAsDouble(upperBound)-integralAnalytic.applyAsDouble(lowerBound);
 
-		double error = integralValueNumeric-integralValueAnalytic;
+		final double error = integralValueNumeric-integralValueAnalytic;
 
 		System.out.println(String.format("%30s:", integrator.getClass().getSimpleName()) + "\t" + "numeric: " + integralValueNumeric + "\tanalytic: " + integralValueAnalytic + "\t" + error);
 
-		double tolerance = 3.0/Math.sqrt(numberOfEvaluationPoints);
+		final double tolerance = 3.0/Math.sqrt(numberOfEvaluationPoints);
 
 		Assert.assertEquals("Integral", integralValueNumeric, integralValueAnalytic, tolerance);
 	}

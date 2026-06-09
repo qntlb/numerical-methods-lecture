@@ -10,13 +10,13 @@ import java.util.Random;
 public class RandomVectorLCG {
 
 	// Create a 1-D random number generator x_{k}
-	private Random random = new Random(3141);
+	private final Random random = new Random(3141);
 
 	// Our memory for the d-Dimensional sequence indexed as [sampleIndex][componentIndex]. Alternative would be : [componentIndex][sampleIndex]
-	private double[][] randomVectorSequence;
+	private final double[][] randomVectorSequence;
 
 	public RandomVectorLCG(int length, int dimension) {
-		
+
 		randomVectorSequence = new double[length][dimension];
 
 		for(int i=0; i<length; i++) {
@@ -40,7 +40,7 @@ public class RandomVectorLCG {
 	}
 
 	double[] getSequenceForComponent(int componentIndex) {
-		double[] componentSequence = new double[randomVectorSequence.length];
+		final double[] componentSequence = new double[randomVectorSequence.length];
 		for(int i=0; i<randomVectorSequence.length; i++) {
 			componentSequence[i] = randomVectorSequence[i][componentIndex];
 		}

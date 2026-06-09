@@ -13,8 +13,8 @@ public class JavaStreamsExperiments {
 		/*
 		 * Working with streams
 		 */
-		IntStream indices = IntStream.range(1,10);
-		DoubleStream values = indices.mapToDouble(i -> 10.0*i + 5);
+		final IntStream indices = IntStream.range(1,10);
+		final DoubleStream values = indices.mapToDouble(i -> 10.0*i + 5);
 		values.forEach(x -> System.out.println(x));
 
 		System.out.println("_".repeat(80) + "\n");
@@ -22,14 +22,14 @@ public class JavaStreamsExperiments {
 		/*
 		 * A stream of 10 random numbers
 		 */
-		DoubleSupplier randomNumberGenerator = new MersenneTwister();
-		DoubleStream randomNumbers = DoubleStream.generate(randomNumberGenerator).limit(10);
+		final DoubleSupplier randomNumberGenerator = new MersenneTwister();
+		final DoubleStream randomNumbers = DoubleStream.generate(randomNumberGenerator).limit(10);
 		randomNumbers.forEach(x -> System.out.println(x));
 
 		System.out.println("_".repeat(80) + "\n");
 
 		for(int i=0; i<10; i++) {
-			double randomNumber = Math.random();
+			final double randomNumber = Math.random();
 			System.out.println(randomNumber);
 		}
 	}

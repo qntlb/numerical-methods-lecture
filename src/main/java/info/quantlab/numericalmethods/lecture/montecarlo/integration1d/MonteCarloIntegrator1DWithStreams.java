@@ -12,7 +12,7 @@ public class MonteCarloIntegrator1DWithStreams implements Integrator1D {
 	private final int seed;
 
 	/**
-	 * 
+	 *
 	 * @param numberOfEvaluationPoints The number of sample points to be used.
 	 * @param seed The seed for the random number generator.
 	 */
@@ -29,13 +29,13 @@ public class MonteCarloIntegrator1DWithStreams implements Integrator1D {
 	@Override
 	public double integrate(DoubleUnaryOperator integrand, double lowerBound, double upperBound) {
 
-		DoubleSupplier uniformRandomNumberGenerator = new MersenneTwister(3141);
+		final DoubleSupplier uniformRandomNumberGenerator = new MersenneTwister(3141);
 
-		DoubleStream randomNumbers = DoubleStream.generate(uniformRandomNumberGenerator).limit(numberOfEvaluationPoints);
+		final DoubleStream randomNumbers = DoubleStream.generate(uniformRandomNumberGenerator).limit(numberOfEvaluationPoints);
 
-		double domainSize = upperBound-lowerBound;
+		final double domainSize = upperBound-lowerBound;
 
-		double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+domainSize*x)).sum();
+		final double sum = randomNumbers.map(x -> integrand.applyAsDouble(lowerBound+domainSize*x)).sum();
 
 		return sum/numberOfEvaluationPoints * domainSize;
 	}

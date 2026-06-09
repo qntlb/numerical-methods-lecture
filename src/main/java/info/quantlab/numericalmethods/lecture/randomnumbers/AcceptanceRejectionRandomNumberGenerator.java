@@ -28,7 +28,7 @@ public class AcceptanceRejectionRandomNumberGenerator implements RandomNumberGen
 	private final double acceptanceLevel;
 
 	/**
-	 * 
+	 *
 	 * @param uniformRandomNumberGenerator A two dimension (at least) uniform number generator (with i.i.d components). The first two components will be used.
 	 * @param targetDensity The density f of the target distribution F.
 	 * @param referenceDensity The density g.

@@ -103,11 +103,11 @@ public class StochasticVolatilityExperiments {
 		/*
 		 * Generate some interesting objects (underlying, paths, quadratcVariation)
 		 */
-		RandomVariable underlying = simulation.getAssetValue(optionMaturity, 0);		// S(T), T=5.0
+		final RandomVariable underlying = simulation.getAssetValue(optionMaturity, 0);		// S(T), T=5.0
 
-		DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex);		// t -> S(t)
+		final DoubleToRandomVariableFunction paths = t -> simulation.getAssetValue(t, assetIndex);		// t -> S(t)
 
-		RandomVariable quadraticVariation = IntStream.range(0, timeDiscretization.getNumberOfTimeSteps())
+		final RandomVariable quadraticVariation = IntStream.range(0, timeDiscretization.getNumberOfTimeSteps())
 				.mapToObj(i -> {
 					try {
 						return simulation.getAssetValue(i+1, assetIndex).log()		// log(S(t_{i+1})
@@ -115,7 +115,7 @@ public class StochasticVolatilityExperiments {
 										simulation.getAssetValue(i, assetIndex).log())		// log(S(t_{i})
 								.squared()
 								.div(optionMaturity);
-					} catch (CalculationException e) {
+					} catch (final CalculationException e) {
 						return new Scalar(Double.NaN);
 					}
 				})
@@ -124,22 +124,22 @@ public class StochasticVolatilityExperiments {
 		/*
 		 * Plots: Implied volatility
 		 */
-//		plotImpliedVolatility(simulation);
+		//		plotImpliedVolatility(simulation);
 
 		/*
 		 * Plots: Density of underlying
 		 */
-//		plotDensityUnderlying(underlying);
+		//		plotDensityUnderlying(underlying);
 
 		/*
 		 * Plots: Density of quadraticVariation
 		 */
-//		plotDensityQuadraticVariation(quadraticVariation);
+		//		plotDensityQuadraticVariation(quadraticVariation);
 
 		/*
 		 * Plots: Sample paths
 		 */
-//		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
+		//		plotSamplePaths(timeDiscretization, paths, quadraticVariation);
 
 		/*
 		 * Plots: Scatter S(T) versus QV
@@ -149,26 +149,26 @@ public class StochasticVolatilityExperiments {
 
 	private void plotSamplePaths(TimeDiscretization timeDiscretization, DoubleToRandomVariableFunction paths, RandomVariable quadratcVariation) throws IOException {
 
-		int numberOfPathsToPlot = 1000;
-		Color[] colors = new Color[numberOfPathsToPlot];
-		double x1 = 0.06;//quadratcVariation.getAverage()+0*quadratcVariation.getStandardDeviation();
-		double x2 = 0.12;//quadratcVariation.getAverage()+1*quadratcVariation.getStandardDeviation();
-		double x3 = 0.20;//quadratcVariation.getAverage()+3*quadratcVariation.getStandardDeviation();
+		final int numberOfPathsToPlot = 1000;
+		final Color[] colors = new Color[numberOfPathsToPlot];
+		final double x1 = 0.06;//quadratcVariation.getAverage()+0*quadratcVariation.getStandardDeviation();
+		final double x2 = 0.12;//quadratcVariation.getAverage()+1*quadratcVariation.getStandardDeviation();
+		final double x3 = 0.20;//quadratcVariation.getAverage()+3*quadratcVariation.getStandardDeviation();
 		for(int i=0; i<numberOfPathsToPlot; i++) {
-			double v = quadratcVariation.get(i);
-			float green = (float) Math.min(Math.max(x2-v,0)/x2,1);
-			float blue = (float) Math.max(1-(Math.abs(((v-x1)-(x2-x1)/2))/((x2-x1)/2)),0);
-			float red = (float) Math.min(Math.max(v/x3,0),1);
+			final double v = quadratcVariation.get(i);
+			final float green = (float) Math.min(Math.max(x2-v,0)/x2,1);
+			final float blue = (float) Math.max(1-(Math.abs(((v-x1)-(x2-x1)/2))/((x2-x1)/2)),0);
+			final float red = (float) Math.min(Math.max(v/x3,0),1);
 			colors[i] = new Color(red, green, blue);
 		}
 
 		new PlotProcess2D(timeDiscretization, (DoubleToRandomVariableFunction) t -> paths.apply(t).log(), numberOfPathsToPlot)
-			.setColors(colors)
-			.setTitle("Simulation path (colored by quatratic variation) (\u03C3=" + volatility + ", \u03be=" + xi + ")")
-			.setXAxisLabel("t")
-			.setYAxisLabel("log(S(t))")
-			.saveAsPDF(new File("images/StochasticVolatilityExperiments-paths-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
-			.show();
+		.setColors(colors)
+		.setTitle("Simulation path (colored by quatratic variation) (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+		.setXAxisLabel("t")
+		.setYAxisLabel("log(S(t))")
+		.saveAsPDF(new File("images/StochasticVolatilityExperiments-paths-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
+		.show();
 	}
 
 	private void plotDensityUnderlying(RandomVariable underlying) throws IOException {
@@ -191,38 +191,38 @@ public class StochasticVolatilityExperiments {
 
 	private void plotDensityQuadraticVariation(RandomVariable quadraticVariation) throws IOException {
 		Plots.createDensity(quadraticVariation, 200, 6.0)
-			.setTitle("Quadratc Variation (\u03C3=" + volatility + ", \u03be=" + xi + ")")
-			.setXAxisLabel("Quadratc Variation")
-			.saveAsPDF(new File("images/StochasticVolatilityExperiments-density-quadratic-variation-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
-			.show();
+		.setTitle("Quadratc Variation (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+		.setXAxisLabel("Quadratc Variation")
+		.saveAsPDF(new File("images/StochasticVolatilityExperiments-density-quadratic-variation-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
+		.show();
 	}
 
 	private void plotImpliedVolatility(MonteCarloAssetModel simulation) throws IOException {
-		DoubleUnaryOperator volatilitySmile = strike -> {
+		final DoubleUnaryOperator volatilitySmile = strike -> {
 			try {
-				double value = new EuropeanOption(optionMaturity, strike, assetIndex).getValue(simulation);
-				double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(
+				final double value = new EuropeanOption(optionMaturity, strike, assetIndex).getValue(simulation);
+				final double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(
 						initialValue * Math.exp(riskFreeRate * optionMaturity),
 						optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);
 				return impliedVolatility;
-			} catch (CalculationException e) {
+			} catch (final CalculationException e) {
 				return Double.NaN;
 			}
 		};
 		new Plot2D(1/4.0, 4.0, volatilitySmile)
-			.setTitle("Implied Black-Scholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
-			.setXAxisLabel("Strike")
-			.setYAxisLabel("Implied Volatility")
-			.setYRange(0.0, 0.6)
-			.saveAsPDF(new File("images/StochasticVolatilityExperiments-impliedvol-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
-			.show();
+		.setTitle("Implied Black-Scholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+		.setXAxisLabel("Strike")
+		.setYAxisLabel("Implied Volatility")
+		.setYRange(0.0, 0.6)
+		.saveAsPDF(new File("images/StochasticVolatilityExperiments-impliedvol-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
+		.show();
 
 		new Plot2D(-1.0, 1.0, logStrike -> volatilitySmile.applyAsDouble(Math.exp(logStrike)))
-			.setTitle("Implied Black-Scholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
-			.setXAxisLabel("log(Strike)")
-			.setYAxisLabel("Implied Volatility")
-			.setYRange(0.0, 0.6)
-			.saveAsPDF(new File("images/StochasticVolatilityExperiments-impliedvol-log-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
-			.show();
+		.setTitle("Implied Black-Scholes Volatility (\u03C3=" + volatility + ", \u03be=" + xi + ")")
+		.setXAxisLabel("log(Strike)")
+		.setYAxisLabel("Implied Volatility")
+		.setYRange(0.0, 0.6)
+		.saveAsPDF(new File("images/StochasticVolatilityExperiments-impliedvol-log-xi" + (int)(xi * 100) + ".pdf"), 960, 600)
+		.show();
 	}
 }

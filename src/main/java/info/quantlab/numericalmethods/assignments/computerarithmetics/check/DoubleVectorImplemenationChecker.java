@@ -32,14 +32,14 @@ public class DoubleVectorImplemenationChecker {
 			case "basic":
 			default:
 			{
-				boolean checkSum = checkSimpleArray(solution) && checkRandom(solution);
+				final boolean checkSum = checkSimpleArray(solution) && checkRandom(solution);
 				success = checkSum;
 			}
 			break;
 			case "accuracy":
 			{
-				boolean checkSum = checkSimpleArray(solution) && checkRandom(solution);
-				boolean checkAccuracy = checkAccuracy(solution);
+				final boolean checkSum = checkSimpleArray(solution) && checkRandom(solution);
+				final boolean checkAccuracy = checkAccuracy(solution);
 				if(checkSum & !checkAccuracy) {
 					System.out.println("You almost solved the exercise. The sum is approximately correct, but not accurate enough.");
 				}
@@ -48,7 +48,7 @@ public class DoubleVectorImplemenationChecker {
 			break;
 			}
 		}
-		catch(Exception e) {
+		catch(final Exception e) {
 			System.out.println("\tTest failed with exception: " + e.getMessage());
 			System.out.println("\nHere is a stack trace:");
 			e.printStackTrace(System.out);
@@ -71,9 +71,9 @@ public class DoubleVectorImplemenationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkSimpleArray(DoubleVectorFactory solution) {
-		double[] testArgument = new double[] { 1, 2, 3 };
+		final double[] testArgument = new double[] { 1, 2, 3 };
 
-		DoubleVector vector = solution.createDoubleVector(testArgument);
+		final DoubleVector vector = solution.createDoubleVector(testArgument);
 
 		if(vector.get(0) != testArgument[0] || vector.get(1) != testArgument[1]) {
 			System.out.println("\t\u274cSimple test failed: get appears to be wrong.");
@@ -101,15 +101,15 @@ public class DoubleVectorImplemenationChecker {
 	 * @return Boolean if the test is passed.
 	 */
 	public static boolean checkRandom(DoubleVectorFactory solution) {
-		double[] testArgument = new double[1000];
+		final double[] testArgument = new double[1000];
 		for(int i=0; i<testArgument.length; i++) {
 			testArgument[i] = random.nextDouble();
 		}
-		double testSum = new RandomVariableFromDoubleArray(0.0, testArgument).getAverage()*testArgument.length;
+		final double testSum = new RandomVariableFromDoubleArray(0.0, testArgument).getAverage()*testArgument.length;
 
-		DoubleVector vector = solution.createDoubleVector(testArgument);
+		final DoubleVector vector = solution.createDoubleVector(testArgument);
 
-		double error = testSum - vector.sum();
+		final double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
 			System.out.println("\t\u274cRandom array test failed. The error is " + error);
 			return false;
@@ -132,16 +132,16 @@ public class DoubleVectorImplemenationChecker {
 		 * Create an array of 10000 times Math.Pi and 1 times 10000 * Math.Pi.
 		 * Then check if the sum is 20000 times Math.Pi.
 		 */
-		double[] testArgument = new double[10001];
+		final double[] testArgument = new double[10001];
 		for(int i=0; i<testArgument.length; i++) {
 			testArgument[i] = Math.PI;
 		}
 		testArgument[5000] = 10000*Math.PI;
-		double testSum = 20000*Math.PI;
+		final double testSum = 20000*Math.PI;
 
-		DoubleVector vector = solution.createDoubleVector(testArgument);
+		final DoubleVector vector = solution.createDoubleVector(testArgument);
 
-		double error = testSum - vector.sum();
+		final double error = testSum - vector.sum();
 		if(Math.abs(error) > accuracy) {
 			System.out.println("\t\u274cAccuracy test failed. Accuracy is too low. The error is " + error);
 			System.out.println("\tHint: Check the numerical methods lecture on how to improve the accuracy of a summation.");
