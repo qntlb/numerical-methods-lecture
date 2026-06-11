@@ -52,9 +52,9 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 	private final double	initialTime = 0.0;			// t_0
 	private final int		numberOfTimeSteps = 1;
 
-	private final long	seed = 3216;
+	private final long		seed = 3216;
 	private final int		numberOfFactors = 1;		// dimension of the Brownian Motion
-	private final long	numberOfSamples = 20000000;	// 2*10^7
+	private final long		numberOfSamples = 20000000;		// 2*10^7
 
 	public static void main(String[] args) throws CalculationException {
 
