@@ -17,6 +17,8 @@
 		<compiler-plugin.version>3.8.1</compiler-plugin.version>
 		<maven.source-plugin.version>3.2.1</maven.source-plugin.version>
 		<maven.javadoc-plugin.version>3.3.2</maven.javadoc-plugin.version>
+		<maven.surefire-plugin.version>3.0.0-M5</maven.surefire-plugin.version>
+		<checkstyle-plugin.version>3.6.0</checkstyle-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -35,16 +37,19 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.vintage</groupId>
 			<artifactId>junit-vintage-engine</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -91,7 +96,7 @@
 						</header>
 						<footer>
 				   			<![CDATA[
-							<i>Copyright &copy; 2025 finmath.net.</i>
+							<i>Copyright &copy; 2026 finmath.net.</i>
 				   			]]>
 						</footer>
 						<tags>
@@ -128,6 +133,29 @@
 						</execution>
 					</executions>
 				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven.surefire-plugin.version}</version>
+				<configuration>
+					<forkCount>1</forkCount>
+					<reuseForks>false</reuseForks>
+					<argLine>-mx6G</argLine>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${checkstyle-plugin.version}</version>
+				<configuration>
+					<configLocation>checkstyle/finmath-checkstyle.xml</configLocation>
+					<encoding>UTF-8</encoding>
+					<consoleOutput>true</consoleOutput>
+					<failsOnError>true</failsOnError>
+					<linkXRef>false</linkXRef>
+					<excludes>**/module-info.java</excludes>
+				</configuration>
+			</plugin>
 
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
 					only. It has no influence on the Maven build itself. -->
