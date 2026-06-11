@@ -50,7 +50,7 @@ public class MonteCarloBlackScholesCallOptionExperiment {
 	private final double	optionStrike = 105;			// K
 
 	private final double	initialTime = 0.0;			// t_0
-	private final int		numberOfTimeSteps = 1;
+	private final int		numberOfTimeSteps = 1;		// Some implementations ignore this parameter!
 
 	private final long		seed = 3216;
 	private final int		numberOfFactors = 1;		// dimension of the Brownian Motion
