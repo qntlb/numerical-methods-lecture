@@ -8,6 +8,7 @@ package info.quantlab.numericalmethods.lecture.randomnumbers;
  */
 public class RandomNumberGeneratorFrom1D implements RandomNumberGenerator {
 
+	private static final long serialVersionUID = 252658600293654749L;
 	private final RandomNumberGenerator1D randomNumberGenerator;
 	private final int dimension;
 
