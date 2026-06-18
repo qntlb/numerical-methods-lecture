@@ -68,7 +68,7 @@ public class MonteCarloControlVariateExperiment {
 		final TimeDiscretization timeDiscretization = new TimeDiscretizationFromArray(initialTime, numberOfTimeSteps, deltaT);
 		final BrownianMotion brownianMotion = new BrownianMotionFromMersenneRandomNumbers(timeDiscretization, 1, numberOfPaths, seed);
 
-		// Numerical Scheme
+		// Numerical Scheme: Euler Scheme
 		final MonteCarloProcess process = new EulerSchemeFromProcessModel(blackScholesModel, brownianMotion);
 
 		// Monte-Carlo Valuation Model
@@ -90,12 +90,12 @@ public class MonteCarloControlVariateExperiment {
 		final RandomVariable payoffExotic = underlying.sub(strike2).choose(payoffPlain, payoffPlain.squared().div(strike2-strike1));		// V(T) for exotic option
 
 		// Value of the Exotic Option (without control)
-		final RandomVariable valueExotic = payoffExotic.div(numeraireAtPayment).mult(numeraireAtEval);// X
+		final RandomVariable valueExotic = payoffExotic.div(numeraireAtPayment).mult(numeraireAtEval);	// X
 
-		// Value of the Plain Option
+		// Value of the Plain Option: Monte-Carlo: Ê(Y)
 		final RandomVariable valuePlain = payoffPlain.div(numeraireAtPayment).mult(numeraireAtEval);	// Y
 
-		// Analytic Value
+		// Value of the Plain Option: Analytic Value: E(Y)
 		final double valueAnalytic = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, maturity, strike1);
 
 		// Z(1) = X - 1 ( Y - E(Y) )
