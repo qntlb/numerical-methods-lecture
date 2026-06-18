@@ -52,7 +52,7 @@ public class DiscrepancyExperiment {
 		 * Radom sequence with n = 1, 10, 100,
 		 */
 		final RandomNumberGenerator1D random = new MersenneTwister(3216);
-		final List<Double> randomNumbers = new ArrayList<Double>();
+		final List<Double> randomNumbers = new ArrayList<>();
 		for(int n=0; n<=100000; n++) {
 			if(Math.log10(n) == Math.round(Math.log10(n))) {
 				analyse("Random, n = " + n, randomNumbers);

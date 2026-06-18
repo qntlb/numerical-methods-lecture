@@ -78,8 +78,7 @@ public class SummationExperiment {
 
 	private static double getSumOfValuesClassical(double[] realizations) {
 		double sum = 0.0;
-		for(int i=0; i<realizations.length; i++) {
-			final double value = realizations[i];
+		for (final double value : realizations) {
 			sum = sum + value;
 		}
 		return sum;
@@ -88,8 +87,7 @@ public class SummationExperiment {
 	private static double getSumOfValuesKahan(double[] realizations) {
 		double sum = 0.0;
 		double error = 0.0;
-		for(int i=0; i<realizations.length; i++) {
-			final double value = realizations[i];
+		for (final double value : realizations) {
 			final double newValue = value - error;
 			final double newSum = sum + newValue;
 			error = (newSum - sum) - newValue;
