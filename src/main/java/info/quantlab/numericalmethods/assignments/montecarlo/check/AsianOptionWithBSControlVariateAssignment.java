@@ -22,5 +22,5 @@ public interface AsianOptionWithBSControlVariateAssignment {
 	 * @param callOrPutSign The parameter sign in the payoff max( sign * (A(T)-K), 0) (usually either +1 or -1).
 	 * @return A class implementing AssetMonteCarloProduct
 	 */
-	AssetMonteCarloProduct getAsianOption(Double maturity, Double strike, TimeDiscretization timesForAveraging, final Double callOrPutSign);
+	AssetMonteCarloProduct getAsianOption(Double maturity, Double strike, TimeDiscretization timesForAveraging, Double callOrPutSign);
 }

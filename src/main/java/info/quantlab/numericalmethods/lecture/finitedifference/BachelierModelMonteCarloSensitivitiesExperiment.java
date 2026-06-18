@@ -16,16 +16,16 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 public class BachelierModelMonteCarloSensitivitiesExperiment {
 
-	private final static double riskFreeRate = 0.0;
-	private final static double volatility = 1.0;
+	private static final double riskFreeRate = 0.0;
+	private static final double volatility = 1.0;
 
-	private final static double initialTime = 0.0;
-	private final static double maturity = 1.0;
+	private static final double initialTime = 0.0;
+	private static final double maturity = 1.0;
 
-	private final static int numberOfPaths = 10000;
-	private final static int seed = 3141;
+	private static final int numberOfPaths = 10000;
+	private static final int seed = 3141;
 
-	private final static double shift = 0.5;
+	private static final double shift = 0.5;
 
 	public static void main(String[] args) {
 

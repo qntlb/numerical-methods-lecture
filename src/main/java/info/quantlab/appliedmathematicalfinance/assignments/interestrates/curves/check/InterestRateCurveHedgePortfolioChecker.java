@@ -37,8 +37,8 @@ import net.finmath.time.TimeDiscretizationFromArray;
 
 public class InterestRateCurveHedgePortfolioChecker {
 
-	final static double periodLength = 0.5;
-	final static boolean isPayer = true;
+	static final double periodLength = 0.5;
+	static final boolean isPayer = true;
 
 	public enum Check {
 		BASIC("basic functionality"),
