@@ -2,7 +2,7 @@ package net.finmath.lecture.computationalfinance.assignments.dice;
 
 public interface DICEModelOptimizationAssignment {
 
-	public enum AbatementParameterConstraint {
+	enum AbatementParameterConstraint {
 		NONE					/* none */,
 		BOUNDED					/* mu is bounded between 0.0 and 1.0 */,
 		MONOTONE_AND_BOUNDED 	/* mu bounded and is monotone increasing */
