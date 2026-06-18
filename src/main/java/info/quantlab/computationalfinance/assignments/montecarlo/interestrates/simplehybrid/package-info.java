@@ -1,4 +1,4 @@
 /**
- * Classes related to assignments on discount curves: testing
+ * Classes related to assignments on hybrid models
  */
 package info.quantlab.computationalfinance.assignments.montecarlo.interestrates.simplehybrid;
