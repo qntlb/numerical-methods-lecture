@@ -30,18 +30,18 @@ import net.finmath.time.TimeDiscretizationFromArray;
  */
 public class UnderlyingDensityExperiment {
 
-	private final static double initialValue = 1.0;
-	private final static double riskFreeRate = 0.05;
-	private final static double volatility = 0.30;
+	private static final double initialValue = 1.0;
+	private static final double riskFreeRate = 0.05;
+	private static final double volatility = 0.30;
 
-	private final static double initialTime = 0.0;
-	private final static int numberOfTimeSteps = 100;
-	private final static double maturity = 5.0;
+	private static final double initialTime = 0.0;
+	private static final int numberOfTimeSteps = 100;
+	private static final double maturity = 5.0;
 
-	private final static int numberOfPaths = 100000;
-	private final static int seed = 3141;
+	private static final int numberOfPaths = 100000;
+	private static final int seed = 3141;
 
-	private final static double shift = 0.2;
+	private static double shift = 0.2;
 
 	public static void main(String[] args) {
 
