@@ -30,10 +30,22 @@ public class ImpliedVolatilityExperiments {
 	 */
 	public static void main(String[] args) throws IOException {
 
-		new ImpliedVolatilityExperiments().plotImpliedVols();
+		new ImpliedVolatilityExperiments().plotBSImpliedVolsOfBlackScholesVallues();
+		new ImpliedVolatilityExperiments().plotBSImpliedVolsOfBachelierValues();
 	}
 
-	public void plotImpliedVols() throws IOException {
+	public void plotBSImpliedVolsOfBlackScholesVallues() throws IOException {
+
+		final double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
+		final DoubleUnaryOperator values = strike -> {
+			final double value = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, optionMaturity, strike);
+			return value;
+		};
+
+		plotBSImpliedVolsForValues(values, "Black-Scholes");
+	}
+
+	public void plotBSImpliedVolsOfBachelierValues() throws IOException {
 
 		final double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
 		final DoubleUnaryOperator values = strike -> {
@@ -41,18 +53,25 @@ public class ImpliedVolatilityExperiments {
 			return value;
 		};
 
+		plotBSImpliedVolsForValues(values, "Bachelier");
+	}
+	
+	public void plotBSImpliedVolsForValues(DoubleUnaryOperator valuesForStrike, String valuesName) throws IOException {
+
+		final double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
 		final DoubleUnaryOperator volatilitySmile = strike -> {
-			final double value = values.applyAsDouble(strike);
+			final double value = valuesForStrike.applyAsDouble(strike);
 			final double impliedVolatility = AnalyticFormulas.blackScholesOptionImpliedVolatility(forward, optionMaturity, strike, Math.exp(-riskFreeRate * optionMaturity), value);
 			return impliedVolatility;
 		};
 
 		new Plot2D(1/4.0, 4.0, volatilitySmile)
-		.setTitle("Implied Black-Scholes Volatility of Bachelier Values")
+		.setTitle("Implied Black-Scholes Volatility of " + valuesName + " Values")
 		.setXAxisLabel("Strike")
-		.setYAxisLabel("Implied Volatility")
+		.setYAxisLabel("Implied Black-Scholes Volatility")
 		.setYRange(0.0, 0.6)
-		.saveAsPDF(new File("images/ImpliedVolBS.pdf"), 960, 600)
+		.saveAsPDF(new File("images/ImpliedVol-" + valuesName + ".pdf"), 960, 600)
 		.show();
+		
 	}
 }
