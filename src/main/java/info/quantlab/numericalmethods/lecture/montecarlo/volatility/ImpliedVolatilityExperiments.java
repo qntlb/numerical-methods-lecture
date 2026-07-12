@@ -36,7 +36,6 @@ public class ImpliedVolatilityExperiments {
 
 	public void plotBSImpliedVolsOfBlackScholesVallues() throws IOException {
 
-		final double forward = initialValue * Math.exp(riskFreeRate * optionMaturity);
 		final DoubleUnaryOperator values = strike -> {
 			final double value = AnalyticFormulas.blackScholesOptionValue(initialValue, riskFreeRate, volatility, optionMaturity, strike);
 			return value;
