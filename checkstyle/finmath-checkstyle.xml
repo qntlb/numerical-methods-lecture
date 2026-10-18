@@ -154,9 +154,9 @@
 			value="true" /> <property name="ignoreSetter" value="true" /> <property name="setterCanReturnItsClass" 
 			value="true" /> </module> -->
 		<module name="IllegalInstantiation" />
-		<!-- <module name="InnerAssignment" /> -->
+		<module name="InnerAssignment" />
 		<!-- <module name="MagicNumber" /> -->
-		<!-- <module name="MissingSwitchDefault" /> -->
+		<module name="MissingSwitchDefault" />
 		<!-- <module name="SimplifyBooleanExpression" /> -->
 		<module name="SimplifyBooleanReturn" />
 
