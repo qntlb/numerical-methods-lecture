@@ -17,6 +17,7 @@ import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.InterestRateCurveHedgePortfolioAssignment;
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.ModelFactory;
 import info.quantlab.appliedmathematicalfinance.assignments.interestrates.curves.ProductFactory;
+import net.finmath.functions.LinearAlgebra;
 import net.finmath.marketdata.model.AnalyticModel;
 import net.finmath.marketdata.model.AnalyticModelFromCurvesAndVols;
 import net.finmath.marketdata.model.curves.Curve;
@@ -154,6 +155,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 		 */
 		final AnalyticProduct swapToTest = swapFactory.getSwap(periodLength, 6.5, 0.05, isPayer, discountCurveName);
 		final double[] phi = hedgePortfolio.getReplicationPortfolio(parRateSwaps, maturities, zeroRates, discountCurveName, swapToTest);
+		assertReplicationWeights(phi, parRateSwaps.size(), "30 buckets, 30 instruments");
 
 		boolean success = true;
 		for(int i=7; i<phi.length; i++) {
@@ -176,7 +178,76 @@ public class InterestRateCurveHedgePortfolioChecker {
 			System.out.println("\t\tSensitivity in bucket 5Y and 6Y looks unplausible for 6.5Y swap.");
 		}
 
+		// The target need not be exactly replicable when there are fewer instruments than buckets.
+		checkRectangularReplication(hedgePortfolio, modelFactory, swapFactory,
+				new double[] { 1.0, 2.0, 3.0 }, new double[] { 0.03, 0.04, 0.05 },
+				new double[] { 3.0, 1.0 }, new double[] { 0.02, 0.06 }, 2.5, 0.04);
+		// The last instrument is essential; padding a square-only solution with zeros must fail.
+		// Duplicate instruments also allow valid solutions other than the minimum-norm solution.
+		checkRectangularReplication(hedgePortfolio, modelFactory, swapFactory,
+				new double[] { 1.0, 2.0 }, new double[] { 0.03, 0.04 },
+				new double[] { 1.0, 1.0, 2.0 }, new double[] { 0.01, 0.01, 0.08 }, 2.0, 0.08);
+
 		return success;
+	}
+
+	private static void checkRectangularReplication(InterestRateCurveHedgePortfolio hedgePortfolio,
+			ModelFactory modelFactory, ProductFactory swapFactory, double[] maturities, double[] zeroRates,
+			double[] instrumentMaturities, double[] fixedRates, double targetMaturity, double targetFixedRate) {
+		final String discountCurveName = "EURSTR";
+		final String scenario = maturities.length + " buckets, " + instrumentMaturities.length + " instruments";
+		final List<AnalyticProduct> instruments = new ArrayList<>();
+		for(int j=0; j<instrumentMaturities.length; j++) {
+			instruments.add(swapFactory.getSwap(periodLength, instrumentMaturities[j], fixedRates[j], isPayer, discountCurveName));
+		}
+		final AnalyticProduct target = swapFactory.getSwap(periodLength, targetMaturity, targetFixedRate, isPayer, discountCurveName);
+		final double[] weights = hedgePortfolio.getReplicationPortfolio(instruments, maturities, zeroRates, discountCurveName, target);
+		assertReplicationWeights(weights, instruments.size(), scenario);
+
+		// Independently measure sensitivities with smaller, symmetric shifts. All contractual terms stay fixed.
+		final double shift = 1E-5;
+		final double[][] sensitivities = new double[maturities.length][instruments.size()];
+		final double[] targetSensitivities = new double[maturities.length];
+		for(int i=0; i<maturities.length; i++) {
+			final AnalyticModel up = modelFactory.getModelWithShift(maturities, zeroRates, discountCurveName, i, shift);
+			final AnalyticModel down = modelFactory.getModelWithShift(maturities, zeroRates, discountCurveName, i, -shift);
+			targetSensitivities[i] = (target.getValue(0.0, up) - target.getValue(0.0, down)) / (2 * shift);
+			for(int j=0; j<instruments.size(); j++) {
+				sensitivities[i][j] = (instruments.get(j).getValue(0.0, up) - instruments.get(j).getValue(0.0, down)) / (2 * shift);
+			}
+		}
+		final double[] referenceWeights = LinearAlgebra.solveLinearEquationSVD(sensitivities, targetSensitivities);
+		final double minimumResidual = getResidualNorm(sensitivities, targetSensitivities, referenceWeights);
+		final double actualResidual = getResidualNorm(sensitivities, targetSensitivities, weights);
+		double targetNorm = 0.0;
+		for(final double sensitivity : targetSensitivities) {
+			targetNorm = Math.hypot(targetNorm, sensitivity);
+		}
+		// Permit the forward difference with shift 0.001 suggested by the exercise.
+		final double tolerance = 2E-3 * targetNorm + 1E-10;
+		Assertions.assertTrue(Double.isFinite(actualResidual) && actualResidual <= minimumResidual + tolerance,
+				scenario + ": hedge sensitivity residual " + actualResidual
+				+ " exceeds least-squares minimum " + minimumResidual + " (tolerance " + tolerance + ")");
+	}
+
+	private static void assertReplicationWeights(double[] weights, int numberOfInstruments, String scenario) {
+		Assertions.assertNotNull(weights, scenario + ": replication weights must not be null");
+		Assertions.assertEquals(numberOfInstruments, weights.length, scenario + ": return one weight per supplied instrument");
+		for(int j=0; j<weights.length; j++) {
+			Assertions.assertTrue(Double.isFinite(weights[j]), scenario + ": weight " + j + " must be finite");
+		}
+	}
+
+	private static double getResidualNorm(double[][] sensitivities, double[] targetSensitivities, double[] weights) {
+		double norm = 0.0;
+		for(int i=0; i<targetSensitivities.length; i++) {
+			double residual = -targetSensitivities[i];
+			for(int j=0; j<weights.length; j++) {
+				residual += sensitivities[i][j] * weights[j];
+			}
+			norm = Math.hypot(norm, residual);
+		}
+		return norm;
 	}
 
 	private static boolean checkParRate(InterestRateCurveHedgePortfolioAssignment solution) {
@@ -282,7 +353,7 @@ public class InterestRateCurveHedgePortfolioChecker {
 		Assertions.assertTrue((0 <= parRate && parRate <= 0.1), "par swap rate pausibility: should be between 0.0 and 0.10 for our model");
 
 		final double[] phi = hedgePortfolio.getReplicationPortfolio(portfolioInstruments, maturities, zeroRates, discountCurveName, productToHedge);
-		Assertions.assertTrue((portfolioInstruments.size() == phi.length), "hedge portfolio pausibility: length of hedge portfolio matches number of portfolioInstruments portfolio products");
+		assertReplicationWeights(phi, portfolioInstruments.size(), "basic functionality");
 
 		return true;
 	}
