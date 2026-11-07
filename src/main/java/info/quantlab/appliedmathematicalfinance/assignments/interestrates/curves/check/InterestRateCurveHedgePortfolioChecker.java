@@ -201,7 +201,21 @@ public class InterestRateCurveHedgePortfolioChecker {
 			instruments.add(swapFactory.getSwap(periodLength, instrumentMaturities[j], fixedRates[j], isPayer, discountCurveName));
 		}
 		final AnalyticProduct target = swapFactory.getSwap(periodLength, targetMaturity, targetFixedRate, isPayer, discountCurveName);
-		final double[] weights = hedgePortfolio.getReplicationPortfolio(instruments, maturities, zeroRates, discountCurveName, target);
+		final double[] weights;
+		try {
+			weights = hedgePortfolio.getReplicationPortfolio(instruments, maturities, zeroRates, discountCurveName, target);
+		}
+		catch(final RuntimeException e) {
+			String message = scenario + ": getReplicationPortfolio failed with "
+					+ e.getClass().getSimpleName() + ": " + e.getMessage();
+			if(e instanceof IndexOutOfBoundsException) {
+				message += ". One possible cause is confusing rate-bucket and instrument indices. "
+						+ "The sensitivity matrix must have " + maturities.length + " rows and " + instruments.size()
+						+ " columns, and the result must contain " + instruments.size() + " weights. "
+						+ "Check that bucket loops use maturities.length and instrument loops use portfolioInstruments.size().";
+			}
+			throw new IllegalStateException(message, e);
+		}
 		assertReplicationWeights(weights, instruments.size(), scenario);
 
 		// Independently measure sensitivities with smaller, symmetric shifts. All contractual terms stay fixed.

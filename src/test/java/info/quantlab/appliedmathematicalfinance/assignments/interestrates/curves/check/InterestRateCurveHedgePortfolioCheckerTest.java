@@ -3,6 +3,9 @@ package info.quantlab.appliedmathematicalfinance.assignments.interestrates.curve
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
@@ -38,7 +41,23 @@ public class InterestRateCurveHedgePortfolioCheckerTest {
 
 	@Test
 	void rejectsOriginalSquareOnlyInstrumentCount() {
-		assertFalse(check(new ReferenceAssignment(Behavior.SQUARE_ONLY)));
+		final String diagnostics = getFailureDiagnostics(Behavior.SQUARE_ONLY);
+		for(final String expected : List.of("3 buckets, 2 instruments", "3 rows", "2 columns", "2 weights",
+				"portfolioInstruments.size()", "Caused by: java.lang.IndexOutOfBoundsException")) {
+			assertTrue(diagnostics.contains(expected), "Missing diagnostic '" + expected + "':\n" + diagnostics);
+		}
+	}
+
+	@Test
+	void reportsNullPointerFailureWithoutDimensionHint() {
+		assertFailureWithoutDimensionHint(Behavior.NULL_POINTER_EXCEPTION,
+				"Caused by: java.lang.NullPointerException: Missing valuation input");
+	}
+
+	@Test
+	void reportsIllegalArgumentFailureWithoutDimensionHint() {
+		assertFailureWithoutDimensionHint(Behavior.ILLEGAL_ARGUMENT_EXCEPTION,
+				"Caused by: java.lang.IllegalArgumentException: Unsupported valuation option");
 	}
 
 	@Test
@@ -72,6 +91,28 @@ public class InterestRateCurveHedgePortfolioCheckerTest {
 		return InterestRateCurveHedgePortfolioChecker.check(assignment, Check.SENSITIVITIES);
 	}
 
+	private static String getFailureDiagnostics(Behavior behavior) {
+		final PrintStream originalOut = System.out;
+		final ByteArrayOutputStream output = new ByteArrayOutputStream();
+		try(PrintStream capturedOut = new PrintStream(output, true, StandardCharsets.UTF_8)) {
+			System.setOut(capturedOut);
+			assertFalse(check(new ReferenceAssignment(behavior)));
+		}
+		finally {
+			System.setOut(originalOut);
+		}
+		return output.toString(StandardCharsets.UTF_8);
+	}
+
+	private static void assertFailureWithoutDimensionHint(Behavior behavior, String originalError) {
+		final String diagnostics = getFailureDiagnostics(behavior);
+		assertTrue(diagnostics.contains("3 buckets, 2 instruments"), diagnostics);
+		assertTrue(diagnostics.contains(originalError), diagnostics);
+		for(final String hint : List.of("portfolioInstruments.size()", "rows", "columns")) {
+			assertFalse(diagnostics.contains(hint), "Unexpected dimension hint '" + hint + "':\n" + diagnostics);
+		}
+	}
+
 	private enum Behavior {
 		CORRECT,
 		ALTERNATIVE_MINIMUM_RESIDUAL,
@@ -81,7 +122,9 @@ public class InterestRateCurveHedgePortfolioCheckerTest {
 		INFINITE_WEIGHTS,
 		WRONG_LENGTH,
 		ZERO_WEIGHTS,
-		REORDERED_WEIGHTS
+		REORDERED_WEIGHTS,
+		NULL_POINTER_EXCEPTION,
+		ILLEGAL_ARGUMENT_EXCEPTION
 	}
 
 	private static final class ReferenceAssignment implements InterestRateCurveHedgePortfolioAssignment {
@@ -115,6 +158,12 @@ public class InterestRateCurveHedgePortfolioCheckerTest {
 					final int numberOfBuckets = maturities.length;
 					final int numberOfInstruments = instruments.size();
 					final boolean rectangular = numberOfBuckets != numberOfInstruments;
+					if(rectangular && behavior == Behavior.NULL_POINTER_EXCEPTION) {
+						throw new NullPointerException("Missing valuation input");
+					}
+					if(rectangular && behavior == Behavior.ILLEGAL_ARGUMENT_EXCEPTION) {
+						throw new IllegalArgumentException("Unsupported valuation option");
+					}
 					int instrumentsToUse = numberOfInstruments;
 					if(behavior == Behavior.SQUARE_ONLY
 							|| behavior == Behavior.IGNORE_EXTRA_INSTRUMENTS && numberOfBuckets < numberOfInstruments) {
